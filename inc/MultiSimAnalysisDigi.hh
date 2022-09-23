@@ -360,6 +360,7 @@ public:
   G4float XPosdev[nlayermx];
   G4float YPosdev[nlayermx];
 
+  Float_t clustTime[10];
 
   
   //Position Resolutions JIM

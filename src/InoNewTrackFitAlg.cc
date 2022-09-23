@@ -141,7 +141,7 @@ InoNewTrackFitAlg::InoNewTrackFitAlg() {
     cout <<"\n InoNewTrackFitAlg::InoNewTrackFitAlg() "<<StripXWidth<<" "<<StripYWidth<<" "<<LayerThickness<<endl;
   }
 
-  inoHit_pointer = InoHit_Manager::APointer;
+  
   InoCluster_pointer = InoCluster_Manager::APointer;
 
 }
@@ -1680,7 +1680,7 @@ void InoNewTrackFitAlg::GetFitData_new(int& Plane1, int& Plane2) {
 	//   }
 	// }
 
-	if(SlcClustData[ij][jk].csh->HitsInCluster.size()>4) continue;
+	//	if(SlcClustData[ij][jk].csh->HitsInCluster.size()>4) continue;//StripCluster
 
 	// if(SlcClustData[ij][jk].csh->GetXEntries()>3) continue;
 	// if(SlcClustData[ij][jk].csh->GetYEntries()>3) continue;
@@ -5077,6 +5077,7 @@ void InoNewTrackFitAlg::KalmanFilterStateVector(double *x__minus, const int Plan
 //Abhijit's Work. ADB 2015/05/06
 //>>
 
+/*
 int InoNewTrackFitAlg::CheckFCPCUpOrDn(double *ax_k, bool DirExtraPol, int MaxMinPlane, bool GoDir) {
 
   //bit 1 : LocalPos[1];
@@ -5277,7 +5278,7 @@ int InoNewTrackFitAlg::CheckFCPCUpOrDn(double *ax_k, bool DirExtraPol, int MaxMi
   return alltags;
 
 }
-
+*/
 bool InoNewTrackFitAlg::CheckFCPC(double *ax_k, bool GoForward) {
   int ExtremePlane = 0;
   ExtremePlane = (GoForward == true) ? MaxPlane:MinPlane;

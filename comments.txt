@@ -1,0 +1,6 @@
+//Modifications for STripCLuster in Standalone code:
+- Changed vector manger
+- commented off checkfcpc function in InoNewTrackfit alg
+- commented off histon cluster in InoOldTrackFit Alg inside directionfromfitter and also search inohitpointer
+- InoReco alg filling momentum theta phi in vx and end plane
+- changed inotrackcand.cc getz getpulse commented getnstrip

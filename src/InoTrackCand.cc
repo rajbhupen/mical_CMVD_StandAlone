@@ -1,3 +1,6 @@
+//changed GetZ
+// commented getnstrip()
+//changed getpulse
 #include "TMath.h"
 
 #include <cassert>
@@ -386,17 +389,26 @@ Float_t InoTrackCand::GetV(Int_t plane) const
 return -99999.;
 }
 
-Float_t InoTrackCand::GetZ(Int_t plane) const
-{
-  InoHit_Manager *pinohit = InoHit_Manager::APointer;
+Float_t InoTrackCand::GetZ(Int_t plane) const {
+  /*  InoHit_Manager *pinohit = InoHit_Manager::APointer;
   for (unsigned i=0; i<pinohit->InoHit_list.size() ; i++) {
     if (pinohit->InoHit_list[i]->GetZPlane()==plane) {
       return pinohit->InoHit_list[i]->GetZPos();
     }
   }
   return -1.;
-}
 
+  */
+  InoCluster_Manager *clust = InoCluster_Manager::APointer;
+    for (unsigned i=0; i<clust->InoCluster_list.size() ; i++) {
+  if (clust->InoCluster_list[i]->GetZPlane()==plane) {
+      return clust->InoCluster_list[i]->GetZPos();
+    }
+      
+    }
+  return -1.;
+}
+/*
 /*
 Double_t InoTrackCand::GetT(Int_t plane) const // ,StripEnd::StripEnd_t stripend_t) const
 {
@@ -1228,6 +1240,8 @@ Int_t InoTrackCand::GetNDaughters() const {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //______________________________________________________________________
+
+/*
 Int_t InoTrackCand::GetNStrip(Int_t iuv) const
 {
   Int_t n=0;
@@ -1241,20 +1255,21 @@ Int_t InoTrackCand::GetNStrip(Int_t iuv) const
   }
   return n;
  
-  /* 08/02/09
-  if (iuv==2) { return fTrack->HitsInTrack.size(); }
-  else {
-    Int_t n=0;
-    for (unsigned i=0; i<fTrack->HitsInTrack.size(); i++) {
-      InoHit* inohit = fTrack->HitsInTrack[i];
-      if (inohit->GetView()==2 || inohit->GetView()==iuv) {n++;}
-    }
-    return n;
-  }
-  return -999;
-  */
+  //  08/02/09
+  // if (iuv==2) { return fTrack->HitsInTrack.size(); }
+  // else {
+  //   Int_t n=0;
+  //   for (unsigned i=0; i<fTrack->HitsInTrack.size(); i++) {
+  //     InoHit* inohit = fTrack->HitsInTrack[i];
+  //     if (inohit->GetView()==2 || inohit->GetView()==iuv) {n++;}
+  //   }
+  //   return n;
+  // }
+  // return -999;
+  // 
 }
 
+*/
 Double_t InoTrackCand::GetPlanePulse(Int_t plane) const
 {
   for (unsigned i=0; i<ClustsInTrack.size(); i++) {
@@ -1272,18 +1287,25 @@ Double_t InoTrackCand::GetPlanePulse(Int_t plane) const
   */
 }
 
-Double_t InoTrackCand::GetPulse() const
-{
-  Double_t pulse = 0;
 
+Double_t InoTrackCand::GetPulse() const {
+  Double_t pulse = 0;
+  
   for (unsigned i=0; i<ClustsInTrack.size(); i++) {
     InoCluster* inoclust = ClustsInTrack[i];
-    for (unsigned j=0; j<inoclust->HitsInCluster.size(); j++) {
-      InoHit* inohit = inoclust->GetHit(j);
-      pulse +=inohit->GetPulse();
+    for (unsigned j=0; j<inoclust->GetXStripCluster()->GetStripEntries(); j++) {
+      InoStrip* inoxstrip = inoclust->GetXStripCluster()->GetStrip(j);
+      pulse +=inoxstrip->GetPulse();
     }
-  }
 
+  for (unsigned j=0; j<inoclust->GetYStripCluster()->GetStripEntries(); j++) {
+    InoStrip* inoystrip = inoclust->GetYStripCluster()->GetStrip(j);
+      pulse +=inoystrip->GetPulse();
+    }
+
+    
+  }
+  
   /* 08/02/09
   for (unsigned i=0; i<fTrack->HitsInTrack.size(); i++) {
     InoHit* inohit = fTrack->HitsInTrack[i];
@@ -1293,7 +1315,6 @@ Double_t InoTrackCand::GetPulse() const
 
   return pulse;
 }
-
 
 
 Int_t InoTrackCand::GetNDigit(Int_t) const

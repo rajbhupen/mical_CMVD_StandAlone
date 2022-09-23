@@ -361,6 +361,7 @@ void InoRecoAlg::ReadEvent(int ixt) {
 
     //if smearing //RANDOM
     inoStripX_pointer->InoStripX_list[ij]->SetXYPos(xpos);
+    inoStripX_pointer->InoStripX_list[ij]->SetXYPosErr(0.03/sqrt(12));
     inoStripX_pointer->InoStripX_list[ij]->SetZPos(zpos);
     if(TrgLayer[0]==nInLA || TrgLayer[1]==nInLA || TrgLayer[2]==nInLA || TrgLayer[3]==nInLA) {
       nTriggerX[nInLA]++;
@@ -413,6 +414,7 @@ void InoRecoAlg::ReadEvent(int ixt) {
 
     // double zpos = inoStripY_pointer->InoStripY_list[ij]->GetGenPosZ()/m;
     inoStripY_pointer->InoStripY_list[ij]->SetXYPos(ypos);
+    inoStripY_pointer->InoStripY_list[ij]->SetXYPos(0.03/sqrt(12));
     inoStripY_pointer->InoStripY_list[ij]->SetZPos(zpos);
 
     cout<<"22 "<<ij<<" "<<ypos<<" "<<zpos<<" "<<inoStripY_pointer->InoStripY_list[ij]->GetXYPos() << " " << inoStripY_pointer->InoStripY_list[ij]->GetZPos() << " " << inoStripY_pointer->InoStripY_list[ij]->GetGenPosY() << " "<< inoStripY_pointer->InoStripY_list[ij]->GetGenPosZ()<<endl;
@@ -1007,12 +1009,34 @@ void InoRecoAlg::SaveRecoDataToRootFiles(unsigned int iTrackNum, InoTrackCand* p
 
 				       int plane = pfittedTrack->GetVtxPlane();
 
-				       // cout <<"genplane "<<plane<<endl;
+				       // // // cout <<"genplane "<<plane<<endl;
+				       // // for (unsigned kl = 0; kl <tmpclusts.size(); kl++)	{
+				       // // 	 if (tmpclusts[kl]->GetZPlane()==plane) {
+				       // // 	   pAnalysis->momgnvx[iTrackNum] = 0.001*tmpclusts[kl]->HitsInCluster[0]->GetMomentum();
+				       // // 	   pAnalysis->thegnvx[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetTheta();
+				       // // 	   pAnalysis->phignvx[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetPhi();
+				       // // 	   break;
+				       // // 	 } // if (tmpclusts[kl]->GetZPlane()==plane)
+				       // // } //  for (unsigned kl = 0; kl <tmpclusts.size(); kl++)
+
+				       // // plane = pfittedTrack->GetEndPlane();
+
+				       // // for (unsigned kl = 0; kl <tmpclusts.size(); kl++) {
+				       // // 	 if (tmpclusts[kl]->GetZPlane()==plane) {
+				       // // 	   pAnalysis->momgnend[iTrackNum] = 0.001*tmpclusts[kl]->HitsInCluster[0]->GetMomentum();
+				       // // 	   pAnalysis->thegnend[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetTheta();
+				       // // 	   pAnalysis->phignend[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetPhi();
+				       // // 	   break;
+				       // // 	 }
+				       // // }
+
+
+				        // cout <<"genplane "<<plane<<endl;
 				       for (unsigned kl = 0; kl <tmpclusts.size(); kl++)	{
 					 if (tmpclusts[kl]->GetZPlane()==plane) {
-					   pAnalysis->momgnvx[iTrackNum] = 0.001*tmpclusts[kl]->HitsInCluster[0]->GetMomentum();
-					   pAnalysis->thegnvx[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetTheta();
-					   pAnalysis->phignvx[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetPhi();
+					   pAnalysis->momgnvx[iTrackNum] = 0.001*tmpclusts[kl]->GetMomentum();
+					   pAnalysis->thegnvx[iTrackNum] = tmpclusts[kl]->GetTheta();
+					   pAnalysis->phignvx[iTrackNum] = tmpclusts[kl]->GetPhi();
 					   break;
 					 } // if (tmpclusts[kl]->GetZPlane()==plane)
 				       } //  for (unsigned kl = 0; kl <tmpclusts.size(); kl++)
@@ -1021,14 +1045,18 @@ void InoRecoAlg::SaveRecoDataToRootFiles(unsigned int iTrackNum, InoTrackCand* p
 
 				       for (unsigned kl = 0; kl <tmpclusts.size(); kl++) {
 					 if (tmpclusts[kl]->GetZPlane()==plane) {
-					   pAnalysis->momgnend[iTrackNum] = 0.001*tmpclusts[kl]->HitsInCluster[0]->GetMomentum();
-					   pAnalysis->thegnend[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetTheta();
-					   pAnalysis->phignend[iTrackNum] = tmpclusts[kl]->HitsInCluster[0]->GetPhi();
+					   pAnalysis->momgnend[iTrackNum] = 0.001*tmpclusts[kl]->GetMomentum();
+					   pAnalysis->thegnend[iTrackNum] = tmpclusts[kl]->GetTheta();
+					   pAnalysis->phignend[iTrackNum] = tmpclusts[kl]->GetPhi();
 					   break;
 					 }
 				       }
+
+
+
+				       
 				       //tmpclusts.clear();
-				       }
+}
 
 
 

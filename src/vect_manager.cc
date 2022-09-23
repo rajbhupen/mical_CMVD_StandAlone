@@ -41,9 +41,16 @@ InoStripY_Manager ::InoStripY_Manager() {    APointer = this;  }
 InoStripY_Manager:: ~InoStripY_Manager(){}
 InoStripY_Manager* InoStripY_Manager::APointer;
 
-InoHit_Manager ::InoHit_Manager() {    APointer = this;  }
-InoHit_Manager:: ~InoHit_Manager(){}
-InoHit_Manager *InoHit_Manager::APointer;
+
+InoStripXCluster_Manager ::InoStripXCluster_Manager() {    APointer = this;  }
+InoStripXCluster_Manager:: ~InoStripXCluster_Manager(){}
+InoStripXCluster_Manager* InoStripXCluster_Manager::APointer;
+
+
+InoStripYCluster_Manager ::InoStripYCluster_Manager() {    APointer = this;  }
+InoStripYCluster_Manager:: ~InoStripYCluster_Manager(){}
+InoStripYCluster_Manager* InoStripYCluster_Manager::APointer;
+
 
 InoCluster_Manager ::InoCluster_Manager() {    APointer = this;  }
 InoCluster_Manager:: ~InoCluster_Manager(){}

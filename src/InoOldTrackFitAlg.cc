@@ -1580,7 +1580,7 @@ void InoOldTrackFitAlg::GetFitData_new(int& Plane1, int& Plane2) {
 	//   }
 	// }
 	
-	if(SlcClustData[ij][jk].csh->HitsInCluster.size()>4) continue;
+	//	if(SlcClustData[ij][jk].csh->HitsInCluster.size()>4) continue;
 
 	// if(SlcClustData[ij][jk].csh->GetXEntries()>3) continue;
 	// if(SlcClustData[ij][jk].csh->GetYEntries()>3) continue;
@@ -3465,9 +3465,12 @@ void InoOldTrackFitAlg::SetTrackProperties(double* Prediction,double* fCMVD, dou
     fTrackCand->SetNewTimeSlope(tmpintercept);
     fTrackCand->SetNewTimeIntercept(tmpslope);
   }
-  
+
+  // StripCluster
+  /*
     InoHit_Manager *pHitCollection = InoHit_Manager::APointer;
-  
+
+   
   for(int iw1=EndPlane-2; iw1>-1; iw1--) {
     for(unsigned qw1=0; qw1<pHitCollection->InoHit_list.size(); qw1++) {
       if(pHitCollection->InoHit_list[qw1]->GetZPlane()==iw1 && fabs(pHitCollection->InoHit_list[qw1]->GetTime()-fTrackCand->GetNewTimeEndPlaneExp())<15.0) {
@@ -3490,7 +3493,7 @@ void InoOldTrackFitAlg::SetTrackProperties(double* Prediction,double* fCMVD, dou
   // cout<<tmcnt1<<" "<<tmcnt2<<endl;
   fTrackCand->SetNhitsEndPlane(tmcnt1);
   fTrackCand->SetNhitsEndPlaneM1(tmcnt2);
-  
+  */
   // Fill time and range maps
   SetT() ;// &cth);
   //  SetRangeAnddS();//cth);
@@ -5169,16 +5172,18 @@ bool InoOldTrackFitAlg::DirectionFromFitterHits(InoTrackCand *trk, int epln, dou
       int tninla = trk->ClustsInTrack[kl]->GetZPlane();
       double y1_loc = xslope*xval_loc[kl] + xintercept;
       // cout<<"kl "<<kl<<" "<<trk->ClustsInTrack[kl]->HitsInCluster.size()<<endl;
-      for(unsigned jk=0; jk<trk->ClustsInTrack[kl]->HitsInCluster.size(); jk++) {
+      //SC      for(unsigned jk=0; jk<trk->ClustsInTrack[kl]->HitsInCluster.size(); jk++) {
 	// if(trk->ClustsInTrack[kl]->HitsInCluster.size()==1) {
 	// if(jk==0) {
-	pAnalysis->hdifftime2[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetXTimeCorr() - trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetYTimeCorr());
-	// }
-	pAnalysis->hxtime_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetXTimeCorr() - y1_loc);
-	pAnalysis->hytime_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetYTimeCorr() - y1_loc);
-	pAnalysis->h_hit_time_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetTime() - y1_loc);
-	
-      }
+	//StripCluster
+	// pAnalysis->hdifftime2[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetXTimeCorr() - trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetYTimeCorr());
+	// // }
+	// pAnalysis->hxtime_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetXTimeCorr() - y1_loc);
+	// pAnalysis->hytime_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetYTimeCorr() - y1_loc);
+	// pAnalysis->h_hit_time_ext[tninla]->Fill(trk->ClustsInTrack[kl]->HitsInCluster[jk]->GetTime() - y1_loc);
+	//StripCLuster
+      // }
+      //SC
     }
   } else {
     xslope = -10000;

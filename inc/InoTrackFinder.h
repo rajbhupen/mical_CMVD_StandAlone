@@ -23,7 +23,8 @@ class InoTrackFinder // : public AlgBase
   void Trace(const char *c) const;
 
   void RunTheFinder(); //CandSliceHandle* slice);
-  void FormTheHits(); //CandSliceHandle* slice);
+
+  void FormStripCluster();
   void FormTheClusters();
   void IDTrkAndShwClusters();
   void FormTriplets();
@@ -43,18 +44,17 @@ class InoTrackFinder // : public AlgBase
   void ClearUp();
   double cal_slope2(double x, double* par);
 
+  InoStripXCluster_Manager* inoStripXCluster_pointer; //082022
+  InoStripYCluster_Manager* inoStripYCluster_pointer;
   InoCluster_Manager* inoCluster_pointer; 
   MultiSimAnalysisDigi *pAnalysis;
   micalDetectorParameterDef* paradef;
   /* DatabaseManager* DBmanager; */
   GeneralRecoInfo* grecoi;
  private:
-  //  vector<InoHit*> AllHitBank[500]; //GMA should be given though database of static constant
 
-  vector<InoHit*> HitBank[500];  //GMA Same
-
-  //  vector<InoHit*> HitsInTracks[2];
-
+  
+  vector<InoStrip*> StripBank[500];  //InoStripCluster 082022 
   vector<InoCluster*> ClusterBank[500];
   //  vector<InoCluster*> AllClusterBank[500];
 
@@ -80,7 +80,7 @@ class InoTrackFinder // : public AlgBase
   //  const double StripWidth;
 
   double PECut, PECut2;
-  InoHit_Manager* inoHit_pointer; 
+  
   InoRPCStrip_Manager* inoRPC_pointer;
   //  InoCluster_Manager* inoCluster_pointer; 
   InoTrack_Manager* inoTrack_pointer; 
@@ -98,7 +98,7 @@ class InoTrackFinder // : public AlgBase
   int TrkFinderDebug;
   double DigiToTimeConv;
   double SignalSpeed;
-  
+   unsigned int mxcluster = 5;
     
 };
 

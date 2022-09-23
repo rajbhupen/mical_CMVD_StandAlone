@@ -1,11 +1,13 @@
 #include <cassert>
 #include <iostream>
 #include "InoStrip.h"
-
+#include <iomanip>
+using namespace std;
 //______________________________________________________________________
 
 //______________________________________________________________________
 InoStrip::InoStrip() {
+  fUsed = -1;
   fView = -1; 
   fStrip =-1000;
   fPlane =-1000; 
@@ -25,10 +27,12 @@ InoStrip::InoStrip() {
 
   fId    = -1;  
   fRPCmod =-1;
+  fXYPosErr =(999.);
 }
 
 //______________________________________________________________________
 InoStrip::InoStrip(InoStrip* cd) {
+  fUsed = cd->fUsed;
   fView = cd->fView;  
   fStrip = cd->fStrip;
   fPlane = cd->fPlane; 
@@ -102,3 +106,28 @@ int GetPlaneViewX() {
   return (int)idet;
 }
 */
+
+
+void InoStrip::Print() {
+  //	cout<<"----------------------------------------------------------------------"<<endl;
+  //	cout<<"Cluster combination "<<endl;
+  cout<< "InoStrips():" 
+      << " Plane "<< std::setw(3)<<  GetPlane()
+      << " PlaneView "   << std::setw(3)<<  GetPlaneView()
+      << " Strip "<< std::setw(4)<<  GetStrip()
+       << " RPCmod "<< std::setw(4)<<  GetRPCmod()
+ << " Id "<< std::setw(4)<<  GetId()
+
+      << " XYPos ="   <<std::setw(8)<<  GetXYPos()
+    << " XYPosErr ="   <<std::setw(8)<<  GetXYPosErr()
+      << " ZPos =" <<std::setw(8)<<  GetZPos()
+      << " truetime =" <<std::setw(8)<<  GetTrueTime()
+      << " smrtime =" <<std::setw(8)<<  GetSmrTime()
+      << " isUsed =" <<std::setw(8)<<  GetUsed()
+    //   << " Z_Pos =" <<std::setw(8)<<  GetTruePosZ()
+    // // << " chg="   <<std::setw(8)<<  GetPulse()
+    //   << " time="  <<std::setw(8)<<  GetLeTime()
+      << endl;
+  //  cout<<"......................................................................"<<endl;
+}
+

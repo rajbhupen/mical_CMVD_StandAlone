@@ -5,7 +5,7 @@
 #include "InoCal0Hit.hh"
 #include "InoCal1Hit.hh"
 #include "InoStrip.h"
-#include "InoHit.h"
+#include "InoStripCluster.h"
 #include "InoCluster.h"
 #include "InoTrack.h"
 #include "InoFittedTrack.h"
@@ -82,15 +82,30 @@ class InoStripY_Manager {
   vector<InoStrip*> InoStripY_list;
 };
 
-class InoHit_Manager {
+
+class InoStripXCluster_Manager {
  public:
-  InoHit_Manager();
-  ~InoHit_Manager();
+  InoStripXCluster_Manager();
+  ~InoStripXCluster_Manager();
  public:
   
-  static InoHit_Manager* APointer;
-  vector<InoHit*> InoHit_list;
+  static InoStripXCluster_Manager* APointer;
+  vector<InoStripCluster*> InoStripXCluster_list;
 };
+
+
+
+class InoStripYCluster_Manager {
+ public:
+  InoStripYCluster_Manager();
+  ~InoStripYCluster_Manager();
+ public:
+  
+  static InoStripYCluster_Manager* APointer;
+  vector<InoStripCluster*> InoStripYCluster_list;
+};
+
+
 
 class InoCluster_Manager {
  public:

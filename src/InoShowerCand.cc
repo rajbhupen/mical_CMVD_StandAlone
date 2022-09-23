@@ -6,7 +6,7 @@
 //#include <map>
 
 #include "InoCluster.h"
-#include "InoHit.h"
+
 #include "InoTrackCand.h"
 //#include "InoFitterTrackHandle.h"
 #include "InoShowerCand.h"

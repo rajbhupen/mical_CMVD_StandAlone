@@ -4,7 +4,7 @@
 InoLinearTrackFitAlg::InoLinearTrackFitAlg() {
 
   cout<<" InoLinearTrackFitAlg::InoLinearTrackFitAlg() " <<endl;
-  inoHit_pointer = InoHit_Manager::APointer;
+  
   InoCluster_pointer = InoCluster_Manager::APointer;
   pAnalysis = MultiSimAnalysisDigi::AnPointer;
   //  inoTrackCand_pointer = new InoTrackCand_Manager();
@@ -107,7 +107,7 @@ void InoLinearTrackFitAlg::RunAlg() {
 
 	for (unsigned int ix=0; ix<pinotrack->InoTrack_list[iji]->ClustsInTrack.size(); ix++) {
 	  InoCluster* clust = pinotrack->InoTrack_list[iji]->ClustsInTrack[ix];
-	  clust->Print();
+	  //	  clust->Print();
 	  ClustsInTrackBank[iji][clust->GetZPlane()].push_back(clust);
     cout<<"Filling Cluster"<< "\tZplane="<<clust->GetZPlane()<<endl;
 	}// for (unsigned int ix=0; ix<Cluster_pointer->InoStripX_list.size(); ix++) {
@@ -119,23 +119,23 @@ void InoLinearTrackFitAlg::RunAlg() {
 	    //Only one clust per layer and that cluster should have less than 5 multiplicity:
      if(ClustsInTrackBank[iji][nlay].size()>=1) {
       cout<<"ClustsInTrackBank Size -----"<<ClustsInTrackBank[iji][nlay].size()<<endl;
-	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust() << " "<< ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust() <<endl;
+	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize() << " "<< ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize() <<endl;
 
-	    if (ClustsInTrackBank[iji][nlay].size()==1 &&  ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust()<5 && ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust()<5 ){
+	    if (ClustsInTrackBank[iji][nlay].size()==1 &&  ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize()<5 && ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize()<5 ){
 
 	      zval[nlay]=ClustsInTrackBank[iji][nlay][0]->GetZPos();
 	      Xpos[nlay]=ClustsInTrackBank[iji][nlay][0]->GetXPos();
 	      Ypos[nlay]=ClustsInTrackBank[iji][nlay][0]->GetYPos();
-	      if(ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust()>0) {
-		//	errxsq[nlay] = grecoi->xposerrsq[ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust()-1][nlay]*0.03*0.03;
+	      if(ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize()>0) {
+		//		errxsq[nlay] = grecoi->xposerrsq[ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize()-1][nlay]*0.03*0.03;
 		errxsq[nlay]=ClustsInTrackBank[iji][nlay][0]->GetXPosErr() * ClustsInTrackBank[iji][nlay][0]->GetXPosErr() ;
 	      } else {
 		errxsq[nlay]=errxco[nlay]*errxco[nlay]*0.03*0.03;
 		
 	      }
-	      if(ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust()>0) {
-		//errysq[nlay] = grecoi->yposerrsq[ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust()-1][nlay]*0.03*0.03;
-	        errysq[nlay]=ClustsInTrackBank[iji][nlay][0]->GetYPosErr() * ClustsInTrackBank[iji][nlay][0]->GetYPosErr() ;
+	      if(ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize()>0) {
+		//	errysq[nlay] = grecoi->yposerrsq[ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize()-1][nlay]*0.03*0.03;
+	       errysq[nlay]=ClustsInTrackBank[iji][nlay][0]->GetYPosErr() * ClustsInTrackBank[iji][nlay][0]->GetYPosErr() ; 
 	      } else {
 		errysq[nlay]=erryco[nlay]*erryco[nlay]*0.03*0.03;
 	    
@@ -250,7 +250,7 @@ void InoLinearTrackFitAlg::RunAlg() {
 	      // if(nxfail==0) {Xpos[jki] -= tmp_poffyx;}
 	      // if(nyfail==0) {Ypos[jki] -= tmp_poffxy;}
 
-	      StraightLineFit xposresolfit(1, zval, Xpos,  errxsq, Xusedpos, occulyr, occulyr, layfirst, laylast, xyPosDev);
+	    StraightLineFit xposresolfit(1, zval, Xpos,  errxsq, Xusedpos, occulyr, occulyr, layfirst, laylast, xyPosDev);
 	      xposresolfit.GetParameters(nxfail, xinters, xslope);
 	      cout<<"Slope and intercept X  "<<xslope<<" "<<xinters<<endl;
 	      xposresolfit.GetError(xerrcst, xerrlin, xerrcov);
@@ -283,8 +283,8 @@ void InoLinearTrackFitAlg::RunAlg() {
 		pAnalysis->extPosX[jki] = xext[jki];
 		pAnalysis->inPosY[jki] = Ypos[jki];
 		pAnalysis->extPosY[jki] = yext[jki];
-		pAnalysis->nXStrips[jki] = ClustsInTrackBank[iji][jki][0]->GetNXStripsInClust();
-		pAnalysis->nYStrips[jki] = ClustsInTrackBank[iji][jki][0]->GetNYStripsInClust();
+		pAnalysis->nXStrips[jki] = ClustsInTrackBank[iji][jki][0]->GetXStripClusterSize();
+		pAnalysis->nYStrips[jki] = ClustsInTrackBank[iji][jki][0]->GetYStripClusterSize();
 		pAnalysis->XchisqOccu[jki] = xchi2;
 		pAnalysis->YchisqOccu[jki] = ychi2;
 		pAnalysis->XndfOccu[jki] = Nx-2;

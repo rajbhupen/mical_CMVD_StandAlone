@@ -12,7 +12,7 @@ public:
   InoStrip *DupHandle() const;
 
   void Trace(const char *c = "") const;
-
+  void Print();
   int    GetPlaneView() const { return fView;};
   int    GetStrip() const { return fStrip;};
   double GetXYPos() const {return fXYPos;};
@@ -23,7 +23,9 @@ public:
   int GetSmrTime() const {return iSmrTime;};
   //  double GetTimeY() const {return fTimeY;};
   double GetPulse() const {return fPulse;}; 
-
+  bool GetUsed() const{return fUsed;};
+  
+  void SetUsed(int f){fUsed=f;};
   void   SetPlaneView( int f) {fView=f;};
   void   SetStrip(int f) { fStrip=f;};
   void   SetXYPos(double f) {fXYPos=f;};
@@ -65,7 +67,10 @@ public:
 
   void   SetpdgId(int id) {pdgid= id;}
   int    GetpdgId() { return pdgid;};
-
+  
+  double GetXYPosErr() const {return fXYPosErr;};
+  void   SetXYPosErr(double f) {fXYPosErr=f;};
+      
   int    fRPCmod; //RPC module ID
   int    fView;   // 0/1 for X/Y-axis
   int    fStrip;   //StripID
@@ -88,6 +93,7 @@ public:
   double fZgen; //Generated track z-coordinate
 
   int    fId; // id, will replace all other individual ids
-
+  int fUsed;
+ double fXYPosErr;
 };
 #endif                                              // INOSTRIP_H

@@ -251,7 +251,7 @@ typedef struct{
 
   InoFittedTrack_Manager* inoFittedTrack_pointer; 
      InoTrackCand_Manager* inoTrackCand_pointer;
-  InoHit_Manager* inoHit_pointer; 
+ 
   InoCluster_Manager *InoCluster_pointer;
   MultiSimAnalysisDigi *pAnalysis; 
   micalFieldPropagator *pFieldMap;

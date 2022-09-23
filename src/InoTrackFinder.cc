@@ -73,10 +73,12 @@ InoTrackFinder::InoTrackFinder() :
 			      //  NumModules(1), PlanesInModule(150), ModuleType(1), PECut(0.05), PECut2(0.1) //GMA Need proper vlaue, particularly PECut(2)
 {
   grecoi = GeneralRecoInfo::GnPointer;
-  inoHit_pointer = new InoHit_Manager();
+  
   inoRPC_pointer = InoRPCStrip_Manager::APointer; //new InoRPCStrip_Manager();
-  TrkFinderDebug = 1000;
+  TrkFinderDebug = 100;
   pAnalysis = MultiSimAnalysisDigi::AnPointer;        //asm
+  inoStripXCluster_pointer = new InoStripXCluster_Manager();//082022 RSA
+  inoStripYCluster_pointer = new InoStripYCluster_Manager();
   inoCluster_pointer = new InoCluster_Manager();
 
   inoTrack_pointer = new InoTrack_Manager();
@@ -113,6 +115,27 @@ InoTrackFinder::~InoTrackFinder() {
   //GMA need to clear after evergy events;
   //  inoHit_pointer->InoHit_list.clear();
 
+  
+
+  for (unsigned int ij=0; ij<inoStripXCluster_pointer->InoStripXCluster_list.size(); ij++) {
+    if (inoStripXCluster_pointer->InoStripXCluster_list[ij]) {
+      delete inoStripXCluster_pointer->InoStripXCluster_list[ij];
+      inoStripXCluster_pointer->InoStripXCluster_list[ij]=0;
+    }
+  }
+  inoStripXCluster_pointer->InoStripXCluster_list.clear(); delete inoStripXCluster_pointer;
+
+
+  
+  for (unsigned int ij=0; ij<inoStripYCluster_pointer->InoStripYCluster_list.size(); ij++) {
+    if (inoStripYCluster_pointer->InoStripYCluster_list[ij]) {
+      delete inoStripYCluster_pointer->InoStripYCluster_list[ij];
+      inoStripYCluster_pointer->InoStripYCluster_list[ij]=0;
+    }
+  }
+  inoStripYCluster_pointer->InoStripYCluster_list.clear(); delete inoStripYCluster_pointer;
+
+
   for (unsigned int ij=0; ij<inoCluster_pointer->InoCluster_list.size(); ij++) {
     if (inoCluster_pointer->InoCluster_list[ij]) {
       delete inoCluster_pointer->InoCluster_list[ij];
@@ -140,35 +163,35 @@ void InoTrackFinder::RunTheFinder() {
   // cout<< "FINDING TRACKS IN SLICE" << endl;
 
   // Run the methods
-  FormTheHits();// slice);
-  // cout<< "FINDING TRACKS IN SLICE1" << endl;
+  FormStripCluster();// slice);
+   cout<< "FINDING TRACKS IN SLICE1" << endl;
   FormTheClusters();
-  // cout<< "FINDING TRACKS IN SLICE2" << endl;
+   cout<< "FINDING TRACKS IN SLICE2" << endl;
   IDTrkAndShwClusters();
-  // cout<< "FINDING TRACKS IN SLICE3" << endl;
+   cout<< "FINDING TRACKS IN SLICE3" << endl;
   FormTriplets();
-  // cout<< "FINDING TRACKS IN SLICE4" << endl;
+   cout<< "FINDING TRACKS IN SLICE4" << endl;
   FindAllAssociations();
-  // cout<< "FINDING TRACKS IN SLICE5" << endl;
+   cout<< "FINDING TRACKS IN SLICE5" << endl;
   FindPreferredJoins();
-  // cout<< "FINDING TRACKS IN SLICE6" << endl;
+   cout<< "FINDING TRACKS IN SLICE6" << endl;
   FindMatchedJoins();
-  // cout<< "FINDING TRACKS IN SLICE7" << endl;
+   cout<< "FINDING TRACKS IN SLICE7" << endl;
   FirstComparison();
   // if(ModuleType==2) {NearDetectorTriplets();}
   FormTracks();
-  // cout<< "FINDING TRACKS IN SLICE8" << endl;
+   cout<< "FINDING TRACKS IN SLICE8" << endl;
   JoinTracks();
-  // cout<< "FINDING TRACKS IN SLICE9" << endl;
+   cout<< "FINDING TRACKS IN SLICE9" << endl;
   FormFinalTracks(); //(slice);
-  // cout<< "FINDING TRACKS IN SLICE10" << endl;
+   cout<< "FINDING TRACKS IN SLICE10" << endl;
   // JoinCurvedTrack();
-  // cout<< "FINDING TRACKS IN SLICE11" << endl;
+   cout<< "FINDING TRACKS IN SLICE11" << endl;
   CleanAndFilled();
-  // cout<< "FINDING TRACKS IN SLICE12" << endl;
+   cout<< "FINDING TRACKS IN SLICE12" << endl;
   return;
 }
-
+/*
 void InoTrackFinder::FormTheHits() {
   // cout<<"void InoTrackFinder::FormTheHits() {..."<<endl;
   //MultiSimAnalysis *pAnalysis = MultiSimAnalysis::AnPointer;        //asm
@@ -261,8 +284,8 @@ void InoTrackFinder::FormTheHits() {
 	    inpar4[prx] = grecoi->align_ystr_xdev[nInLAx][prx];
 	  }
 
-	  double tmp_poffx = StripXWidth*(cal_slope2(nInX+0.5,inpar1) + cal_slope2(nInY+0.5,inpar4));
-	  double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2) + cal_slope2(nInX+0.5,inpar3));
+	  //	  double tmp_poffx = StripXWidth*(cal_slope2(nInX+0.5,inpar1) + cal_slope2(nInY+0.5,inpar4));
+	  //	  double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2) + cal_slope2(nInX+0.5,inpar3));
 
 	   // cout<<nInLAx<<" "<<nInX<<" "<<nInY<<endl;
 	  // cout<<grecoi->timeoffsetx[nInLAx]<<" "<<grecoi->timeoffsety[nInLAx]<<" "<<grecoi->xtoffset[nInLAx][nInX]<<" "<<grecoi->ytoffset[nInLAx][nInY]<<" "<<grecoi->xt_slope_cor[nInLAx][nInX][nInY]<<" "<<grecoi->yt_slope_cor[nInLAx][nInY][nInX]<<endl;
@@ -276,11 +299,11 @@ void InoTrackFinder::FormTheHits() {
 	  // cout<<"nInLA "<<nInLAx<<" "<<nInLAy<<" ix "<<ix<<" jy "<<jy<<" SmrTime "<<DigiToTimeConv*XStrip->GetSmrTime()<<" "<<DigiToTimeConv*YStrip->GetSmrTime()<<" corrtime "<<Xtime<<" "<<Ytime<<" offset "<<tmp_toffx<<" "<<tmp_toffy<<endl;
 
 	  // Mark for editting
-	  cout<<"Both XY Hits"<<endl;
+
 	  InoHit* tmphit = new InoHit(XStrip, YStrip);
 
-	  tmphit->SetXpOffset(tmp_poffx);
-	  tmphit->SetYpOffset(tmp_poffy);
+	  tmphit->SetXpOffset(0.);
+	  tmphit->SetYpOffset(0.);
 	  tmphit->SetXtOffset(tmp_toffx);
 	  tmphit->SetYtOffset(tmp_toffy);
 
@@ -311,67 +334,17 @@ void InoTrackFinder::FormTheHits() {
       //         inoHit_pointer->InoHit_list.push_back(tmphit);
       // }
 
-  //0:SwimSwimmer and also for straightline
+  //0:SwimSwimmer
+  if(MessFile->GetTrackFit()==0){
 
-  bool consider_singlehits = false;
-  if(consider_singlehits){
-    if( (MessFile->GetTrackFit()==0 && MessFile->GetMag()==1 ) || MessFile->GetMag()==0 ){ //for SL and SwimSwimmer use single hit events also
 
-    cout<<"Considering Single side hits"<<endl;
   if (pstripx) {
     for (unsigned ix=0; ix<pstripx->InoStripX_list.size() ; ix++) {
       InoStrip* XStrip = pstripx->InoStripX_list[ix];
-
-
-      int tmpxStrpId = XStrip->GetId();
-      tmpxStrpId>>=8;
-      int nInX = tmpxStrpId & 0x7F;
-      tmpxStrpId>>=13;
-      int nInLAx = tmpxStrpId & 0xFF;
-
-      // int nInY = 32; //Y-side cosider center of detector
-      // int nInLAy = nInLAx;
-
-      
       if (iXFill[ix]==1) continue;
       if (XStrip->GetPulse()<PECut2) continue;
 
-      cout<<"Only X Hits"<<endl;
-      double tmp_toffx = grecoi->timeoffsetx[nInLAx] - 1.5;
-      double tmp_toffy = grecoi->timeoffsety[nInLAx];
-
-       tmp_toffx += grecoi->xtoffset[nInLAx][nInX];
-      // tmp_toffy += grecoi->ytoffset[nInLAx][nInY];
-
-      // tmp_toffx += grecoi->xt_slope_cor[nInLAx][nInX][nInY];
-      // tmp_toffy += grecoi->yt_slope_cor[nInLAx][nInY][nInX];
-      
-      double inpar1[3];
-      double inpar2[3];
-      double inpar3[3];
-      double inpar4[3];
-      for(int prx=0; prx<3; prx++) {
-	inpar1[prx] = grecoi->align_xstr_xdev[nInLAx][prx];
-	inpar2[prx] = grecoi->align_ystr_ydev[nInLAx][prx];
-	inpar3[prx] = grecoi->align_xstr_ydev[nInLAx][prx];
-	inpar4[prx] = grecoi->align_ystr_xdev[nInLAx][prx];
-      }
-      
-      double tmp_poffx = StripXWidth*(cal_slope2(nInX+0.5,inpar1));
-      //  double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2) + cal_slope2(nInX+0.5,inpar3));
-      double tmp_poffy = -1000;
-        
-      
-      
       InoHit* tmphit = new InoHit(XStrip);
-	  
-      tmphit->SetXpOffset(tmp_poffx);
-      tmphit->SetYpOffset(tmp_poffy);
-      tmphit->SetXtOffset(tmp_toffx);
-      tmphit->SetYtOffset(tmp_toffy);
-      
-      
-      
       HitBank[XStrip->GetPlane()].push_back(tmphit);
       //      AllHitBank[XStrip->GetPlane()].push_back(tmphit);
       //    inoHit_pointer->InoHit_list.push_back(tmphit);
@@ -381,54 +354,10 @@ void InoTrackFinder::FormTheHits() {
   if (pstripy) {
     for (unsigned iy=0; iy<pstripy->InoStripY_list.size() ; iy++) {
       InoStrip* YStrip = pstripy->InoStripY_list[iy];
-
-
-      int tmpyStrpId = YStrip->GetId();
-      tmpyStrpId>>=8;
-      int nInY = tmpyStrpId & 0x7F;
-      tmpyStrpId>>=13;
-      int nInLAy = tmpyStrpId & 0xFF;
-
-      // int nInX = 32; //Y-side cosider center of detector
-      // int nInLAx = nInLAy;
-
-      
       if (iYFill[iy]==1) continue;
       if (YStrip->GetPulse()<PECut2) continue;
-      cout<<"Only Y Hits"<<endl;
-      double tmp_toffx = grecoi->timeoffsetx[nInLAy] - 1.5;
-      double tmp_toffy = grecoi->timeoffsety[nInLAy];
 
-      //      tmp_toffx += grecoi->xtoffset[nInLAx][nInX];
-      tmp_toffy += grecoi->ytoffset[nInLAy][nInY];
-
-      //      tmp_toffx += grecoi->xt_slope_cor[nInLAx][nInX][nInY];
-      //      tmp_toffy += grecoi->yt_slope_cor[nInLAx][nInY][nInX];
-      
-      double inpar1[3];
-      double inpar2[3];
-      double inpar3[3];
-      double inpar4[3];
-      for(int prx=0; prx<3; prx++) {
-	inpar1[prx] = grecoi->align_xstr_xdev[nInLAy][prx];
-	inpar2[prx] = grecoi->align_ystr_ydev[nInLAy][prx];
-	inpar3[prx] = grecoi->align_xstr_ydev[nInLAy][prx];
-	inpar4[prx] = grecoi->align_ystr_xdev[nInLAy][prx];
-      }
-      
-      double tmp_poffx = -1000;
-      double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2));
-      
-      
-      
       InoHit* tmphit = new InoHit(YStrip);
-	  
-      tmphit->SetXpOffset(tmp_poffx);
-      tmphit->SetYpOffset(tmp_poffy);
-      tmphit->SetXtOffset(tmp_toffx);
-      tmphit->SetYtOffset(tmp_toffy);
-      
-      
       HitBank[YStrip->GetPlane()].push_back(tmphit);
       //      AllHitBank[YStrip->GetPlane()].push_back(tmphit);
       //    inoHit_pointer->InoHit_list.push_back(tmphit);
@@ -600,7 +529,7 @@ void InoTrackFinder::FormTheClusters() {
   // of these hits. This is controlled by the IsHitAssoc method in InoCluster.
   // Pointers to the InoCluster objects are stored in plane order in a
   // clusterbank
-  bool jim_pos_corr = false;
+
   double xpos_xtime_corr[3][10][2] = {
     {
       {0.00202779 , -0.0812821},
@@ -688,7 +617,7 @@ void InoTrackFinder::FormTheClusters() {
 	  //HitBank[ij][jk]::fUID = 0 b4 including the hit in a cluster
 	  InoCluster* Clust = new InoCluster(HitBank[ij][jk]);
 	  // Make a cluster for the first hit on the plane
-	  Clust->Print();
+
 	  ClusterBank[HitBank[ij][jk]->GetZPlane()].push_back(Clust);
 	  //ClusterBank[HitBank[ij][jk]->GetZPlane()].push_back(Clust);
 
@@ -714,7 +643,6 @@ void InoTrackFinder::FormTheClusters() {
 	    }
 	  }
 
-    if(jim_pos_corr){
 
 	  
 	//After adding all the hits in cluster Jim & SP
@@ -766,11 +694,6 @@ void InoTrackFinder::FormTheClusters() {
 
 	  newClusterNum++;
 	  Clust->SetClusterNum(newClusterNum);
-
-
-
-
-    } //jim_pos_corr
 	  inoCluster_pointer->InoCluster_list.push_back(Clust);//All the clusters wil be stored in InoCluster_list
 	}
       }
@@ -827,83 +750,680 @@ void InoTrackFinder::FormTheClusters() {
   //------------------------------------------------------------------------------------------
   // cout<<"void InoTrackFinder::FormTheClusters() completed"<<endl;
   // return;
+}
+*/
 
-  //Add multiplicity dependent errors                                           
+
+void InoTrackFinder::FormStripCluster() {
+  cout<<"void InoTrackFinder::FormStripCluster() {..."<<endl;
+  InoStripX_Manager *inoStripX_pointer = InoStripX_Manager::APointer;
+  InoStripY_Manager *inoStripY_pointer = InoStripY_Manager::APointer;
+
+  //..........X................
+
+  if (inoStripX_pointer) {
+    for (unsigned int ix=0; ix<inoStripX_pointer->InoStripX_list.size(); ix++) {
+      inoStripX_pointer->InoStripX_list[ix]->Print();
+    }
+
+  }
+  
+
+  cout<<"...........First Sorting X Entries acc to stripno..................."<<endl;
+
+  if (inoStripX_pointer) {
+
+    for (unsigned int ix=0; ix<inoStripX_pointer->InoStripX_list.size(); ix++) {
+    
+      int detid1 = inoStripX_pointer->InoStripX_list[ix]->GetRPCmod();
+      int strp1 = inoStripX_pointer->InoStripX_list[ix]->GetStrip();
+    
+      for (unsigned int ixi=ix+1; ixi<inoStripX_pointer->InoStripX_list.size(); ixi++) {
+      
+	int detid2 = inoStripX_pointer->InoStripX_list[ixi]->GetRPCmod();
+	int strp2 = inoStripX_pointer->InoStripX_list[ixi]->GetStrip();
+	if(detid1 == detid2){
+	
+	  if(strp1<strp2){
+	    swap(inoStripX_pointer->InoStripX_list[ix],inoStripX_pointer->InoStripX_list[ixi]);	  
+	  }
+	
+	}// if(detid ==detid2){
+    	
+      }// for (unsigned ixi=ix+1; ixi<inoStripX_pointer->InoStripX_list.size(); ixi++) {
+    
+    }//  for (unsigned ix=0; ix<inoStripX_pointer->InoStripX_list.size(); ix++) {
+
+
+
+    cout<<"................sorted array: ..............."<<endl;
+    for (unsigned int ix=0; ix<inoStripX_pointer->InoStripX_list.size(); ix++) {
+      InoStrip* XStrip = inoStripX_pointer->InoStripX_list[ix];
+      XStrip->SetUsed(false);
+      XStrip->Print();
+      //      pAnalysis->XSmrTime->Fill(XStrip->GetSmrTime());
+      //      pAnalysis->XTrueTime->Fill(XStrip->GetTrueTime());
+      StripBank[XStrip->GetPlane()].push_back(XStrip);
+    }
+    //.....................................................................................
+    // bool AddingStrips;
+  
+    for(unsigned int ij=0; ij<10;ij++){
+    
+      cout<<"ij "<<ij<<" "<<StripBank[ij].size()<< endl;   
+      for(unsigned int jk=0; jk<StripBank[ij].size();jk++) {
+	cout<<"jk "<<jk<<endl;   
+	if(!(StripBank[ij][jk]->GetUsed())) {
+	  InoStripCluster* StripXClust = new InoStripCluster(StripBank[ij][jk]);
+	  cout<<StripXClust<<endl;
+	
+	  //Change Used from 0 to 1 to show that hit has been added
+	  StripBank[ij][jk]->SetUsed(true);
+	  // int stripno1 = 	StripBank[ij][jk]->GetStrip();
+	  // int truetime1 = StripBank[ij][jk]->GetTrueTime();
+	  //	cout<<stripno1<<endl;
+	  //	AddingStrips=true;
+	  // Loop over other strip hits on plane to form stripclusters
+	  //	while(AddingStrips==true) {
+	  //	  cout<<"while"<<endl;
+	  //  AddingStrips=false;
+	  for(unsigned int kl=jk+1; kl<StripBank[ij].size(); kl++) {
+	    cout<<"kl "<<kl<<endl;
+	    // int stripno2 = 	StripBank[ij][kl]->GetStrip();
+	    // int truetime2 = StripBank[ij][kl]->GetTrueTime();
+	    //	 	cout<<stripno2<<endl;
+
+	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) continue;
+	    //	 //	 if(StripBank[ij][kl]->GetSmrTime() > 800 || StripBank[ij][kl]->GetSmrTime()<150 )continue;//290 is mean of smrtime without noise/multiplicity
+	 
+	    //loop over the hits in that plane
+	    if ( abs(StripXClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) continue;
+	    if(!( StripBank[ij][kl]->GetUsed())) {
+	   
+	      cout<<"check1"<<endl;
+	      StripXClust->AddStrip(StripBank[ij][kl]);
+	      cout<<"check2"<<endl;
+	  
+	      StripBank[ij][kl]->SetUsed(true);
+	      cout<<"check3"<<endl;
+	      //StripBank[ij][jk]::fUID = 1 when the strip is included as StripCluster
+	      //  AddingStrips=true;
+	    }
+	  }
+	  // }
+     
+	  cout<<"check4 "<<StripXClust<<endl;
+	  inoStripXCluster_pointer->InoStripXCluster_list.push_back(StripXClust);//All the clusters wil be stored in InoCluster_list
+	  cout<<"check5"<<endl;
+     
+	}
+
+     
+     
+      }
+   
+
+    }
+    //...//
+
+  
+
+  }//  if (inoStripX_pointer) {
+  //......................
+  cout<<"check3"<<endl;
+  for(unsigned int jj=0;jj<inoStripXCluster_pointer->InoStripXCluster_list.size();jj++){
+    inoStripXCluster_pointer->InoStripXCluster_list[jj]->Print();
+  }
+
+  cout<<"check3q"<<endl;
+
+  bool rejectX=false;
+
+  if(rejectX){
+    //Rejecting a cluster having more than 5 strips:
+    if(inoStripX_pointer){
+      for(unsigned int jj=0;jj<inoStripXCluster_pointer->InoStripXCluster_list.size();jj++){
+	if(inoStripXCluster_pointer->InoStripXCluster_list[jj]->GetStripEntries()>mxcluster){
+	  inoStripXCluster_pointer->InoStripXCluster_list.erase(inoStripXCluster_pointer->InoStripXCluster_list.begin()+jj);
+	  jj--;
+
+
+	}
+      }
+
+    }
+  }
+
+  //..................Y...........
+
+  cout<<"...........First Sorting Y Entries acc to stripno..................."<<endl;
+
+
+
+  if (inoStripY_pointer) {
+    for (unsigned ix=0; ix<inoStripY_pointer->InoStripY_list.size(); ix++) {
+      inoStripY_pointer->InoStripY_list[ix]->Print();
+    }
+
+  }
+
+
+
+
+
+   
+  if (inoStripY_pointer) {
+    for (unsigned iy=0; iy<inoStripY_pointer->InoStripY_list.size(); iy++) {
+    
+      int detid1 = inoStripY_pointer->InoStripY_list[iy]->GetRPCmod();
+      int strp1 = inoStripY_pointer->InoStripY_list[iy]->GetStrip();
+    
+      for (unsigned iyi=iy+1; iyi<inoStripY_pointer->InoStripY_list.size(); iyi++) {
+      
+	int detid2 = inoStripY_pointer->InoStripY_list[iyi]->GetRPCmod();
+	int strp2 = inoStripY_pointer->InoStripY_list[iyi]->GetStrip();
+	if(detid1 == detid2){
+	
+	  if(strp1<strp2){
+	    swap(inoStripY_pointer->InoStripY_list[iy],inoStripY_pointer->InoStripY_list[iyi]);	  
+	  }
+	
+	}// if(detid ==detid2){
+    	
+      }// for (unsigned iyi=iy+1; iyi<inoStripY_pointer->InoStripY_list.size(); iyi++) {
+    
+    }//  for (unsigned iy=0; iy<inoStripY_pointer->InoStripY_list.size(); iy++) {
+
+    for(int i=0;i<64;i++){
+      StripBank[i].clear();
+    }
+    cout<<"................sorted array: ..............."<<endl;
+    for (unsigned int iy=0; iy<inoStripY_pointer->InoStripY_list.size(); iy++) {
+      InoStrip* YStrip = inoStripY_pointer->InoStripY_list[iy];
+      YStrip->SetUsed(false);
+      YStrip->Print();
+      //      pAnalysis->YSmrTime->Fill(YStrip->GetSmrTime()  );
+      // pAnalysis->YTrueTime->Fill(YStrip->GetTrueTime());
+      StripBank[YStrip->GetPlane()].push_back(YStrip);
+    }
+    //.....................................................................................
+    //  bool AddingStrips;
+  
+    for(unsigned int ij=0; ij<10;ij++){
+      for(unsigned int jk=0; jk<StripBank[ij].size();jk++) {
+     
+	if(StripBank[ij][jk]->GetUsed()==0) {
+	  InoStripCluster* StripYClust = new InoStripCluster(StripBank[ij][jk]);
+	
+	
+	  //Change Used from 0 to 1 to show that hit has been added
+	  StripBank[ij][jk]->SetUsed(1);
+	  // int stripno1 = 	StripBank[ij][jk]->GetStrip();
+	  // int truetime1 = StripBank[ij][jk]->GetTrueTime();
+	
+	  ////	AddingStrips=true;
+	  // Loop over other strip hits on plane to form stripclusters
+	  ////	while(AddingStrips==true) {
+	  ////	  AddingStrips=false;
+	  for(unsigned int kl=jk+1; kl<StripBank[ij].size(); kl++) {
+	 
+	    // int stripno2 = 	StripBank[ij][kl]->GetStrip();
+	    // int truetime2 = StripBank[ij][kl]->GetTrueTime();
+	 
+
+	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) continue;
+	    ////	 if(StripBank[ij][kl]->GetSmrTime() > 800 || StripBank[ij][kl]->GetSmrTime()<150 )continue;//290 is mean of smrtime without noise/multiplicity
+	    ////	 if( abs(StripBank[ij][kl-1]->GetSmrTime()-StripBank[ij][kl]->GetSmrTime())>50 ) continue; //5/0.1
+	    if ( abs(StripYClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) continue;
+
+	 
+	    //loop over the hits in that plane
+	    if(StripBank[ij][kl]->GetUsed()==0) {
+
+	 
+	      StripYClust->AddStrip(StripBank[ij][kl]);
+
+	  
+	      StripBank[ij][kl]->SetUsed(1);
+	      //StripBank[ij][jk]::fUID = 1 when the strip is included as StripCluster
+	      ////	   AddingStrips=true;
+	    }
+	    ////       }
+	  }
+     
+     
+	  inoStripYCluster_pointer->InoStripYCluster_list.push_back(StripYClust);//All the clusters wil be stored in InoCluster_list
+     
+     
+	}
+
+     
+     
+      }
+   
+
+    }
+    //...//
+
+  
+
+  }//  if (inoStripY_pointer) {
+  //......................
+
+
+  for(unsigned int jj=0;jj<inoStripYCluster_pointer->InoStripYCluster_list.size();jj++){
+    inoStripYCluster_pointer->InoStripYCluster_list[jj]->Print();
+  }
+
+
+  //Rejecting a cluster having more than 5 strips:
+
+  bool rejectY = false;
+  if(rejectY){
+    if(inoStripY_pointer){
+      for(unsigned int jj=0;jj<inoStripYCluster_pointer->InoStripYCluster_list.size();jj++){
+	if(inoStripYCluster_pointer->InoStripYCluster_list[jj]->GetStripEntries()>mxcluster){
+	  inoStripYCluster_pointer->InoStripYCluster_list.erase(inoStripYCluster_pointer->InoStripYCluster_list.begin()+jj);
+	  jj--;
+
+
+	}
+      }
+
+    }
+   
+  }
+  
+}//  void InoTrackFinder::FormStripCluster() {
+//===================================================================================================================================
+
+
+
+void InoTrackFinder::FormTheClusters() {
+  cout<<"void InoTrackFinder::FormTheClusters() {..combining x and y stripcluster."<<endl;
+  
+  paradef = micalDetectorParameterDef::AnPointer;
+  InoStripXCluster_Manager *pstripx = InoStripXCluster_Manager::APointer;
+  InoStripYCluster_Manager *pstripy = InoStripYCluster_Manager::APointer;
+  
+  //  vector <int> iXfill;
+  //  vector <int> iYFill;
+  //GMA need to sort out the definition of vector<int> it out
+  int iXFill[5000]={0}; //GMA14 need to return back to vecttor, same is true for some other cases aslo (in other classes)
+  int iYFill[5000]={0};
+  //-----------------------------------------------------------------------------------------------------------
+
+ 
+  
+  if (pstripx) {
+    cout<<"pstripx->InoStripXCluster_list.size()"<<pstripx->InoStripXCluster_list.size()<<endl;
+    for (unsigned ix=0; ix<pstripx->InoStripXCluster_list.size(); ix++) {
+      InoStripCluster* XStripCluster = pstripx->InoStripXCluster_list[ix];
+      cout <<"GetPlane strip "<< XStripCluster->GetPlane()<<endl;
+      int nInLAx = XStripCluster->GetPlane();
+      int nInX = XStripCluster->GetStripCluster(); // cluster no.
+      
+      if (XStripCluster->GetPulse()<PECut) continue;
+      
+      if (pstripy) {
+	for (unsigned jy=0; jy<pstripy->InoStripYCluster_list.size(); jy++) {
+	  InoStripCluster* YStripCluster = pstripy->InoStripYCluster_list[jy];
+	  cout <<"YGetPlane strip "<< YStripCluster->GetPlane()<<endl;
+
+	  int nInLAy = YStripCluster->GetPlane();
+	  int nInY = YStripCluster->GetStripCluster();
+
+	  if (YStripCluster->GetPulse()<PECut) continue;
+	  if (XStripCluster->GetRPCmod() != YStripCluster->GetRPCmod()) continue;
+
+        
+        
+
+
+	  if(nInLAx != nInLAy) continue;
+
+	  double tmp_toffx = grecoi->timeoffsetx[nInLAx] - 1.5;
+	  double tmp_toffy = grecoi->timeoffsety[nInLAx];
+
+	  tmp_toffx += grecoi->xtoffset[nInLAx][nInX];
+	  tmp_toffy += grecoi->ytoffset[nInLAx][nInY];
+
+	  tmp_toffx += grecoi->xt_slope_cor[nInLAx][nInX][nInY];
+	  tmp_toffy += grecoi->yt_slope_cor[nInLAx][nInY][nInX];
+
+	  double inpar1[3];
+	  double inpar2[3];
+	  double inpar3[3];
+	  double inpar4[3];
+	  for(int prx=0; prx<3; prx++) {
+	    inpar1[prx] = grecoi->align_xstr_xdev[nInLAx][prx];
+	    inpar2[prx] = grecoi->align_ystr_ydev[nInLAx][prx];
+	    inpar3[prx] = grecoi->align_xstr_ydev[nInLAx][prx];
+	    inpar4[prx] = grecoi->align_ystr_xdev[nInLAx][prx];
+	  }
+
+	  	  double tmp_poffx = StripXWidth*(cal_slope2(nInX+0.5,inpar1) + cal_slope2(nInY+0.5,inpar4));
+	  	  double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2) + cal_slope2(nInX+0.5,inpar3));
+
+		  cout<<"tmp_poffx tmp_poffy "<<tmp_poffx<<" "<<tmp_poffy<<endl;
+		  
+	   // cout<<nInLAx<<" "<<nInX<<" "<<nInY<<endl;
+	  // cout<<grecoi->timeoffsetx[nInLAx]<<" "<<grecoi->timeoffsety[nInLAx]<<" "<<grecoi->xtoffset[nInLAx][nInX]<<" "<<grecoi->ytoffset[nInLAx][nInY]<<" "<<grecoi->xt_slope_cor[nInLAx][nInX][nInY]<<" "<<grecoi->yt_slope_cor[nInLAx][nInY][nInX]<<endl;
+	  double Xtime = DigiToTimeConv*XStripCluster->GetSmrTime() - (nInY+0.5)*SignalSpeed - tmp_toffx; //(sigXspeed);
+	  double Ytime = DigiToTimeConv*YStripCluster->GetSmrTime() - (nInX+0.5)*SignalSpeed - tmp_toffy; //(sigYspeed);
+
+	  double diffTime = Xtime - Ytime;
+	  pAnalysis->hdifftime1[nInLAx]->Fill(diffTime);
+	  if (fabs(diffTime) > 5*ns) continue; //Already converted this to ns (anyhow ns=1.0)
+	  // pAnalysis->hdifftime2[nInLAx]->Fill(diffTime);
+	  // cout<<"nInLA "<<nInLAx<<" "<<nInLAy<<" ix "<<ix<<" jy "<<jy<<" SmrTime "<<DigiToTimeConv*XStrip->GetSmrTime()<<" "<<DigiToTimeConv*YStrip->GetSmrTime()<<" corrtime "<<Xtime<<" "<<Ytime<<" offset "<<tmp_toffx<<" "<<tmp_toffy<<endl;
+
+
+
+
+
+	  // Mark for editting
+	  cout<<"checks1"<<endl;
+	  InoCluster* tmpcluster = new InoCluster(XStripCluster, YStripCluster);
+
+	  
+	  tmpcluster->SetXpOffset(tmp_poffx);
+	  tmpcluster->SetYpOffset(tmp_poffy);
+	  tmpcluster->SetXtOffset(tmp_toffx);
+	  tmpcluster->SetYtOffset(tmp_toffy);
+
+
+
+
+
+	  inoCluster_pointer->InoCluster_list.push_back(tmpcluster);
+
+
+	 
+
+	  ClusterBank[XStripCluster->GetPlane()].push_back(tmpcluster);
+
+	  iXFill[ix] = 1;
+	  iYFill[jy] = 1;
+
+	}
+      }
+    }
+  }
+
+
+  if (pstripx) {
+    cout<<" if (pstripx) {"<<endl;
+    for (unsigned ix=0; ix<pstripx->InoStripXCluster_list.size() ; ix++) {
+      InoStripCluster* XStripCluster = pstripx->InoStripXCluster_list[ix];
+      cout<<iXFill[ix]<<endl;
+
+      int nInLAx = XStripCluster->GetPlane();
+      int nInX = XStripCluster->GetStripCluster(); // cluster no.
+
+      double tmp_toffx = grecoi->timeoffsetx[nInLAx] - 1.5;
+      double tmp_toffy = grecoi->timeoffsety[nInLAx];
+
+	  // tmp_toffx += grecoi->xtoffset[nInLAx][nInX];
+	  // tmp_toffy += grecoi->ytoffset[nInLAx][nInY];
+
+	  // tmp_toffx += grecoi->xt_slope_cor[nInLAx][nInX][nInY];
+	  // tmp_toffy += grecoi->yt_slope_cor[nInLAx][nInY][nInX];
+
+	  double inpar1[3];
+	  double inpar2[3];
+	  double inpar3[3];
+	  double inpar4[3];
+	  for(int prx=0; prx<3; prx++) {
+	    inpar1[prx] = grecoi->align_xstr_xdev[nInLAx][prx];
+	    inpar2[prx] = grecoi->align_ystr_ydev[nInLAx][prx];
+	    inpar3[prx] = grecoi->align_xstr_ydev[nInLAx][prx];
+	    inpar4[prx] = grecoi->align_ystr_xdev[nInLAx][prx];
+	  }
+	  
+	  double tmp_poffx = StripXWidth*(cal_slope2(nInX+0.5,inpar1));
+	  double tmp_poffy = 1000;
+					  
+		  cout<<"tmp_poffx tmp_poffy "<<tmp_poffx<<" "<<tmp_poffy<<endl;
+
+
+
+      
+      if (iXFill[ix]==1) continue;
+      cout<<"Only X side Hit"<<endl;
+      cout<<XStripCluster->GetPulse()<<" "<<PECut2<<endl;
+      if (XStripCluster->GetPulse()<PECut2) continue;
+     
+      InoCluster* tmpcluster = new InoCluster(XStripCluster);
+
+
+		  
+	  tmpcluster->SetXpOffset(tmp_poffx);
+	  tmpcluster->SetYpOffset(tmp_poffy);
+	  tmpcluster->SetXtOffset(tmp_toffx);
+	  tmpcluster->SetYtOffset(tmp_toffy);
+
+
+
+
+      ClusterBank[XStripCluster->GetPlane()].push_back(tmpcluster);
+      //      AllClusterBank[XStripCluster->GetPlane()].push_back(tmpcluster);
+      inoCluster_pointer->InoCluster_list.push_back(tmpcluster);
+    }
+  }
+
+  if (pstripy) {
+    for (unsigned iy=0; iy<pstripy->InoStripYCluster_list.size() ; iy++) {
+      InoStripCluster* YStripCluster = pstripy->InoStripYCluster_list[iy];
+
+
+
+      int nInLAy = YStripCluster->GetPlane();
+      int nInY = YStripCluster->GetStripCluster(); // cluster no.
+
+      double tmp_toffx = grecoi->timeoffsetx[nInLAy] - 1.5;
+      double tmp_toffy = grecoi->timeoffsety[nInLAy];
+      
+      // tmp_toffx += grecoi->xtoffset[nInLAx][nInX];
+      // tmp_toffy += grecoi->ytoffset[nInLAx][nInY];
+
+      // tmp_toffx += grecoi->xt_slope_cor[nInLAx][nInX][nInY];
+      // tmp_toffy += grecoi->yt_slope_cor[nInLAx][nInY][nInX];
+      
+      double inpar1[3];
+      double inpar2[3];
+      double inpar3[3];
+      double inpar4[3];
+      for(int prx=0; prx<3; prx++) {
+	inpar1[prx] = grecoi->align_xstr_xdev[nInLAy][prx];
+	inpar2[prx] = grecoi->align_ystr_ydev[nInLAy][prx];
+	inpar3[prx] = grecoi->align_xstr_ydev[nInLAy][prx];
+	inpar4[prx] = grecoi->align_ystr_xdev[nInLAy][prx];
+      }
+      
+      double tmp_poffx = 1000;
+      double tmp_poffy = StripYWidth*(cal_slope2(nInY+0.5,inpar2));
+      
+      cout<<"tmp_poffx tmp_poffy "<<tmp_poffx<<" "<<tmp_poffy<<endl;
+      
+      
+      
+      if (iYFill[iy]==1) continue;
+
+      if (YStripCluster->GetPulse()<PECut2) continue;
+      cout<<"Only Y side Hit"<<endl;
+      InoCluster* tmpcluster = new InoCluster(YStripCluster);
+
+		  
+	  tmpcluster->SetXpOffset(tmp_poffx);
+	  tmpcluster->SetYpOffset(tmp_poffy);
+	  tmpcluster->SetXtOffset(tmp_toffx);
+	  tmpcluster->SetYtOffset(tmp_toffy);
+
+
+      ClusterBank[YStripCluster->GetPlane()].push_back(tmpcluster);
+      //      AllClusterBank[YStripCluster->GetPlane()].push_back(tmpcluster);
+      inoCluster_pointer->InoCluster_list.push_back(tmpcluster);
+    }
+  }
+
+
+  cout<<"void InoTrackFinder::FormTheClusters() }..."<<endl;
+
+
+  int nlayer=0;
+  for(int ij=0; ij<500; ++ij) {
+  if(ClusterBank[ij].size()>0){nlayer++;}
+  }
+  pAnalysis->nLayer=nlayer;
+
+
+
+
+  
+
+  for (unsigned ix=0; ix<inoCluster_pointer->InoCluster_list.size() ; ix++) {
+    InoCluster* clust = inoCluster_pointer->InoCluster_list[ix];
+    clust->Print();
+    pAnalysis->clustTime[clust->GetZPlane()] = clust->GetTime();
+  }
+  
+  
+  cout<<"Add multiplicity dependent errors"<<endl;                                                                                                                         
 
   float errxco[12]={0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675};
   float erryco[12]={0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675,0.288675};
 
-                                      
+ 
+
 
   for(int Module=0; Module<NumModules; ++Module) {
-    for(int Plane=0; Plane<PlanesInModule+1; ++Plane) {
-      int jk=Plane + Module*(PlanesInModule+1);
-      
-      for(int ij=0;ij<ClusterBank[jk].size();ij++){
-	
-	InoCluster* Clust = ClusterBank[jk][ij];
-	
-	if(Clust->GetNXStripsInClust()>0){
-	  Clust->SetXPosErr(0.03*sqrt(grecoi->xposerrsq[Clust->GetNXStripsInClust()-1][jk]));
-	} else{
-	  Clust->SetXPosErr(errxco[jk]*0.03);
-	}
-    
-	if(Clust->GetNYStripsInClust()>0){
-	  Clust->SetYPosErr(0.03*sqrt(grecoi->yposerrsq[Clust->GetNYStripsInClust()-1][jk]));
-	}else{
-	  Clust->SetYPosErr(erryco[jk]*0.03);
-	}
-	
-    
-	
-      }//  for(int ij=0;ij<ClusterBank[jk].size();ij++){                            
-      
-    }
-  }
-  
-  
-  
-  
+    for(int Plane=0; Plane<PlanesInModule; ++Plane) {
+      int jk=Plane + Module*(PlanesInModule);
+
+      cout<<"Module Plane jk "<<Module<<" "<<Plane<<" "<<jk<<endl;
+    for(int ij=0;ij<ClusterBank[jk].size();ij++){
+
+      InoCluster* Clust = ClusterBank[jk][ij];
+
+      if(Clust->GetXStripClusterSize()>0){
+        Clust->SetXPosErr(0.03*sqrt(grecoi->xposerrsq[Clust->GetXStripClusterSize()-1][jk]));
+      } else{
+        Clust->SetXPosErr(errxco[jk]*0.03);
+      }
+
+      if(Clust->GetYStripClusterSize()>0){
+        Clust->SetYPosErr(0.03*sqrt(grecoi->yposerrsq[Clust->GetYStripClusterSize()-1][jk]));
+      }else{
+        Clust->SetYPosErr(erryco[jk]*0.03);
+      }
+
+
+
+    }//  for(int ij=0;ij<ClusterBank[jk].size();ij++){                                                                                                        
+    }//  for(int Plane=0; Plane<PlanesInModule+1; ++Plane) {
+  }//  for(int Module=0; Module<NumModules; ++Module) {
+
+
+
   
 }
- 
+
+
+
+
+
+
+
+
+
+
 void InoTrackFinder::IDTrkAndShwClusters() {
+  cout<<"void InoTrackFinder::IDTrkAndShwClusters() {"<<endl;
   // Look at the 1D clusters formed and use simple techniques to get an idea
   // of how track-like or shower-like each cluster is.
   // Then look at all clusters on the plane and see how track-like or shower-like
   // the plane is.
   //  Detector::Detector_t Detector = vldc->GetDetector();
-
+  
   //  int k0;
   int nclust0, nclust1, nhits0, nhits1, ShwAssocNum;
-
+  
   vector<InoCluster*> TempClust0;
   vector<InoCluster*> TempClust1;
-
+  
   //Set TrkFlag to 1, when the pulse value is above threshold (right now set to low value) or fdigit is >1 i.e more thatn two strips are hit
   //MultiSimAnalysis *pAnalysis = MultiSimAnalysis::AnPointer;
   for(int Module=0; Module<NumModules; ++Module) {
     for(int Plane=0; Plane<PlanesInModule+1; ++Plane) {
       int ij=Plane + Module*(PlanesInModule+1);
       for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
-	if(ClusterBank[ij][jk]->GetPulse()>PECut || ClusterBank[ij][jk]->GetDigits()>1 ) {
-	  ClusterBank[ij][jk]->SetTrkFlag(1);
+	if(ClusterBank[ij][jk]->GetPulse()>PECut ) {
+	  
+	  ClusterBank[ij][jk]->Print();
+	  
+	  if(ClusterBank[ij][jk]->GetXStripClusterSize()>0){
+
+	    if(ClusterBank[ij][jk]->GetYStripClusterSize()>0 ){
+	      cout<<"both x y stripcluster present"<<endl;
+	      if(ClusterBank[ij][jk]->GetXStripClusterSize() <=3 && ClusterBank[ij][jk]->GetYStripClusterSize() <=3 ) {
+	cout<<"SetTrakFlag to 1"<<endl;
+	ClusterBank[ij][jk]->SetTrkFlag(1);
+	ClusterBank[ij][jk]->SetTrkPlnFlag(1);
+	
+	      }
+	      else{
+		
+		ClusterBank[ij][jk]->SetShwFlag(1);
+		ClusterBank[ij][jk]->SetShwPlnFlag(1);
+	      }
+	      
+	    }else{
+	      cout<<"only x stripcluster present"<<endl;
+	      if(ClusterBank[ij][jk]->GetXStripClusterSize() <=3 ) {
+		cout<<"SetTrakFlag to 1"<<endl;
+		ClusterBank[ij][jk]->SetTrkFlag(1);
+		ClusterBank[ij][jk]->SetTrkPlnFlag(1);
+	      }
+	      else{
+		
+		ClusterBank[ij][jk]->SetShwFlag(1);
+		ClusterBank[ij][jk]->SetShwPlnFlag(1);
+	      }
+	      
+	      
+	    }
+	  }else if(ClusterBank[ij][jk]->GetYStripClusterSize()>0 ){
+	    cout<<"Only Y side StripCluster present"<<endl;
+	    if(ClusterBank[ij][jk]->GetYStripClusterSize() <=3 ) {
+	      cout<<"SetTrakFlag to 1"<<endl;
+	      ClusterBank[ij][jk]->SetTrkFlag(1);
+	      ClusterBank[ij][jk]->SetTrkPlnFlag(1);
+	    }
+	    else{
+	      
+	      ClusterBank[ij][jk]->SetShwFlag(1);
+	      ClusterBank[ij][jk]->SetShwPlnFlag(1);
+	    }
+	    
+	    
+	  }
+	  
 	}
-      }
+      }	
     }
   }
-
-  // Identify the shower-like clusters
+  /*
+    // Identify the shower-like clusters
   for(int Module=0; Module<NumModules; ++Module) {
     for(int Plane=1; Plane<PlanesInModule+1; ++Plane) {
       int ij=Plane + Module*(PlanesInModule+1);
-
+      
       for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
 	InoCluster* Clust0 = ClusterBank[ij][jk];
 	nhits0=0; nhits1=0; nclust0=0; nclust1=0;
 	TempClust0.clear(); TempClust1.clear();
-
+	
 	// Look for shower associations in nearby planes
 	// Loop over nearby planes
 	for(int kl=-1; kl<2; ++kl) {
@@ -919,12 +1439,14 @@ void InoTrackFinder::IDTrkAndShwClusters() {
 		ShwAssocNum=Clust0->IsShwAssoc(Clust1);
 		// Store the association data and the clusters
 		if(ShwAssocNum>0) {
-		  nhits0+=Clust1->GetHitEntries();
+		  nhits0+=max(Clust1->GetXStripCluster()->GetClusterSize(),Clust1->GetYStripCluster()->GetClusterSize());
+		  // nhits0+=Clust1->GetHitEntries();
 		  nclust0+=1;
 		  TempClust0.push_back(Clust1);
 		}
 		if(ShwAssocNum>1) {
-		  nhits1+=Clust1->GetHitEntries();
+		  //  nhits1+=Clust1->GetHitEntries();
+		  nhits1+=  max(Clust1->GetXStripCluster()->GetClusterSize(),Clust1->GetYStripCluster()->GetClusterSize());
 		  nclust1+=1;
 		  TempClust1.push_back(Clust1);
 		}
@@ -944,7 +1466,7 @@ void InoTrackFinder::IDTrkAndShwClusters() {
 	    // Clust0->SetTrkFlag(3); //asm: added new
 	  }
 	}
-
+	
 	if(nclust0>4 && nhits0>5) {
 	  //GMA optimise it
 	  for(unsigned int kl=0; kl<TempClust0.size(); ++kl) {
@@ -956,15 +1478,16 @@ void InoTrackFinder::IDTrkAndShwClusters() {
       }
     }
   }
-
+  
+  
   // Identify track-like and shower-like planes
   double Charge;
-
+  
   for(int Module=0; Module<NumModules; ++Module) {
     for(int Plane=0; Plane<PlanesInModule+1; ++Plane) {
       int ij=Plane + Module*(PlanesInModule+1);
       Charge=0.;
-
+      
       // Get total charge in clusters on plane
       for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
 	Charge+=ClusterBank[ij][jk]->GetPulse();
@@ -974,26 +1497,28 @@ void InoTrackFinder::IDTrkAndShwClusters() {
       if(Charge>0.) {
 	for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
 	  InoCluster* Clust = ClusterBank[ij][jk];
-	  if(Clust->GetHitEntries()<4 && (Clust->GetPulse()/Charge)>0.39) {Clust->SetTrkPlnFlag(1);}
-	  if(Clust->GetHitEntries()<4 && (Clust->GetPulse()/Charge)<0.40) {Clust->SetTrkPlnFlag(1);}//Clust->SetTrkFlag(0);}
-	  if(Clust->GetHitEntries()>3 && Clust->GetHitEntries()<7 && (Clust->GetPulse()/Charge)<0.6)
+
+	  int maxXYClusterSize =  max(Clust->GetXStripCluster()->GetClusterSize(),Clust->GetYStripCluster()->GetClusterSize());
+	  if(maxXYClusterSize<4 && (Clust->GetPulse()/Charge)>0.39) {Clust->SetTrkPlnFlag(1);}
+	  if(maxXYClusterSize<4 && (Clust->GetPulse()/Charge)<0.40) {Clust->SetTrkPlnFlag(1);}//Clust->SetTrkFlag(0);}
+	  if(maxXYClusterSize>3 && maxXYClusterSize<7 && (Clust->GetPulse()/Charge)<0.6)
 	    {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);Clust->SetTrkFlag(0);}
-	  if(Clust->GetHitEntries()>3 && Clust->GetHitEntries()<7 && (Clust->GetPulse()/Charge)>0.59)
+	  if(maxXYClusterSize>3 && maxXYClusterSize<7 && (Clust->GetPulse()/Charge)>0.59)
 	    {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(1);Clust->SetTrkFlag(1);}
-	  if(Clust->GetHitEntries()>6) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);Clust->SetTrkFlag(0);}
-	  // if(Clust->GetHitEntries()<4) {Clust->SetTrkPlnFlag(1);}//Clust->SetTrkFlag(0); }
-	  // if(Clust->GetHitEntries()>3 && Clust->GetHitEntries()<7) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);}//Clust->SetTrkFlag(0);}
-	  // if(Clust->GetHitEntries()>3 && Clust->GetHitEntries()<7) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);}
-	  // if(Clust->GetHitEntries()>6) {Clust->SetShwPlnFlag(1) ;Clust->SetTrkPlnFlag(0);}
+	  if(maxXYClusterSize>6) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);Clust->SetTrkFlag(0);}
+	  // if(maxXYClusterSize<4) {Clust->SetTrkPlnFlag(1);}//Clust->SetTrkFlag(0); }
+	  // if(maxXYClusterSize>3 && maxXYClusterSize<7) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);}//Clust->SetTrkFlag(0);}
+	  // if(maxXYClusterSize>3 && maxXYClusterSize<7) {Clust->SetShwPlnFlag(1);Clust->SetTrkPlnFlag(0);}
+	  // if(maxXYClusterSize>6) {Clust->SetShwPlnFlag(1) ;Clust->SetTrkPlnFlag(0);}
 	}
       }
     }
   }
-
+  */
   //----------------------------------------------------------------------------------------------------------------------cout
   // Print out list of hits and 1D clusters
-  // cout <<" InoTrackFinder:ShwTrkFlagging" <<endl;
-
+   cout <<" InoTrackFinder:ShwTrkFlagging" <<endl;
+  
   pAnalysis->inoclust =0;
   for(int ij=0; ij<500; ++ij) {
     double Charge1=0;
@@ -1001,8 +1526,8 @@ void InoTrackFinder::IDTrkAndShwClusters() {
     for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
       Charge1+=ClusterBank[ij][jk]->GetPulse();
     }
-
-    if (TrkFinderDebug==1) {
+    
+    //  if (pAnalysis->isXtermOut==1) {
       for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
 	cout<<"shwtrk"
 	    << " pln=" << std::setw(3) << ClusterBank[ij][jk]->GetZPlane()
@@ -1010,39 +1535,43 @@ void InoTrackFinder::IDTrkAndShwClusters() {
 	    << "<->"    << std::setw(8) << ClusterBank[ij][jk]->GetEndXPos()
 	    << "  beY="<< std::setw(8) << ClusterBank[ij][jk]->GetBegYPos()
 	    << "<->"    << std::setw(8) << ClusterBank[ij][jk]->GetEndYPos()
-	    << "  nhits="    << std::setw(4) << ClusterBank[ij][jk]->GetHitEntries()
-	    << "  puls  ="   << std::setw(10) << ClusterBank[ij][jk]->GetPulse()/Charge1
-	    << "  trkf="     << std::setw(3) << ClusterBank[ij][jk]->GetTrkFlag()
-	    << "  shwf="     << std::setw(3) << ClusterBank[ij][jk]->GetShwFlag()
-	    << "  shwpl="    << std::setw(3) << ClusterBank[ij][jk]->GetShwPlnFlag()
-	    << "  trkpl="    << std::setw(4) << ClusterBank[ij][jk]->GetTrkPlnFlag() << endl;
+	    << "  XClusterSize="    << std::setw(4) << ClusterBank[ij][jk]->GetXStripClusterSize()
+	   << "  YClusterSize="    << std::setw(4) << ClusterBank[ij][jk]->GetYStripClusterSize()
+	<< "  puls  ="   << std::setw(10) << ClusterBank[ij][jk]->GetPulse()/Charge1
+	<< "  trkf="     << std::setw(3) << ClusterBank[ij][jk]->GetTrkFlag()
+	<< "  shwf="     << std::setw(3) << ClusterBank[ij][jk]->GetShwFlag()
+	<< "  shwpl="    << std::setw(3) << ClusterBank[ij][jk]->GetShwPlnFlag()
+	<< "  trkpl="    << std::setw(4) << ClusterBank[ij][jk]->GetTrkPlnFlag() << endl;
       }
-    }// TrkFinderDebug
+      // }// isXtermOut
   }
   //-----------------------------------------------------------------------------------------------------------------ascii_output
-  if (pAnalysis->isVisOut==1) {
-    int ll=0;
-    pAnalysis->H->NClus=inoCluster_pointer->InoCluster_list.size();
-    for(int ij=0; ij<500; ++ij) {
-      for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
-	for(unsigned int kl =0 ;kl<ClusterBank[ij][jk]->GetHitEntries(); ++kl) {
-	  pAnalysis->Hp=  pAnalysis->H->AddHits(0,0); // add a track object  //VALGRIND
-	  pAnalysis->Hp->TrackType=-2;// Track Type: -1: hits, -2: clulster, -3: trijlet, -4: track
-	  pAnalysis->Hp->CluNum=ll;// Hit Number
-	  pAnalysis->Hp->ZZ=ClusterBank[ij][jk]->GetZPlane();
-	  pAnalysis->Hp->XX=ClusterBank[ij][jk]->GetHit(kl)->GetXPos();
-	  pAnalysis->Hp->YY=ClusterBank[ij][jk]->GetHit(kl)->GetYPos();
-	}
-	ll++;
-      }
-    }
-  }
+  //commented raj
+  // // if (pAnalysis->isVisOut==1) {
+  // //   int ll=0;
+  // //   pAnalysis->H->NClus=inoCluster_pointer->InoCluster_list.size();
+  // //   for(int ij=0; ij<500; ++ij) {
+  // //     for(unsigned int jk=0; jk<ClusterBank[ij].size(); ++jk) {
+  // // 	for(unsigned int kl =0 ;kl<max(ClusterBank[ij][jk]->GetXStripCluster()->GetClusterSize(),ClusterBank[ij][jk]->GetYStripCluster()->GetClusterSize()); ++kl) {
+  // // 	  pAnalysis->Hp=  pAnalysis->H->AddHits(0,0); // add a track object  //VALGRIND
+  // // 	  pAnalysis->Hp->TrackType=-2;// Track Type: -1: hits, -2: clulster, -3: trijlet, -4: track
+  // // 	  pAnalysis->Hp->CluNum=ll;// Hit Number
+  // // 	  pAnalysis->Hp->ZZ=ClusterBank[ij][jk]->GetZPlane();
+  // // 	  pAnalysis->Hp->XX=ClusterBank[ij][jk]->GetHit(kl)->GetXPos();
+  // // 	  pAnalysis->Hp->YY=ClusterBank[ij][jk]->GetHit(kl)->GetYPos();
+  // // 	}
+  // // 	ll++;
+  // //     }
+  // //   }
+  // // }
   //---------------------------------------------------------------------------------------------------------------
   return;
 }
 
-void InoTrackFinder::FormTriplets() {
 
+
+void InoTrackFinder::FormTriplets() {
+  cout<<"void InoTrackFinder::FormTriplets() {"<<endl;
   //asm++++++++++++++++++++++++++++++++++++++++changed the conditions for forming triplets+++++++++++++++++++++++
   //asm[][][][][][][][][][][][][][][][][][][][]Refer to the changes in Cluster.cc file also[][][][][][][][][][][]
 
@@ -1088,10 +1617,10 @@ void InoTrackFinder::FormTriplets() {
 	      for(unsigned int kp=0; kp<ClusterBank[ij+1].size(); ++kp) {
 
                 if(ClusterBank[ij-1][kl]->GetTrkFlag()>0 && ClusterBank[ij+1][kp]->GetTrkFlag()>0) {
-		  if(TrkFinderDebug==10) cout<<"-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-"<<endl;
+		  if(TrkFinderDebug==100) cout<<"-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-a1-"<<endl;
                   // Check the track-like association of the three clusters
                   TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-1][kl],ClusterBank[ij+1][kp]);
-		  if(TrkFinderDebug==10) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		  if(TrkFinderDebug==100) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
 		  // If the association is good, make the triplet
                   if(TripAssocNum> 2) {        //asm : was 0
                     InoTrackSegment* seg0 = new InoTrackSegment(ClusterBank[ij-1][kl], ClusterBank[ij][k0], ClusterBank[ij+1][kp]);
@@ -1121,10 +1650,10 @@ void InoTrackFinder::FormTriplets() {
 		  if(ClusterBank[ij-2][kl]->GetTrkFlag()>0 && ClusterBank[ij+1][kp]->GetTrkFlag()>0) {
 
 		    // Check the track-like association of the three clusters
-		    if(TrkFinderDebug==10) cout<<"-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-"<<endl;
+		    if(TrkFinderDebug==100) cout<<"-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-a2-"<<endl;
 		    TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-2][kl],ClusterBank[ij+1][kp]);
 
-		    if(TrkFinderDebug==10) cout<<"ij m X 0 p "<< ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		    if(TrkFinderDebug==100) cout<<"ij m X 0 p "<< ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
 
 		    // If the association is good, check whether we can make the triplet
 		    if(TripAssocNum>2) {                          //asm: was >0
@@ -1177,12 +1706,12 @@ void InoTrackFinder::FormTriplets() {
                   if(ClusterBank[ij-3][kl]->GetTrkFlag()>0 && ClusterBank[ij+1][kp]->GetTrkFlag()>0) {
 
                     // Check the track-like association of the three clusters
-		    if(TrkFinderDebug==10) cout<<"-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-"<<endl;
+		    if(TrkFinderDebug==100) cout<<"-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-a4-"<<endl;
                     TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-3][kl],ClusterBank[ij+1][kp]);
 
                     // If the association is good, check whether we can make the triplet
 
-		    if(TrkFinderDebug==10) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		    if(TrkFinderDebug==100) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
                     if(TripAssocNum>2) {
                       AlternateTriplets=false;
 
@@ -1267,10 +1796,10 @@ void InoTrackFinder::FormTriplets() {
 		for(unsigned int kp=0; kp<ClusterBank[ij+2].size(); ++kp) {
 
 		  if(ClusterBank[ij-1][kl]->GetTrkFlag()>0 && ClusterBank[ij+2][kp]->GetTrkFlag()>0) {
-		    if(TrkFinderDebug==10) cout<<"-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-"<<endl;
+		    if(TrkFinderDebug==100) cout<<"-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-a3-"<<endl;
                     // Check the track-like association of the three clusters
 		    TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-1][kl],ClusterBank[ij+2][kp]);
-		    if(TrkFinderDebug==10) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		    if(TrkFinderDebug==100) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
 		    // If the association is good, check whether we can make the triplet
 		    if(TripAssocNum>2) {
 		      AlternateTriplets=false;
@@ -1323,9 +1852,9 @@ void InoTrackFinder::FormTriplets() {
 
 		  if(ClusterBank[ij-1][kl]->GetTrkFlag()>0 && ClusterBank[ij+3][kp]->GetTrkFlag()>0) {
 		    // Check the track-like association of the three clusters
-		    if(TrkFinderDebug==10) cout<<"-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-"<<endl;
+		    if(TrkFinderDebug==100) cout<<"-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-a5-"<<endl;
 		    TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-1][kl],ClusterBank[ij+3][kp]);
-		    if(TrkFinderDebug==10) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		    if(TrkFinderDebug==100) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
 		    // If the association is good, check whether we can make the triplet
 
 		    if(TripAssocNum>2) {
@@ -1410,9 +1939,9 @@ void InoTrackFinder::FormTriplets() {
 
 		if(ClusterBank[ij-2][kl]->GetTrkFlag()>0 && ClusterBank[ij+2][kp]->GetTrkFlag()>0) {
 		  // Check the track-like association of the three clusters
-		  if(TrkFinderDebug==10) cout<<"-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-"<<endl;
+		  if(TrkFinderDebug==100) cout<<"-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-a6-"<<endl;
 		  TripAssocNum=ClusterBank[ij][k0]->IsTrkAssoc(ClusterBank[ij-2][kl],ClusterBank[ij+2][kp]);
-		  if(TrkFinderDebug==10) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
+		  if(TrkFinderDebug==100) cout <<"TripAssocNum "<<ij<<" "<<k0<<" "<<kl<<" "<<kp<<" "<<TripAssocNum<<endl;
 		  // If the association is good, check whether we can make the triplet
 		  if(TripAssocNum>2) {
 		    AlternateTriplets=false;
@@ -1545,72 +2074,77 @@ void InoTrackFinder::FormTriplets() {
   }//(TrkFinderDebug)
 
   //-----------------------------------------------------------------------------------------------------ascii_output
-  if (pAnalysis->isVisOut==1){
+  //commented raj
+//   if (pAnalysis->isVisOut==1){
 
-    int n_clushit;
-    int ll=pAnalysis->H->NTrips;
-    for( int ij=0; ij<500; ++ij ) {
-      for(unsigned int jk=0;jk<SegmentBank[ij].size(); ++jk) {
-	n_clushit =0;
-	for (unsigned int kl=0; kl<SegmentBank[ij][jk]->ClustersInSegment.size(); ++kl){
-	  n_clushit +=  SegmentBank[ij][jk]->GetCluster(kl)->HitsInCluster.size();
-	}
+//     int n_clushit;
+//     int ll=pAnalysis->H->NTrips;
+//     for( int ij=0; ij<500; ++ij ) {
+//       for(unsigned int jk=0;jk<SegmentBank[ij].size(); ++jk) {
+// 	n_clushit =0;
+// 	for (unsigned int kl=0; kl<SegmentBank[ij][jk]->ClustersInSegment.size(); ++kl){
+// 	  n_clushit +=  SegmentBank[ij][jk]->GetCluster(kl)->HitsInCluster.size();
+// 	}
 
-	//           InoCluster* clr0 = SegmentBank[ij][jk]->GetCluster(k);
-/*	pAnalysis->ascii_output << std::setw(12)<< "1"
-				<< std::setw(12)<< "-3"
-				<< std::setw(12)<< ll
-				<< std::setw(12)<< jk
-				<< std::setw(14) << n_clushit
-				<< std::setw(14)<< "-3"
-				<< std::setw(14)<< "-3"
-				<< std::setw(14)<< "-3"
-				<< endl;
-*/
-	int hh=0;
-	for (unsigned int kl=0; kl<SegmentBank[ij][jk]->ClustersInSegment.size(); ++kl) {
-	  InoCluster* clr0 = SegmentBank[ij][jk]->GetCluster(kl);
-	  /*   pAnalysis->ascii_output << std::setw(12)<< "1"
-	      <<std::setw(12) << "-3"
-	      << std::setw(12)<< kl
-	      << std::setw(12)
-	      << std::setw(14)<< "-2"
-	      << std::setw(14)<< "-2"
-	      << std::setw(14)<< "-2"
-	      << endl;  */
-          for (unsigned int lm=0;lm< clr0->HitsInCluster.size(); ++lm){
-/*	    pAnalysis->ascii_output << std::setw(12)<< "1"
-				    << std::setw(12)<< "-3"
-				    << std::setw(12)<< ll
-				    << std::setw(12)<< hh
-				    << std::setw(12)<< lm
-				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetZPlane()
-				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetXPos()
-				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetYPos()
-				    << endl;
-*/
-	    pAnalysis->H->NTrips= pAnalysis->H->NTrips +1; //Number of Triplet events
-	    pAnalysis->Hp= pAnalysis->H->AddHits(0,0); // add a track object //VALGRIND
-	    pAnalysis->Hp->TrackType=-3;// Track Type: -1: hits, -2: clulster, -3: triplet, -4: track
-	    pAnalysis->Hp->TriNum=ll;// Hit Number
-	    pAnalysis->Hp->ZZ=clr0->HitsInCluster[lm]->GetZPlane();
-	    pAnalysis->Hp->XX=clr0->HitsInCluster[lm]->GetXPos();
-	    pAnalysis->Hp->YY=clr0->HitsInCluster[lm]->GetYPos();
+// 	//           InoCluster* clr0 = SegmentBank[ij][jk]->GetCluster(k);
+// /*	pAnalysis->ascii_output << std::setw(12)<< "1"
+// 				<< std::setw(12)<< "-3"
+// 				<< std::setw(12)<< ll
+// 				<< std::setw(12)<< jk
+// 				<< std::setw(14) << n_clushit
+// 				<< std::setw(14)<< "-3"
+// 				<< std::setw(14)<< "-3"
+// 				<< std::setw(14)<< "-3"
+// 				<< endl;
+// */
+// 	int hh=0;
+// 	for (unsigned int kl=0; kl<SegmentBank[ij][jk]->ClustersInSegment.size(); ++kl) {
+// 	  InoCluster* clr0 = SegmentBank[ij][jk]->GetCluster(kl);
+// 	  /*   pAnalysis->ascii_output << std::setw(12)<< "1"
+// 	      <<std::setw(12) << "-3"
+// 	      << std::setw(12)<< kl
+// 	      << std::setw(12)
+// 	      << std::setw(14)<< "-2"
+// 	      << std::setw(14)<< "-2"
+// 	      << std::setw(14)<< "-2"
+// 	      << endl;  */
+//           for (unsigned int lm=0;lm< clr0->HitsInCluster.size(); ++lm){
+// /*	    pAnalysis->ascii_output << std::setw(12)<< "1"
+// 				    << std::setw(12)<< "-3"
+// 				    << std::setw(12)<< ll
+// 				    << std::setw(12)<< hh
+// 				    << std::setw(12)<< lm
+// 				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetZPlane()
+// 				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetXPos()
+// 				    << std::setw(14)<<clr0->HitsInCluster[lm]->GetYPos()
+// 				    << endl;
+// */
+// 	    pAnalysis->H->NTrips= pAnalysis->H->NTrips +1; //Number of Triplet events
+// 	    pAnalysis->Hp= pAnalysis->H->AddHits(0,0); // add a track object //VALGRIND
+// 	    pAnalysis->Hp->TrackType=-3;// Track Type: -1: hits, -2: clulster, -3: triplet, -4: track
+// 	    pAnalysis->Hp->TriNum=ll;// Hit Number
+// 	    pAnalysis->Hp->ZZ=clr0->HitsInCluster[lm]->GetZPlane();
+// 	    pAnalysis->Hp->XX=clr0->HitsInCluster[lm]->GetXPos();
+// 	    pAnalysis->Hp->YY=clr0->HitsInCluster[lm]->GetYPos();
 
 
-	    hh++;
-	  }
-	}
-	ll++;
-      }
-    }
-  }
+// 	    hh++;
+// 	  }
+// 	}
+// 	ll++;
+//       }
+//     }
+//   }
+//   //commented raj
+
+  
   //asm: here we display all hits in that cluster, we can move to clusters in the triplet.
   //--------------------------------------------------------------------------------------------
   return;
 }
 
 void InoTrackFinder::FindAllAssociations() {
+  cout<<"void InoTrackFinder::FindAllAssociations() {"<<endl;
   // For each triplet formed, we check nearby triplets and examine if
   // the triplets are associated. For each triplet, we simply find the
   // nearby other triplets that have a compatible beginning and/or end
@@ -4013,7 +4547,7 @@ void InoTrackFinder::FormFinalTracks( )
 
   int ShwOrTrkList[500];
   int ViewList[500];
-  vector<InoHit*> HitList[500];
+  ////  vector<InoHit*> HitList[500];
   //  vector<InoCluster*> ClustList[500]; //GMA14
   //  vector<InoTrack*> FinalTrackTempHolder[2];
 
@@ -4284,11 +4818,11 @@ void InoTrackFinder::FormFinalTracks( )
       for(Plane=begplane2;Plane<maxplane; ++Plane) {
 	if (TrkFinderDebug==3 && ViewList[Plane]>-1) {
 	  InoCluster* Clust = ClusterList[Plane][0];
-	  cout<< "InoTrackFinder : size11 "<<ClusterList[Plane].size()<<" " << Clust->GetHitEntries()<<" "
-	      << Clust->GetZPlane() <<" flg " << Clust->GetShwPlnFlag() << " " << Clust->GetTrkPlnFlag()
-	      << " " << Clust->GetBegXPos() << " " << Clust->GetEndXPos()
-	      << " " << Clust->GetBegYPos() << " " << Clust->GetEndYPos()
-	      << " " << ShwOrTrkList[Plane] << endl;
+	      // 	  cout<< "InoTrackFinder : size11 "<<ClusterList[Plane].size()<<" " << Clust->GetHitEntries()<<" "
+	      // << Clust->GetZPlane() <<" flg " << Clust->GetShwPlnFlag() << " " << Clust->GetTrkPlnFlag()
+	      // << " " << Clust->GetBegXPos() << " " << Clust->GetEndXPos()
+	      // << " " << Clust->GetBegYPos() << " " << Clust->GetEndYPos()
+	      // << " " << ShwOrTrkList[Plane] << endl;
 	}
       }
 
@@ -4361,24 +4895,33 @@ void InoTrackFinder::FormFinalTracks( )
 	      if(ViewList[Plane+kl]==View) {
 		InoCluster* ClustTemp = ClusterList[Plane+kl][0];
 
-		for(unsigned int lm=0; lm<ClustTemp->GetHitEntries(); ++lm) {
-		  InoHit* HitTemp = ClustTemp->GetHit(lm);
+		
+		  
+		for(int lm=0; lm<ClustTemp->GetXStripClusterSize(); ++lm) {
+		  InoStrip* XTemp = ClustTemp->GetXStripCluster()->GetStrip(lm);
 
-		  Zz=HitTemp->GetZPos();
-		  Xx=HitTemp->GetXPos();
-		  Xw=HitTemp->GetXPulse()/ClustTemp->GetXPulse();
+		  Zz=XTemp->GetZPos();
+		  Xx=XTemp->GetXYPos();
+		  Xw=XTemp->GetPulse()/ClustTemp->GetPulse();
 
 		  if(ShwOrTrkList[Plane+kl]>2) {Xw=5.*Xw;}
 		  else {Xw=0.5*Xw;}
 		  Xswx+=Xw*Zz; Xswy+=Xw*Xx; Xswx2+=Xw*Zz*Zz; Xswxy+=Xw*Zz*Xx; Xsw+=Xw;
+		}
 
-		  Yy=HitTemp->GetYPos();
-		  Yw=HitTemp->GetYPulse()/ClustTemp->GetYPulse();
+	  
+		for(int lm=0; lm<ClustTemp->GetYStripClusterSize(); ++lm) {
+		  InoStrip* YTemp = ClustTemp->GetYStripCluster()->GetStrip(lm);
+
+		  Zz=YTemp->GetZPos();	      
+		  Yy=YTemp->GetXYPos();
+		  Yw=YTemp->GetPulse()/ClustTemp->GetPulse();
 
 		  if(ShwOrTrkList[Plane+kl]>2) {Yw=5.*Yw;}
 		  else {Yw=0.5*Yw;}
 		  Yswx+=Yw*Zz; Yswy+=Yw*Yy; Yswx2+=Yw*Zz*Zz; Yswxy+=Yw*Zz*Yy; Ysw+=Yw;
 		}
+		
               }
             }
 
@@ -4466,105 +5009,158 @@ void InoTrackFinder::FormFinalTracks( )
 	    // 07/02/2009 If we want hit infor kep it, otherwise emove the following part
             // Loop over the hits in this cluster
 
-	    const unsigned int nhits = clr->GetHitEntries();
+
+	    //changed for stripcluster:raj
+	     int nxstrips = clr->GetXStripClusterSize();
 	    //   if(nhits<2)ClustList[Plane].push_back(clr);
-
-            if(nhits){
-              for(unsigned int kl=0; kl<nhits; ++kl) {clr->GetHit(kl)->SetTrkFlag(1);}
-
+	    
+            if(nxstrips>0){
+              for(int kl=0; kl<nxstrips; ++kl) {clr->SetTrkFlag(1);}
+              
               Xswx=0.0; Xswy=0.0; Xswx2=0.0; Xswxy=0.0; Xsw=0.0;
-	      Yswx=0.0; Yswy=0.0; Yswx2=0.0; Yswxy=0.0; Ysw=0.0;
+	  
 
               // For these, loop over the hits in nearby clusters (within 2 planes of the current plane)
               // and carry out the linear fit
               for(int kl=-2; kl<3; ++kl){
 		//		// ViewList[Plane+kl]==View &&
                 if( ViewList[Plane+kl]==View && (Plane+kl)>=begplane2 && (Plane+kl)<(maxplane) && ShwOrTrkList[Plane+kl]>1 ) {
-
+		  
                   InoCluster* clrtmp = ClusterList[Plane+kl].back(); // Again get last entry
-                  for(unsigned int lm=0; lm<clrtmp->GetHitEntries(); ++lm){
-                    InoHit* hittmp = clrtmp->GetHit(lm);
-
-		    Zz=hittmp->GetZPos();
-		    Xx=hittmp->GetXPos();
-		    Xw=hittmp->GetXPulse()/clrtmp->GetXPulse();
-
+		  cout<<"printing cluster xw"<<endl;
+		  clrtmp->Print();
+		  if(clrtmp->GetXStripClusterSize()>0){
+		    for(unsigned int lm=0; lm<clrtmp->GetXStripCluster()->GetStripEntries(); lm++){
+		    	    cout<<"lm "<<lm<<endl;
+                    InoStrip* xtmp = clrtmp->GetXStripCluster()->GetStrip(lm);
+		    
+		    Zz=xtmp->GetZPos();
+		    Xx=xtmp->GetXYPos();
+		    Xw=xtmp->GetPulse()/clrtmp->GetXPulse();
+		
 		    Xswx+=Xw*Zz; Xswy+=Xw*Xx; Xswx2+=Xw*Zz*Zz; Xswxy+=Xw*Zz*Xx; Xsw+=Xw;
 
-		    Yy=hittmp->GetYPos();
-		    Yw=hittmp->GetYPulse()/clrtmp->GetYPulse();
-
-		    Yswx+=Yw*Zz; Yswy+=Yw*Yy; Yswx2+=Yw*Zz*Zz; Yswxy+=Yw*Zz*Yy; Ysw+=Yw;
-
-		    //  x=hittmp->GetZPos();
-		    //  y=hittmp->GetTPos();
-		    //  w=hittmp->GetPulse()/clrtmp->GetPulse();
-		    //  swx+=w*x; swy+=w*y; swx2+=w*x*x; swxy+=w*x*y; sw+=w;
-
+		 
                   }
+
+		}//if
                 }
               }
 
+
+	      
               if(Xsw>1.0 && (Xsw*Xswx2-Xswx*Xswx)!=0.){
                 Xm=(Xsw*Xswxy-Xswx*Xswy)/(Xsw*Xswx2-Xswx*Xswx);
                 Xc=(Xswy*Xswx2-Xswx*Xswxy)/(Xsw*Xswx2-Xswx*Xswx);
-                ProjectedXPos=Xm*clr->GetZPos()+Xc;
-                if(Xm>=0.0) XPosWindow = (0.6*StripXWidth)+0.02*Xm;
-                if(Xm<=0) XPosWindow = (0.6*StripXWidth)-0.02*Xm;
+                ProjectedXPos=Xm*clr->GetZPos()+Xc; 
+                if(Xm>=0.0) XPosWindow = (0.6*StripXWidth)+0.02*Xm; 
+                if(Xm<=0) XPosWindow = (0.6*StripXWidth)-0.02*Xm; 
               }
+	      
+              
+            }//nxstrips
 
-              if(Ysw>1.0 && (Ysw*Yswx2-Yswx*Yswx)!=0.){
+
+
+
+	     int nystrips = clr->GetYStripClusterSize();
+	    if(nystrips>0){
+
+	      for(int kl=0; kl<nystrips; ++kl) {clr->SetTrkFlag(1);}
+
+	      Yswx=0.0; Yswy=0.0; Yswx2=0.0; Yswxy=0.0; Ysw=0.0;
+	      // For these, loop over the hits in nearby clusters (within 2 planes of the current plane)
+	      // and carry out the linear fit
+	      for(int kl=-2; kl<3; ++kl){
+		//		// ViewList[Plane+kl]==View &&
+		if( ViewList[Plane+kl]==View && (Plane+kl)>=begplane2 && (Plane+kl)<(maxplane) && ShwOrTrkList[Plane+kl]>1 ) {
+		  cout<<"printing cluster yw"<<endl;
+		  InoCluster* clrtmp = ClusterList[Plane+kl].back(); // Again get last entry 
+		  clrtmp->Print();
+		  //		  cout<<clrtmp->GetYStripCluster()->GetStripEntries()<<endl;
+		  if(clrtmp->GetYStripClusterSize()>0){
+		    cout<<"hi"<<endl;
+		    cout<<clrtmp->GetYStripCluster()->GetStripEntries()<<endl;
+		    for(unsigned int lm=0; lm<clrtmp->GetYStripCluster()->GetStripEntries(); lm++){
+		    cout<<"lm "<<lm<<endl;
+                    InoStrip* ytmp = clrtmp->GetYStripCluster()->GetStrip(lm);
+
+		    Zz=ytmp->GetZPos();
+
+		    Yy=ytmp->GetXYPos();
+		    Yw=ytmp->GetPulse()/clrtmp->GetYPulse();
+		
+		    Yswx+=Yw*Zz; Yswy+=Yw*Yy; Yswx2+=Yw*Zz*Zz; Yswxy+=Yw*Zz*Yy; Ysw+=Yw;
+		  }
+		  }//if
+		}
+	      }
+
+
+	      if(Ysw>1.0 && (Ysw*Yswx2-Yswx*Yswx)!=0.){
                 Ym=(Ysw*Yswxy-Yswx*Yswy)/(Ysw*Yswx2-Yswx*Yswx);
                 Yc=(Yswy*Yswx2-Yswx*Yswxy)/(Ysw*Yswx2-Yswx*Yswx);
-                ProjectedYPos=Ym*clr->GetZPos()+Yc;
-                if(Ym>=0.0) YPosWindow = (0.6*StripYWidth)+0.02*Ym;
-                if(Ym<=0) YPosWindow = (0.6*StripYWidth)-0.02*Ym;
-              }
-            }//nhits
+                ProjectedYPos=Ym*clr->GetZPos()+Yc; 
+                if(Ym>=0.0) YPosWindow = (0.6*StripYWidth)+0.02*Ym; 
+                if(Ym<=0) YPosWindow = (0.6*StripYWidth)-0.02*Ym; 
+              } 
+
+
+	      
+	    }//nystrips
+	    
 
             // Using the results of the fit, obtain a score for each hit. Again, this is
             // based on distance from the projected strip number. We want to pick the hit which
             // minimises this distance.
             id=-1; dScore=0.; Score=999.;
 
-            for(unsigned int kl=0; kl<nhits; ++kl){
-	      InoHit* hit = clr->GetHit(kl);
-     	      //              dScore=hit->GetTPos()-ProjectedTPos; if(dScore<0) dScore=-dScore;
-	      double xx = hit->GetXPos()-ProjectedXPos;
-     	      double yy = hit->GetYPos()-ProjectedYPos;
-     	      dScore = pow((xx*xx+yy*yy),0.5);
-	      if(dScore<Score){id=kl; Score=dScore;}
-            }
+            // for(unsigned int kl=0; kl<nhits; ++kl){
+	    //   InoHit* hit = clr->GetHit(kl);
+     	    //   //              dScore=hit->GetTPos()-ProjectedTPos; if(dScore<0) dScore=-dScore;
+	    //   double xx = hit->GetXPos()-ProjectedXPos;
+     	    //   double yy = hit->GetYPos()-ProjectedYPos;
+     	    //   dScore = pow((xx*xx+yy*yy),0.5);
+	    //   if(dScore<Score){id=kl; Score=dScore;}
+            // }
 
             // If we have found a good hit, store it and flag the plane as part of the
             // final track
 
-            if(1+id>0){
-	      InoHit* hit = clr->GetHit(id);
-	      //              HitList[Plane].push_back(hit);
-	      //asmS:Oct: here identify the point closest to the predicted point and see if the clusters X and Y position is close to the
-	      //       the selected hit, if yes set ShowOrTrkList[Plane] to 4
+            // if(1+id>0){
+	    //   InoHit* hit = clr->GetHit(id);
+	    //   //              HitList[Plane].push_back(hit);
+	    //   //asmS:Oct: here identify the point closest to the predicted point and see if the clusters X and Y position is close to the
+	    //   //       the selected hit, if yes set ShowOrTrkList[Plane] to 4
 
-	      //            InoCluster* ClustNew1 = new InoCluster(hit);
-	      //            ClustList[Plane].push_back(ClustNew1);
-              // Include any other hits which also match projection within the window
-	      //  for(unsigned int kl=0; kl<nhits; ++kl){
-	      //    InoHit* hittmp = clr->GetHit(kl);
-	      if( ( (clr->GetXPos()-hit->GetXPos()>=0 &&
-		     clr->GetXPos()-hit->GetXPos()<XPosWindow) ||
-		      (clr->GetXPos()-hit->GetXPos()<=0 &&
-		       clr->GetXPos()-hit->GetXPos()>-XPosWindow) ) &&
-		    ( (clr->GetYPos()-hit->GetYPos()>=0 &&
-		       clr->GetYPos()-hit->GetYPos()<YPosWindow) ||
-		      (clr->GetYPos()-hit->GetYPos()<=0 &&
-		       clr->GetYPos()-hit->GetYPos()>-YPosWindow) )  ) {
-		//             HitList[Plane].push_back(hittmp);
-		//             ClustNew1->AddHit(hittmp);
-		ClustList[Plane].push_back(clr);
-		ShwOrTrkList[Plane]=4;
-	      }
-	      //             }
-            }//if
+	    //   //            InoCluster* ClustNew1 = new InoCluster(hit);
+	    //   //            ClustList[Plane].push_back(ClustNew1);
+            //   // Include any other hits which also match projection within the window
+	    //   //  for(unsigned int kl=0; kl<nhits; ++kl){
+	    //   //    InoHit* hittmp = clr->GetHit(kl);
+	    //   if( ( (clr->GetXPos()-hit->GetXPos()>=0 &&
+	    // 	     clr->GetXPos()-hit->GetXPos()<XPosWindow) ||
+	    // 	      (clr->GetXPos()-hit->GetXPos()<=0 &&
+	    // 	       clr->GetXPos()-hit->GetXPos()>-XPosWindow) ) &&
+	    // 	    ( (clr->GetYPos()-hit->GetYPos()>=0 &&
+	    // 	       clr->GetYPos()-hit->GetYPos()<YPosWindow) ||
+	    // 	      (clr->GetYPos()-hit->GetYPos()<=0 &&
+	    // 	       clr->GetYPos()-hit->GetYPos()>-YPosWindow) )  ) {
+	    // 	//             HitList[Plane].push_back(hittmp);
+	    // 	//             ClustNew1->AddHit(hittmp);
+	    // 	ClustList[Plane].push_back(clr);
+	    // 	ShwOrTrkList[Plane]=4;
+	    //   }
+	    //   //             }
+            // }//if
+
+   ClustList[Plane].push_back(clr);
+	    ShwOrTrkList[Plane]=4;
+
+
+
+
+	    
           } // End demand that plane has been flagged as track-like
 
 	} // End loop over planes
@@ -4609,7 +5205,7 @@ void InoTrackFinder::FormFinalTracks( )
       ViewList[jk]=-1;
       ClusterList[jk].clear();
       ClustList[jk].clear();
-      HitList[jk].clear();
+      //      HitList[jk].clear();
     }
   } // End loop over temporary tracks
 
@@ -5520,11 +6116,13 @@ void InoTrackFinder::ClearUp() {
   //  unsigned int i, j;
 
   for (unsigned int ij=0; ij<500; ++ij) {
-    for(unsigned int jk=0; jk<HitBank[ij].size(); ++jk) {
-      if(HitBank[ij][jk]) {delete HitBank[ij][jk]; HitBank[ij][jk]=0;}
+    
+    for(unsigned int jk=0; jk<StripBank[ij].size(); ++jk) {
+      if(StripBank[ij][jk]) {delete StripBank[ij][jk]; StripBank[ij][jk]=0;}
     }
-    HitBank[ij].clear();
+    StripBank[ij].clear();
 
+    
     ClusterBank[ij].clear();
     for(unsigned int jk=0; jk<ClusterList[ij].size(); ++jk) {
       if(ClusterList[ij][jk]){ delete ClusterList[ij][jk];ClusterList[ij][jk]=0;}

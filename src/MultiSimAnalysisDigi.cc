@@ -441,6 +441,8 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("nhits_last_m1",&nhits_last_m1,"nhits_last_m1/I");
     pEventTree->Branch("nhits_below",&nhits_below,"nhits_below/I");
     pEventTree->Branch("ftime_last",&ftime_last,"ftime_last/F");
+    //raj                                                                                                
+    pEventTree->Branch("clustTime", clustTime, "clustTime[10]/F");
 
     //Extrapolated and measured state vector informations JIM
     pEventTree->Branch("inPosX", inPosX, "inPosX[10]/F");

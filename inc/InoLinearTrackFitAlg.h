@@ -66,7 +66,7 @@ class InoLinearTrackFitAlg
 
   // InoFittedTrack_Manager* inoFittedTrack_pointer;
   InoTrackCand_Manager* inoTrackCand_pointer;
-  InoHit_Manager* inoHit_pointer;
+ 
   InoCluster_Manager *InoCluster_pointer;
   MultiSimAnalysisDigi *pAnalysis;
   InoTrack_Manager *pinotrack;

@@ -1,6 +1,6 @@
 #include "InoTrackSegment.h"
 #include "InoCluster.h"
-#include "InoHit.h"
+//#include "InoHit.h"
 #include "math.h"
 #include <iostream>
 
@@ -201,12 +201,12 @@ bool InoTrackSegment::IsAssoc(InoTrackSegment* segment) {
 }
 
 
+
 double InoTrackSegment::GetBegXPos() {
   double tot=0.0,begt=0.0;
   //Loop over clusters in segment
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   int ifirst = 0;
   while ( tot==0 && ifirst <4) {
     for( unsigned int ij=0; ij<nclusters; ++ij) {
@@ -214,21 +214,11 @@ double InoTrackSegment::GetBegXPos() {
       //    int ifirst = 0;
       //    while ( tot==0 && ifirst <4) {
       if(ClustersInSegment[ij]->GetZPlane()==fBegZPlane+ifirst) {
-	nhits = ClustersInSegment[ij]->GetHitEntries();
-	
-	//loop over hits in cluster
-	for(unsigned int jk=0;jk<nhits;++jk){
-	  hit = ClustersInSegment[ij]->GetHit(jk);
-	  if(hit) {
-	    if (hit->GetXPosErr() <100) {
-	      begt+=hit->GetXPos();
-	      tot+=1.0;
-	    }
-	  }
+	if( ClustersInSegment[ij]->GetXStripClusterSize()>0 && ClustersInSegment[ij]->GetXPosErr()<100){
+	  return ClustersInSegment[ij]->GetXPos();
 	}
       }
     }
-    if(tot>0) return (begt/tot); 
     ifirst++;
   }
   return 0;
@@ -238,8 +228,7 @@ double InoTrackSegment::GetEndXPos() {
   double tot=0.0,endt=0.0;
   //Loop over clusters in segment
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   int ifirst = 0;
   while ( tot==0 && ifirst <4) {
   for( unsigned int ij=0; ij<nclusters; ++ij) {
@@ -247,22 +236,14 @@ double InoTrackSegment::GetEndXPos() {
     //    int ifirst = 0;
     //    while ( tot==0 && ifirst <4) {
     if(ClustersInSegment[ij]->GetZPlane()==fEndZPlane-ifirst) {
-      nhits = ClustersInSegment[ij]->GetHitEntries();
-      
-      //loop over hits in cluster
-      for(unsigned int jk=0;jk<nhits;++jk) {
-	hit = ClustersInSegment[ij]->GetHit(jk);
-	if (hit) {
-	  if (hit->GetXPosErr() <100) {
-	    endt+=hit->GetXPos();
-	    tot+=1.0;
-	  }
-	}
+      if(ClustersInSegment[ij]->GetXStripClusterSize()>0 && ClustersInSegment[ij]->GetXPosErr()<100 ){
+
+	return ClustersInSegment[ij]->GetXPos();
       }
     }
   }
-  if(tot>0) return (endt/tot); 
-  ifirst++;
+    ifirst++;
+  
   }
   return 0;
 }
@@ -271,31 +252,20 @@ double InoTrackSegment::GetBegYPos() {
   double tot=0.0,begt=0.0;
   //Loop over clusters in segment
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   int ifirst = 0;
-  while ( tot==0 && ifirst <4) {
+  while ( tot==0 && ifirst <nclusters) {
     for( unsigned int ij=0; ij<nclusters; ++ij) {
       //find the clusters on the first plane in the segment
       //      int ifirst = 0;
       //    while ( tot==0 && ifirst <4) {
       if(ClustersInSegment[ij]->GetZPlane()==fBegZPlane+ifirst) {
-	nhits = ClustersInSegment[ij]->GetHitEntries();
-	
-	//loop over hits in cluster
-	for(unsigned int jk=0;jk<nhits;++jk){
-	  hit = ClustersInSegment[ij]->GetHit(jk);
-	  if(hit) {
-	    if (hit->GetYPosErr() <100) {
-	      begt+=hit->GetYPos();
-	      tot+=1.0;
-	    }
-	  }
+	if(ClustersInSegment[ij]->GetYStripClusterSize()>0 && ClustersInSegment[ij]->GetYPosErr()<100){
+	  return ClustersInSegment[ij]->GetYPos();
 	}
       }
     }
-    if(tot>0) return (begt/tot); 
-    ifirst++;
+	  ifirst++;
   }
   return 0;
 }
@@ -304,8 +274,7 @@ double InoTrackSegment::GetEndYPos() {
   double tot=0.0,endt=0.0;
   //Loop over clusters in segment
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   int ifirst = 0;
   while ( tot==0 && ifirst <4) { 
     for( unsigned int ij=0; ij<nclusters; ++ij) {
@@ -313,25 +282,20 @@ double InoTrackSegment::GetEndYPos() {
       //      int ifirst = 0;
       //      while ( tot==0 && ifirst <4) {
       if(ClustersInSegment[ij]->GetZPlane()==fEndZPlane-ifirst) {
-	nhits = ClustersInSegment[ij]->GetHitEntries();
-	
-	//loop over hits in cluster
-	for(unsigned int jk=0;jk<nhits;++jk) {
-	  hit = ClustersInSegment[ij]->GetHit(jk);
-	  if (hit) {
-	    if (hit->GetYPosErr() <100) {
-	      endt+=hit->GetYPos();
-	      tot+=1.0;
-	    }
-	  }
+	if( ClustersInSegment[ij]->GetYStripClusterSize() >0 && ClustersInSegment[ij]->GetYPosErr()<100){
+	  return ClustersInSegment[ij]->GetYPos();
 	}
       }
     }
-    if(tot>0) return (endt/tot); 
-    ifirst++;
+  ifirst++;
   }
   return 0;
 }
+
+
+
+
+
 
 
 
@@ -386,25 +350,15 @@ double InoTrackSegment::GetBegXDir() {
   double swy=0.0,swyx=0.0;
 
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
-  double angle=0;
+  unsigned int nstrips = 0;
+ double angle=0;
   for( unsigned int ij=0; ij<nclusters; ++ij) {
     //find the clusters on the first plane in the segment
     if(ClustersInSegment[ij]->GetZPlane()<fBegZPlane+5) {  //31Aug  10->5
-      nhits = ClustersInSegment[ij]->GetHitEntries();
-      
-      //loop over hits in cluster
-      for(unsigned int jk=0;jk<nhits;++jk) {
-	hit = ClustersInSegment[ij]->GetHit(jk);
-	if(hit) {
-	  if (hit->GetXPosErr()<100) {
-	    z=hit->GetZPos(); t=hit->GetXPos();
-	    sw+=1.0; swx+=z; swx2+=z*z; 
-	    swy+=t; swyx+=t*z;
-	  }
-	  
-	}
+      if(ClustersInSegment[ij]->GetXStripClusterSize()>0 && ClustersInSegment[ij]->GetXPosErr()>100 ){
+	z=ClustersInSegment[ij]->GetZPos(); t=ClustersInSegment[ij]->GetXPos();
+	sw+=1.0; swx+=z; swx2+=z*z; 
+	swy+=t; swyx+=t*z;
       }
     }
   }
@@ -419,24 +373,15 @@ double InoTrackSegment::GetBegYDir() {
   double swyyy=0.0,swyxyy=0.0;
 
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   double angle=0;
   for( unsigned int ij=0; ij<nclusters; ++ij) {
     //find the clusters on the first plane in the segment
     if(ClustersInSegment[ij]->GetZPlane()<fBegZPlane+5) {   //31Aug 10->5
-      nhits = ClustersInSegment[ij]->GetHitEntries();
-      
-      //loop over hits in cluster
-      for(unsigned int jk=0;jk<nhits;++jk) {
-	hit = ClustersInSegment[ij]->GetHit(jk);
-	if(hit) {
-	  if (hit->GetYPosErr()<100) {
-	    zyy=hit->GetZPos(); tyy=hit->GetYPos();
+      if(ClustersInSegment[ij]->GetYStripClusterSize()>0 && ClustersInSegment[ij]->GetYPosErr()>100 ){
+   	    zyy=ClustersInSegment[ij]->GetZPos(); tyy=ClustersInSegment[ij]->GetYPos();
 	    swyy+=1.0; swxyy+=zyy; swx2yy+=zyy*zyy; 
 	    swyyy+=tyy; swyxyy+=tyy*zyy;
-	  } 
-	}
       }
     }
   }
@@ -497,24 +442,16 @@ double InoTrackSegment::GetEndXDir()
   double swy=0.0,swyx=0.0;
 
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   double angle(0);
   for( unsigned int ij=0; ij<nclusters; ++ij) {
     //find the clusters on the first plane in the segment
     if(ClustersInSegment[ij]->GetZPlane()>fEndZPlane-5) {   //31Aug  10->5
-      nhits = ClustersInSegment[ij]->GetHitEntries();
-      
-      //loop over hits in cluster
-      for(unsigned int jk=0;jk<nhits;++jk) {
-	hit = ClustersInSegment[ij]->GetHit(jk);
-	if(hit) {
-	  if (hit->GetXPosErr()<100) {
-	    z=hit->GetZPos(); t=hit->GetXPos();
+
+      if( ClustersInSegment[ij]->GetXStripClusterSize()>0 && ClustersInSegment[ij]->GetXPosErr()<100){
+	    z=ClustersInSegment[ij]->GetZPos(); t=ClustersInSegment[ij]->GetXPos();
 	    sw+=1.0; swx+=z; swx2+=z*z; 
 	    swy+=t; swyx+=t*z;
-	  }
-	}
       }
     }
   }
@@ -531,32 +468,25 @@ double InoTrackSegment::GetEndYDir()
   double swyyy=0.0,swyxyy=0.0;
 
   unsigned int nclusters = this->GetEntries();
-  unsigned int nhits = 0;
-  InoHit* hit=0;
+  unsigned int nstrips = 0;
   double angle(0);
   for( unsigned int ij=0; ij<nclusters; ++ij) {
     //find the clusters on the first plane in the segment
     if(ClustersInSegment[ij]->GetZPlane()>fEndZPlane-5) { // 31Aug 10->5
-      nhits = ClustersInSegment[ij]->GetHitEntries();
-      
-      //loop over hits in cluster
-      for(unsigned int jk=0;jk<nhits;++jk) {
-	hit = ClustersInSegment[ij]->GetHit(jk);
-	if(hit) {
-	  
-	  if (hit->GetYPosErr()<100) {
-	    zyy=hit->GetZPos(); tyy=hit->GetYPos();
+      if(ClustersInSegment[ij]->GetYStripClusterSize()>0 && ClustersInSegment[ij]->GetYPosErr()<100){
+	    zyy=ClustersInSegment[ij]->GetZPos(); tyy=ClustersInSegment[ij]->GetYPos();
 	    swyy+=1.0; swxyy+=zyy; swx2yy+=zyy*zyy; 
 	    swyyy+=tyy; swyxyy+=tyy*zyy;
-	  } 
-	}
-      }
+	  }
     }
   }
   if((swxyy*swxyy-swyy*swx2yy)!=0) {angle= (swxyy*swyyy-swyy*swyxyy)/(swxyy*swxyy-swyy*swx2yy);} 
 
   return angle;
 }
+
+
+
 
 
 double InoTrackSegment::GetBegZPos() const {
@@ -718,7 +648,7 @@ double InoTrackSegment::GetScore(vector<InoTrackSegment*> *BegSegBank, vector<In
   double dt2,sn;
   double score, dstraightness, straightness, expected;
   double sw, swz, swt, swzt, swzz;
-  unsigned int nhits;
+ 
 
   nclusters = TempContainer.size();
 
@@ -729,15 +659,13 @@ double InoTrackSegment::GetScore(vector<InoTrackSegment*> *BegSegBank, vector<In
 
     if(!(plane<0 || plane>=nplane)) {
       sw=0.; swz=0.; swt=0.;
-      nhits = clust->GetHitEntries();
-      for(unsigned int k1=0; k1<nhits; ++k1) {
-        InoHit* hit = clust->GetHit(k1);
+      if(clust->GetXStripClusterSize()>0 && clust->GetXPosErr()>100){
         
-        swz+=hit->GetPulse()*hit->GetZPos();
-        swt+=hit->GetPulse()*hit->GetXPos();
-        sw+=hit->GetPulse();
-      }
+        swz=clust->GetPulse()*clust->GetZPos();
+        swt=clust->GetPulse()*clust->GetXPos();
+        sw=clust->GetPulse();
       
+      }
       if(sw>0.){
         ZX[plane]=swz/sw; TX[plane]=swt/sw;
         // Weight segments on planes spanned by seed segment. 
@@ -810,14 +738,14 @@ double InoTrackSegment::GetScore(vector<InoTrackSegment*> *BegSegBank, vector<In
 
     if(!(plane<0 || plane>=nplane)) {
       sw=0.; swz=0.; swt=0.;
-      nhits = clust->GetHitEntries();
-      for(unsigned int k1=0; k1<nhits; ++k1) {
-        InoHit* hit = clust->GetHit(k1);
+      if(clust->GetYStripClusterSize()>0 && clust->GetYPosErr()<100 ){
         
-        swz+=hit->GetPulse()*hit->GetZPos();
-        swt+=hit->GetPulse()*hit->GetYPos();
-        sw+=hit->GetPulse();
+        swz=clust->GetPulse()*clust->GetZPos();
+        swt=clust->GetPulse()*clust->GetYPos();
+        sw=clust->GetPulse();
       }
+      
+
       
       if(sw>0.){
         ZY[plane]=swz/sw; TY[plane]=swt/sw;

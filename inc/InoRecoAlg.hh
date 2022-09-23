@@ -6,7 +6,6 @@
 #include "MultiSimAnalysisDigi.hh"
 #include "GeneralRecoInfo.hh"
 #include "vect_manager.h"
-#include "InoHit.h"
 #include "InoTrackCand.h"
 #include "InoTrack.h"
 #include "InoTrackFinder.h"
