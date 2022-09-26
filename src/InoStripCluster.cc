@@ -460,8 +460,9 @@ void InoStripCluster::AddStrip(InoStrip* strip) {
     fEndSmrTimeStrip=strip->GetStrip();
     
     fZPos=strip->GetZPos();
-    fPulse = strip->GetPulse();
-   
+    fPulse = 0;
+    fStripCluster =0;
+    
   } else {
     if(this->ContainsStrip(strip)==true) {return;}
     StripsInStripCluster.push_back(strip);   

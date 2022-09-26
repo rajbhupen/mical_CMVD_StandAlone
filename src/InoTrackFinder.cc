@@ -1151,8 +1151,11 @@ void InoTrackFinder::FormTheClusters() {
     }
   }
 
+  bool single_hits = false;
 
-  if (pstripx) {
+  if(single_hits){
+
+    if (pstripx) {
     cout<<" if (pstripx) {"<<endl;
     for (unsigned ix=0; ix<pstripx->InoStripXCluster_list.size() ; ix++) {
       InoStripCluster* XStripCluster = pstripx->InoStripXCluster_list[ix];
@@ -1267,7 +1270,8 @@ void InoTrackFinder::FormTheClusters() {
     }
   }
 
-
+  }//single_hits
+  
   cout<<"void InoTrackFinder::FormTheClusters() }..."<<endl;
 
 
