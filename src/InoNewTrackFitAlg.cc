@@ -390,6 +390,7 @@ void InoNewTrackFitAlg::RunAlg( ) { // (AlgConfig & ac,  CandHandle &ch, CandCon
           SlcClustData[jk].clear();
           TrkClustsData[jk].clear();
           FilteredData[jk].clear();
+	  ExtraPolData[jk].clear();
         }
       }
       //ij=1
@@ -941,6 +942,7 @@ void InoNewTrackFitAlg::RunTheFitter( ) {
 
     for (unsigned int ij=0; ij<doubleLa; ++ij) {
       FilteredData[ij].clear();
+      ExtraPolData[ij].clear();
     }
 
     StoreFilteredData(MaxPlane);
@@ -1043,6 +1045,17 @@ void InoNewTrackFitAlg::RunTheFitter( ) {
               jk--;
             }
           }
+
+    for (unsigned jk=0; jk<ExtraPolData[ij].size(); jk++) {
+	      if (ExtraPolData[ij][jk].x_k5==1) {
+		ExtraPolData[ij].erase(ExtraPolData[ij].begin()+jk);
+		jk--;
+	      }
+	    }
+
+
+
+	  
         }
 
         SaveData=true;
@@ -1190,6 +1203,21 @@ void InoNewTrackFitAlg::RunTheFitter( ) {
               jk--;
             }
           }
+
+   for (unsigned jk=0; jk<ExtraPolData[ij].size(); jk++) {
+	      if (ExtraPolData[ij][jk].x_k5==1) {
+		ExtraPolData[ij].erase(ExtraPolData[ij].begin()+jk);
+		jk--;
+	      }
+	    }
+
+
+
+
+
+
+
+	  
         }
         // if (TrkClustsData[i].size()>0) FilteredData[i].clear();}
         // if(nint==niteration || ndifchi==0 )
@@ -1774,6 +1802,48 @@ void InoNewTrackFitAlg::GetFitData_new(int& Plane1, int& Plane2) {
       }
     }
 
+    //added to store extrapoldata::raj
+
+    if(ExtraPolData[ijk].size()==0) continue;
+    
+ for (unsigned kl=0; kl<ExtraPolData[ijk].size(); kl++) {
+
+      double x1 = ExtraPolData[ijk][kl].x_k0;
+      double y1 = ExtraPolData[ijk][kl].x_k1;
+
+  for(unsigned int jk=0; jk<SlcClustData[ijk].size(); ++jk) {
+
+
+	if(SlcClustData[ijk][jk].csh->HitsInCluster.size()>4) continue;
+
+	// if(SlcClustData[ijk][jk].csh->GetXEntries()>3) continue;
+	// if(SlcClustData[ijk][jk].csh->GetYEntries()>3) continue;
+	if(SlcClustData[ijk][jk].csh->GetNXStripsInClust()>3) continue;
+	if(SlcClustData[ijk][jk].csh->GetNYStripsInClust()>3) continue;
+
+
+  if(LastIteration==true) {
+    pAnalysis->inPosfX[SlcClustData[ijk][jk].csh->GetZPlane()] = SlcClustData[ijk][jk].csh->GetXPos();
+    pAnalysis->extPosfX[SlcClustData[ijk][jk].csh->GetZPlane()] = x1;
+    pAnalysis->inPosfY[SlcClustData[ijk][jk].csh->GetZPlane()] = SlcClustData[ijk][jk].csh->GetYPos();
+    pAnalysis->extPosfY[SlcClustData[ijk][jk].csh->GetZPlane()] = y1;
+    pAnalysis->nfXStrips[SlcClustData[ijk][jk].csh->GetZPlane()] = SlcClustData[ijk][jk].csh->GetNXStripsInClust();
+    pAnalysis->nfYStrips[SlcClustData[ijk][jk].csh->GetZPlane()] = SlcClustData[ijk][jk].csh->GetNYStripsInClust();
+  }
+
+
+
+
+	
+
+  }
+      
+
+ }// for (unsigned kl=0; kl<ExtraPolData[ijkk].size(); kl++) {
+
+
+    //
+    
   }
 
 }
@@ -2527,8 +2597,10 @@ void InoNewTrackFitAlg::MoveArrays(const int NewPlane, const bool GoForward) {
   }
 }
 
-void InoNewTrackFitAlg::StoreFilteredData(const int NewPlane) {
+void InoNewTrackFitAlg::StoreFilteredData(const int NewPlane) { 
+ 
   // Store the data required for matching Kalman output data to strips
+  
   if(debug_fit) { cout <<" InoNewTrackFitAlg : StoreFilteredData" << endl;}
 	//	cout <<"size "<< FilteredData[NewPlane].size()<<endl;
   for (unsigned ij=0; ij<FilteredData[NewPlane].size(); ij++) {
@@ -2538,6 +2610,8 @@ void InoNewTrackFitAlg::StoreFilteredData(const int NewPlane) {
     }
   }
 
+
+  
   FiltDataStruct temp;
 
   temp.x_k0=x_k[0]; temp.x_k1=x_k[1];
@@ -2549,15 +2623,17 @@ void InoNewTrackFitAlg::StoreFilteredData(const int NewPlane) {
   //  FilteredData[NewPlane].clear();
 	//	cout <<"x_k[0] "<<x_k[0]<<" "<< x_k[1]<<endl;
   FilteredData[NewPlane].push_back(temp);
+
+
 }
 
-void InoNewTrackFitAlg::StoreFilteredData_sr(const int NewPlane, double* prediction, bool str) {
-  // Store the data required for matching Kalman output data to strips
-  if(debug_fit) {  cout <<"InoNewTrackFitAlg : StoreFilteredData_sr"<<endl;}
-  for (unsigned ij=0; ij<FilteredData[NewPlane].size(); ij++) {
-		cout <<"ij "<<ij<<" "<< FilteredData[NewPlane][ij].x_k5<<endl;
-    if (FilteredData[NewPlane][ij].x_k5==0) {
-      FilteredData[NewPlane].erase(FilteredData[NewPlane].begin()+ij);
+void InoNewTrackFitAlg::StoreExtrapolData(const int NewPlane, double* prediction) {
+  // Store the data for posresol raj
+  if(debug_fit) {  cout <<"InoNewTrackFitAlg : StoreExtraPolData"<<endl;}
+  for (unsigned ij=0; ij<ExtraPolData[NewPlane].size(); ij++) {
+		cout <<"ij "<<ij<<" "<< ExtraPolData[NewPlane][ij].x_k5<<endl;
+    if (ExtraPolData[NewPlane][ij].x_k5==0) {
+      ExtraPolData[NewPlane].erase(ExtraPolData[NewPlane].begin()+ij);
       ij-- ;
     }
   }
@@ -2569,10 +2645,11 @@ void InoNewTrackFitAlg::StoreFilteredData_sr(const int NewPlane, double* predict
   temp.x_k3=prediction[3];
   temp.x_k4=prediction[4];
   temp.x_k5=0;
-  temp.x_k6=str;
-  // FilteredData[NewPlane].clear();
-  FilteredData[NewPlane].push_back(temp);
-  if(debug_fit) {cout <<"InoNewTrackFitAlg : StoreFilteredData_sr end"<<endl;}
+  temp.x_k6=true;
+  // ExtraPolData[NewPlane].clear();
+  ExtraPolData[NewPlane].push_back(temp);
+    if(debug_fit) cout<<"ExtrapolData " << temp.x_k0<<" "<<temp.x_k1<<" "<<temp.x_k2<<" "<<temp.x_k3<<" "<<temp.x_k4<<" "<< temp.x_k5<<" "<<temp.x_k6<< endl;
+  if(debug_fit) {cout <<"InoNewTrackFitAlg : StoreExtraPolData_sr end"<<endl;}
 }
 
 void InoNewTrackFitAlg::SetTrackProperties(double* x_xk, double* y_yk, double* z_zk) {
@@ -3406,7 +3483,7 @@ void InoNewTrackFitAlg::GoForwards(bool first) {
   // when KF pocesses hits along increasing z, first = 0. For the 1st half of subsequent
   // iterations, first = 1. This is true for up going μ. For downgoing μ, it is always set to 0.
 	//  cout<<"GoForwards_new : "<<"first = "<<first<<endl;
-  double x__minus[5]={0.0};
+  double  x__minus[5]={0.0};
   bool GoForward = true;
 	//  cout<<"GoForward "<< GoForward<<endl;
 
@@ -3470,7 +3547,10 @@ void InoNewTrackFitAlg::GoForwards(bool first) {
           KalmanFilterStateVector(x__minus, NewPlane, GoForward,x_k);
           UpdateCovMatrix(NewPlane);
           MoveArrays(NewPlane,GoForward);
-          if(SaveData) {StoreFilteredData(NewPlane);}
+          if(SaveData) {
+	    StoreFilteredData(NewPlane);
+	    StoreExtrapolData(NewPlane,x__minus);
+	  }
           //if (ZIncreasesWithTime && LastIteration && (NewPlane==MaxPlane))
           //cout<<"reached end: P = "<<1./x_k[4]<<endl;
         }
@@ -3515,7 +3595,7 @@ void InoNewTrackFitAlg::GoBackwards(bool first) {
 	// Carry out the Kalman fit along the track in the direction of decreasing z
 	//  cout <<" InoNewTrackFitAlg : GoBackwards_new, carry out fit in negative z direction" << endl;
 
-  double x__minus[5] = {0.0};
+double  x__minus[5] = {0.0};
   bool GoBackward = false;
 
   Int_t StartPlane = MaxPlane;// Int_t EndPlane=MinPlane;
@@ -3649,7 +3729,10 @@ void InoNewTrackFitAlg::GoBackwards(bool first) {
             GPL += ds;
             RNG += drange;
           }
-          if(SaveData) {StoreFilteredData(NewPlane);}
+          if(SaveData) {
+	    StoreFilteredData(NewPlane);
+	    StoreExtrapolData(NewPlane,x__minus);
+	  }
           //if (!ZIncreasesWithTime && LastIteration && (NewPlane==MinPlane))
           //cout<<"reached end: P = "<<1./x_k[4]<<endl;
         }

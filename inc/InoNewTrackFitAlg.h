@@ -79,6 +79,8 @@ typedef struct{
   void RunTheFitter();
   
   void StoreFilteredData(const int NewPlane);
+  void StoreExtrapolData(const int NewPlane,double* x); //raj
+ 
   void StoreFilteredData_sr(const int NewPlane, double*, bool);
   void FillGapsInTrack();
 	
@@ -177,6 +179,7 @@ typedef struct{
   Bool_t LastIteration;
   double x_k4_biased;
   int UseGeoSwimmer;
+ 
   double x_k[6]; // x_k5 for tagging used hit or not 5];
   double x_k_minus[6]; // 5];
   double C_k[5][5];

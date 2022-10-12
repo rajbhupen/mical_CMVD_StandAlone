@@ -449,6 +449,19 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("extPosY", extPosY, "extPosY[10]/F");
     pEventTree->Branch("nXStrips", nXStrips, "nXStrips[10]/I");
     pEventTree->Branch("nYStrips", nYStrips, "nYStrips[10]/I");
+
+    pEventTree->Branch("inPosfX", inPosfX, "inPosfX[10]/F");
+    pEventTree->Branch("inPosfY", inPosfY, "inPosfY[10]/F");
+    pEventTree->Branch("extPosfX", extPosfX, "extPosfX[10]/F");
+    pEventTree->Branch("extPosfY", extPosfY, "extPosfY[10]/F");
+    pEventTree->Branch("nfXStrips", nfXStrips, "nfXStrips[10]/I");
+    pEventTree->Branch("nfYStrips", nfYStrips, "nfYStrips[10]/I");
+
+
+
+
+
+    
     pEventTree->Branch("XchisqOccu", XchisqOccu, "XchisqOccu[10]/F");
     pEventTree->Branch("YchisqOccu", YchisqOccu, "YchisqOccu[10]/F");
     pEventTree->Branch("XndfOccu", XndfOccu, "XndfOccu[10]/I");

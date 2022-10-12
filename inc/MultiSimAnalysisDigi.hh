@@ -369,6 +369,16 @@ public:
   Float_t extPosY[10];
   Int_t nXStrips[10];
   Int_t nYStrips[10];
+
+  Float_t inPosfX[10];
+  Float_t extPosfX[10];
+  Float_t inPosfY[10];
+  Float_t extPosfY[10];
+  Int_t nfXStrips[10];
+  Int_t nfYStrips[10];
+
+
+  
   Float_t XchisqOccu[10];
   Float_t YchisqOccu[10];
   Int_t XndfOccu[10];
