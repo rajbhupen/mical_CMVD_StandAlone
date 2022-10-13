@@ -447,6 +447,7 @@ void InoTrackFinder::FormTheHits() {
 
   }
   }
+  
   // cout<<"Hello... "<<endl;
 
   // typedef pair<int,int> xystrp;
@@ -591,8 +592,8 @@ void InoTrackFinder::FormTheHits() {
   // cout<<"void InoTrackFinder::FormTheHits() completed."<<endl;
   //--------------------------------------------------------------------------------------------
   // return;
-  }
 }
+
 //===================================================================================================================================
 
   void InoTrackFinder::FormTheClusters() {

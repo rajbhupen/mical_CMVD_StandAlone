@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
       geoManager = new InoGeometry_Manager("TwoStacks_NoCMVD.gdml");
     }
     else {
-      geoManager = new InoGeometry_Manager("CMVD_mical.gdml");
+      geoManager = new InoGeometry_Manager("cmvd_mical.gdml");
     } //cmvd
 
 

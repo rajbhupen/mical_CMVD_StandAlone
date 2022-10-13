@@ -7,115 +7,153 @@
 #include "CmvHit.h"
 #include "micalDetectorParameterDef.hh"
 #include "MultiSimAnalysisDigi.hh"
+#include <vector>
+using std::vector;
 
+class CmvHit;
 class CmvCluster
 {
 
 public:
-  CmvCluster();
+
+  CmvCluster(CmvHit* hit);
+  virtual ~CmvCluster();
+   void Print();
+  void AddHits(CmvHit* hit);
+  bool ContainsHit(CmvHit* hit);
+
+   CmvHit* GetHit(unsigned int i) const;
+   
+
+  int    GetPlane() const { return fPlane;}; 
+  int    GetLayer() const { return fLayer;}; 
+  int    GetStrip() const { return fStrip;};
+  int    GetBegStrip() const { return fBegStrip;};
+  int    GetEndStrip()const  { return fEndStrip;};
+  int    GetClusterSize(){return fClusterSize;}
+  bool   GetUsed() const {return isUsed;};		
+
+
+
+  double GetTruePosX() const { return fTruePosX;}
+  double GetTruePosY() const { return fTruePosY;}
+  double GetTruePosZ() const { return fTruePosZ;}
+
+
+
+  double GetBegTruePosX() const  { return fBegTruePosX;}
+  double GetBegTruePosY() const { return fBegTruePosY;}
+  double GetBegTruePosZ() const { return fBegTruePosZ;}
   
-  CmvCluster(CmvHit* L0,  CmvHit* L1);
-    CmvCluster(CmvCluster* L0,  CmvCluster* L1);
-  CmvCluster(CmvCluster* cluster);
-  ~CmvCluster();
+  double GetEndTruePosX() const { return fEndTruePosX;}
+  double GetEndTruePosY() const { return fEndTruePosY;}
+  double GetEndTruePosZ() const { return fEndTruePosZ;}
 
 
-void CombineClusts(CmvCluster* C2);	
 
-  int    GetPlane()  { return plane;}; 
-  int    GetLayer()  { return layer;}; 
-  int    GetStrip()  { return strip;};
-  int GetClustersize(){return clustersize;}
-  //  int GetClustersizeL1(){return clustersize;}
-  //  int GetClustersizeL2(){return clustersize;}
+  double GetRecoPosX() const { return fRecoPosX;}
+  double GetRecoPosY() const { return fRecoPosY;}
+  double GetRecoPosZ() const { return fRecoPosZ;}
+
+
+
+  double GetBegRecoPosX()const  { return fBegRecoPosX;}
+  double GetBegRecoPosY()const  { return fBegRecoPosY;}
+  double GetBegRecoPosZ() const { return fBegRecoPosZ;}
   
-  void Print();
-	bool GetUsed() const {return isUsed;};		
-  /* double GetPulse() const { */
-  /* 		double pulse =0; */
-  /* 		int count =0; */
-  /*   if (fLeMiSipm) {count++; pulse = fLeMiSipm->GetPulse();} */
-  /*   if (fLePlSipm) {count++; pulse = fLePlSipm->GetPulse();} */
-  /*   if (fRiMiSipm) {count++; pulse = fRiMiSipm->GetPulse();} */
-  /*   if (fRiPlSipm) {count++; pulse = fRiPlSipm->GetPulse();} */
-  /* 		if (count ==0) count = 1; */
-  /* 		return pulse/count; */
-  /* }; */
+  double GetEndRecoPosX() const { return fEndRecoPosX;}
+  double GetEndRecoPosY() const { return fEndRecoPosY;}
+  double GetEndRecoPosZ() const { return fEndRecoPosZ;}
 
-  void SetClustersize(int fd){clustersize = fd;}
-  //  void SetClustersizeL1(int fd){clustersize = fd;}
-  //  void SetClustersizeL2(int fd){clustersize = fd;}
+
+
+  double GetWRecoPosX() const { return fWRecoPosX;}
+  double GetWRecoPosY() const { return fWRecoPosY;}
+  double GetWRecoPosZ() const { return fWRecoPosZ;}
+
+
+
+
 
   
-  void SetPlane(double fd){plane = fd;}
- void SetLayer(double fd){layer = fd;}
-   void SetStrip(double fd){strip = fd;}
-	void SetTruePosX(double fd) { fXTruePosX=fd;}
-	void SetTruePosY(double fd) { fYTruePosY=fd;}
-	void SetTruePosZ(double fd) { fZTruePosZ=fd;}
-
-	void SetRecoPosX(double fd) { fXRecoPosX=fd;}
-	void SetRecoPosY(double fd) { fYRecoPosY=fd;}
-	void SetRecoPosZ(double fd) { fZRecoPosZ=fd;}
-
-	void SetPosXErr(double fd) { fXPosErr=fd;}
-	void SetPosYErr(double fd) { fYPosErr=fd;}
-	void SetPosZErr(double fd) { fZPosErr=fd;}
+  double GetPosXErr() const { return fXPosErr;}
+  double GetPosYErr() const { return fYPosErr;}
+  double GetPosZErr() const { return fZPosErr;}
 	
-	void SetLeTime(double fd) { fLeTime=fd;}	
-	void SetRiTime(double fd) { fRiTime=fd;}	
+  /* double GetLeTime() { return fLeTime;}	 */
+  /* double GetRiTime() { return fRiTime;}	 */
 
-	void SetLePulse(double fd) { fLePulse=fd;}	
-	void SetRiPulse(double fd) { fRiPulse=fd;}	
-	
-	void SetGenMom(double fd) { fMomentum=fd;}
-	void SetGenThe(double fd) { fTheta=fd;}
-	void SetGenPhi(double fd) { fPhi=fd;}	
-	
-	double GetTruePosX() { return fXTruePosX;}
-	double GetTruePosY() { return fYTruePosY;}
-	double GetTruePosZ() { return fZTruePosZ;}
+  /* double GetLePulse() { return fLePulse;}	 */
+  /* double GetRiPulse() { return fRiPulse;}	 */
+  double GetPulse() const {return fPulse;}
 
-	double GetRecoPosX() { return fXRecoPosX;}
-	double GetRecoPosY() { return fYRecoPosY;}
-	double GetRecoPosZ() { return fZRecoPosZ;}
+  double GetBegPulse() const {return fBegPulse;}
+  double GetEndPulse() const {return fEndPulse;}
 
-	double GetPosXErr() { return fXPosErr;}
-	double GetPosYErr() { return fYPosErr;}
-	double GetPosZErr() { return fZPosErr;}
-	
-	double GetLeTime() { return fLeTime;}	
-	double GetRiTime() { return fRiTime;}	
+  
+  double GetGenMom() const { return fMomentum;}
+  double GetGenThe() const { return fTheta;}
+  double GetGenPhi() const { return fPhi;}	
 
-	double GetLePulse() { return fLePulse;}	
-	double GetRiPulse() { return fRiPulse;}	
 
-	
-	double GetGenMom() { return fMomentum;}
-	double GetGenThe() { return fTheta;}
-	double GetGenPhi() { return fPhi;}	
+  void SetUsed(bool fd) {isUsed=fd;};
 
-  bool isIdentical(CmvCluster* cluster);
-	void SetUsed(bool fd) {isUsed=fd;};
+
+  vector <CmvHit*> HitsInCmvCluster;
 private:
   micalDetectorParameterDef* paradef;
   MultiSimAnalysisDigi* pAnalysis;
 
-  int clustersize;
-  double fXTruePosX;      //Global X-position from Simulation
-  double fYTruePosY;      //Global Y-position from Simulation
-  double fZTruePosZ;      //Global Z-position from Simulation
+  int fPlane;
+  int fLayer;
+  int fStrip;  int fBegStrip;  int fEndStrip;  
 
-  double fXRecoPosX;      //Global X-position from Reconstruction
-  double fYRecoPosY;      //Global Y-position from Reconstruction
-  double fZRecoPosZ;      //Global Z-position from Reconstruction
+  
+  int fClusterSize;
+  bool isUsed;
+  
+  //Global X-position from Simulation
+  double fTruePosX;   double fBegTruePosX;   double fEndTruePosX;
+  
+  //Global Y-position from Simulation
+  double fTruePosY;   double fBegTruePosY;   double fEndTruePosY;
 
-  double fLeTime;      // Timing of Left-SiPMs (ns)
-  double fRiTime;      // Timing of Right-SiPMs (ns)
+  //Global Z-position from Simulation
+  double fTruePosZ;   double fBegTruePosZ;   double fEndTruePosZ;
 
-  double fLePulse;      // Timing of Left-SiPMs (ns)
-  double fRiPulse;      // Timing of Right-SiPMs (ns)
-	
+
+  //Global X-position from Reconstruction
+  double fRecoPosX;   double fBegRecoPosX;   double fEndRecoPosX;
+  
+  //Global Y-position from Reconstruction
+  double fRecoPosY;   double fBegRecoPosY;   double fEndRecoPosY;
+
+  //Global Z-position from Reconstruction
+  double fRecoPosZ;   double fBegRecoPosZ;   double fEndRecoPosZ;
+
+
+    //energy weighted reco X-position
+  double fWRecoPosX;
+  
+  //energy weighted reco Y-position
+  double fWRecoPosY;  
+
+  //Energy weighted reco  Z-position 
+  double fWRecoPosZ;   
+
+
+  
+
+  // Timing 
+  double fLeTime;    double fBegLeTime;  double fEndLeTime;
+  
+  
+ 
+  double fPulse;  double fBegPulse;  double fEndPulse;
+  
+ 
+  
+  
   double fXPosErr; //Error in X-position (m)
   double fYPosErr; //Error in Y-position (m)
   double fZPosErr; //Error in Y-position (m)
@@ -127,12 +165,7 @@ private:
   double PhotonSpeed;
   double layergap;
 
-  int plane;
-    int layer;
-  int strip;
 
-	bool isUsed;
-  
 };
 
 #endif

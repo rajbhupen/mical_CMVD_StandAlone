@@ -11,9 +11,9 @@
 class CmvHit
 {
 
-public:
+ public:
   CmvHit();
-	CmvHit(SipmHit* L0,  SipmHit* L1, SipmHit* R0, SipmHit* R1, double* xx);
+  CmvHit(SipmHit* L0,  SipmHit* L1, SipmHit* R0, SipmHit* R1, double* xx);
   CmvHit(CmvHit* hit);
   ~CmvHit();
 
@@ -22,72 +22,73 @@ public:
   SipmHit* GetR0SiPM() const {return fRiMiSipm;};
   SipmHit* GetR1SiPM() const {return fRiPlSipm;};
 	
-	int    GetStripId() const { return fStripId;}
-	int    GetPlane() const { return (fStripId>>9)&0x07;}; 
+  int    GetStripId() const { return fStripId;}
+  int    GetPlane() const { return (fStripId>>9)&0x07;}; 
   int    GetLayer() const { return (fStripId>>7)&0x03;}; 
   int    GetStrip() const { return fStripId&0x7f;};
 	
   void Print();
-	bool GetUsed() const {return isUsed;};	
+  bool GetUsed() const {return isUsed;};	
   double GetPulse() const {
-		double pulse =0;
-		int count =0;
-    if (fLeMiSipm) {count++; pulse = fLeMiSipm->GetPulse();}
-    if (fLePlSipm) {count++; pulse = fLePlSipm->GetPulse();}
-    if (fRiMiSipm) {count++; pulse = fRiMiSipm->GetPulse();}
-    if (fRiPlSipm) {count++; pulse = fRiPlSipm->GetPulse();}
-		if (count ==0) count = 1;
-		return pulse/count;
+    double pulse =0;
+    int count =0;
+    if (fLeMiSipm) {count++; pulse+= fLeMiSipm->GetPulse();}
+    if (fLePlSipm) {count++; pulse+= fLePlSipm->GetPulse();}
+    if (fRiMiSipm) {count++; pulse+= fRiMiSipm->GetPulse();}
+    if (fRiPlSipm) {count++; pulse+= fRiPlSipm->GetPulse();}
+    if (count ==0) count = 1;
+    return pulse;
+    //return pulse/count; //why average ?
   };
 
-	void SetTruePosX(double fd) { fXTruePosX=fd;}
-	void SetTruePosY(double fd) { fYTruePosY=fd;}
-	void SetTruePosZ(double fd) { fZTruePosZ=fd;}
+  void SetTruePosX(double fd) { fXTruePosX=fd;}
+  void SetTruePosY(double fd) { fYTruePosY=fd;}
+  void SetTruePosZ(double fd) { fZTruePosZ=fd;}
 
-	void SetRecoPosX(double fd) { fXRecoPosX=fd;}
-	void SetRecoPosY(double fd) { fYRecoPosY=fd;}
-	void SetRecoPosZ(double fd) { fZRecoPosZ=fd;}
+  void SetRecoPosX(double fd) { fXRecoPosX=fd;}
+  void SetRecoPosY(double fd) { fYRecoPosY=fd;}
+  void SetRecoPosZ(double fd) { fZRecoPosZ=fd;}
 
-	void SetPosXErr(double fd) { fXPosErr=fd;}
-	void SetPosYErr(double fd) { fYPosErr=fd;}
-	void SetPosZErr(double fd) { fZPosErr=fd;}
+  void SetPosXErr(double fd) { fXPosErr=fd;}
+  void SetPosYErr(double fd) { fYPosErr=fd;}
+  void SetPosZErr(double fd) { fZPosErr=fd;}
 	
-	void SetLeTime(double fd) { fLeTime=fd;}	
-	void SetRiTime(double fd) { fRiTime=fd;}	
+  void SetLeTime(double fd) { fLeTime=fd;}	
+  void SetRiTime(double fd) { fRiTime=fd;}	
 
-	void SetLePulse(double fd) { fLePulse=fd;}	
-	void SetRiPulse(double fd) { fRiPulse=fd;}	
+  void SetLePulse(double fd) { fLePulse=fd;}	
+  void SetRiPulse(double fd) { fRiPulse=fd;}	
 	
-	void SetGenMom(double fd) { fMomentum=fd;}
-	void SetGenThe(double fd) { fTheta=fd;}
-	void SetGenPhi(double fd) { fPhi=fd;}	
+  void SetGenMom(double fd) { fMomentum=fd;}
+  void SetGenThe(double fd) { fTheta=fd;}
+  void SetGenPhi(double fd) { fPhi=fd;}	
 	
-	double GetTruePosX() { return fXTruePosX;}
-	double GetTruePosY() { return fYTruePosY;}
-	double GetTruePosZ() { return fZTruePosZ;}
+  double GetTruePosX() { return fXTruePosX;}
+  double GetTruePosY() { return fYTruePosY;}
+  double GetTruePosZ() { return fZTruePosZ;}
 
-	double GetRecoPosX() { return fXRecoPosX;}
-	double GetRecoPosY() { return fYRecoPosY;}
-	double GetRecoPosZ() { return fZRecoPosZ;}
+  double GetRecoPosX() { return fXRecoPosX;}
+  double GetRecoPosY() { return fYRecoPosY;}
+  double GetRecoPosZ() { return fZRecoPosZ;}
 
-	double GetPosXErr() { return fXPosErr;}
-	double GetPosYErr() { return fYPosErr;}
-	double GetPosZErr() { return fZPosErr;}
+  double GetPosXErr() { return fXPosErr;}
+  double GetPosYErr() { return fYPosErr;}
+  double GetPosZErr() { return fZPosErr;}
 	
-	double GetLeTime() { return fLeTime;}	
-	double GetRiTime() { return fRiTime;}	
+  double GetLeTime() { return fLeTime;}	
+  double GetRiTime() { return fRiTime;}	
 
-	double GetLePulse() { return fLePulse;}	
-	double GetRiPulse() { return fRiPulse;}	
+  double GetLePulse() { return fLePulse;}	
+  double GetRiPulse() { return fRiPulse;}	
 
 	
-	double GetGenMom() { return fMomentum;}
-	double GetGenThe() { return fTheta;}
-	double GetGenPhi() { return fPhi;}	
+  double GetGenMom() { return fMomentum;}
+  double GetGenThe() { return fTheta;}
+  double GetGenPhi() { return fPhi;}	
 
   bool isIdentical(CmvHit* hit);
-	void SetUsed(bool fd) {isUsed=fd;};
-private:
+  void SetUsed(bool fd) {isUsed=fd;};
+  //private:
   micalDetectorParameterDef* paradef;
   MultiSimAnalysisDigi* pAnalysis;
 
@@ -96,7 +97,7 @@ private:
   SipmHit* fRiMiSipm;   //Strip for R-Y-SiPM 
   SipmHit* fRiPlSipm;   //Strip for R+Y-SiPM
 
-	int fStripId; // All four SiPM should have come fro mthe same StripID
+  int fStripId; // All four SiPM should have come fro mthe same StripID
 
   double fXTruePosX;      //Global X-position from Simulation
   double fYTruePosY;      //Global Y-position from Simulation
@@ -120,9 +121,10 @@ private:
   double fTheta;  //Theta
   double fPhi;    // Phi
 
-	double PhotonSpeed;
-	double layergap;
-		bool isUsed;
+  double PhotonSpeed;
+  double layergap;
+  bool isUsed;
+  bool debug=false;	
 };
 
 #endif

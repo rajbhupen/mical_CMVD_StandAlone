@@ -30,7 +30,9 @@ ParameterMessenger::ParameterMessenger() {
   SetUnCorrTimeSmr(0.0);
   SetSignalSpeed(0.15);
   SetTimeToDigiConv(0.1);
-  
+  SetPhotonSpeed(162.0);
+  SetCMVadctons(0.1);
+
 }  
   
 ParameterMessenger::ParameterMessenger(char* infile)

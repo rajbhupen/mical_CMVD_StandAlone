@@ -29,6 +29,9 @@ void  PrintParameters();
   double GetUnCorrTimeSmr() {return UnCorrTimeSmr;}
   double GetSignalSpeed() {return SignalSpeed;}
   double GetTimeToDigiConv() {return TimeToDigiConv;}
+    double GetPhotonSpeed(){return PhotonSpeed;}
+  double GetCMVadctons(){return CMVadctons;}
+
   int GetCollatedIn() {return CollatedIn;}
   int GetMag(){return Magval;}
   int GetCMVD(){return CMVD;}
@@ -56,6 +59,9 @@ void  PrintParameters();
   void SetMag(int val){Magval=val;}
  void SetTrackFit(int val){TrackFitval=val;}
   void SetgdmlOption(int val){gdmlOption=val;}
+  void SetPhotonSpeed(G4double val){PhotonSpeed=val;};
+  void SetCMVadctons(G4double val){CMVadctons=val;};
+
 protected:
 
 private:
@@ -80,6 +86,8 @@ private:
   double UnCorrTimeSmr;
   double SignalSpeed;
   double TimeToDigiConv;
+  double PhotonSpeed;
+  double CMVadctons;
 
 };
 

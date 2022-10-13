@@ -2058,7 +2058,15 @@ Int_t InoTrackCand::GetNDOF() const
   return mNDOF;
 }
 
+//----------------------------------------------------------------------
+void InoTrackCand::SetNDOF2(Int_t ndof2) {
+  mNDOF2 = ndof2;
+}
 
+//----------------------------------------------------------------------
+Int_t InoTrackCand::GetNDOF2() const {
+  return mNDOF2;
+}
 //----------------------------------------------------------------------
 Double_t InoTrackCand::GetRangeBiasedQP() const
 {
