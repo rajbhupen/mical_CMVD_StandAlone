@@ -119,7 +119,7 @@ void InoLinearTrackFitAlg::RunAlg() {
 	    //Only one clust per layer and that cluster should have less than 5 multiplicity:
 	    //  if(ClustsInTrackBank[iji][nlay].size()>=1) {
       cout<<"ClustsInTrackBank Size -----"<<ClustsInTrackBank[iji][nlay].size()<<endl;
-	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust() << " "<< ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust() <<endl;
+      //	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust() << " "<< ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust() <<endl;
 
 	    if (ClustsInTrackBank[iji][nlay].size()==1 &&  ClustsInTrackBank[iji][nlay][0]->GetNXStripsInClust()<5 && ClustsInTrackBank[iji][nlay][0]->GetNYStripsInClust()<5 ){
 
