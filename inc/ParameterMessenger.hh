@@ -29,11 +29,15 @@ void  PrintParameters();
   double GetUnCorrTimeSmr() {return UnCorrTimeSmr;}
   double GetSignalSpeed() {return SignalSpeed;}
   double GetTimeToDigiConv() {return TimeToDigiConv;}
+  double GetPhotonSpeed(){return PhotonSpeed;}
+  double GetCMVadctons(){return CMVadctons;}
   int GetCollatedIn() {return CollatedIn;}
   int GetMag(){return Magval;}
   int GetCMVD(){return CMVD;}
   int GetTrackFit(){return TrackFitval;}
-   int GetgdmlOption(){return gdmlOption;}
+  int GetgdmlOption(){return gdmlOption;}
+  void SetPhotonSpeed(G4double val){PhotonSpeed=val;};
+  void SetCMVadctons(G4double val){CMVadctons=val;};
   //Setters
   void SetParameterLocation(G4String value) {parameterLocation = value;}
   void SetGeometryLocation(G4String value) {geometryLocation = value;}
@@ -80,7 +84,8 @@ private:
   double UnCorrTimeSmr;
   double SignalSpeed;
   double TimeToDigiConv;
-
+  double PhotonSpeed;
+  double CMVadctons;
 };
 
 #endif // PARAMETERMESSENGER_H

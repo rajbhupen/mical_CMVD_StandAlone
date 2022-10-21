@@ -461,7 +461,7 @@ void InoStripCluster::AddStrip(InoStrip* strip) {
     
     fZPos=strip->GetZPos();
     fPulse = 0;
-    fStripCluster =0;
+    fClusterSize =0;
     
   } else {
     if(this->ContainsStrip(strip)==true) {return;}

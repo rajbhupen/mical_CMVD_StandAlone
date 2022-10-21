@@ -15,7 +15,6 @@
 #include "TMath.h"
 #include "TMatrixDEigen.h"
 #include "CmvHit.h"
-#include "CmvLayExtra.h"
 #include "CmvCluster.h"
 using namespace std;
 
@@ -29,13 +28,19 @@ public:
   void CMVD_Extrapolation();
   void CreateCmvHit();
   void FormCmvCluster();
+
+
+  vector <CmvHit*> CmvHitBank[7][4]; //7:sides-top,left,right,back, 4:layers
+  vector <CmvCluster*> CmvClusterBank[7][4]; //7:sides-top,left,right,back, 4:layers
+
+  
 private:
  
 
  
   void SaveCMVHitData(unsigned int hits,CmvHit* pCmvHit );
   void SaveCMVClusterData(unsigned int clusthits,CmvCluster* pCmvCluster );
-  void SaveCMVExtrapData(unsigned int extrap , CmvLayExtra* pCmvLayExtra);
+
 
   micalDetectorParameterDef* paradef;
   MultiSimAnalysisDigi* pAnalysis;

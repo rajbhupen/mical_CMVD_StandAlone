@@ -117,9 +117,9 @@ void InoLinearTrackFitAlg::RunAlg() {
 
 	  for (int nlay =0; nlay<10;nlay++) {
 	    //Only one clust per layer and that cluster should have less than 5 multiplicity:
-     if(ClustsInTrackBank[iji][nlay].size()>=1) {
+	    //     if(ClustsInTrackBank[iji][nlay].size()>=1) {
       cout<<"ClustsInTrackBank Size -----"<<ClustsInTrackBank[iji][nlay].size()<<endl;
-	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize() << " "<< ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize() <<endl;
+      //	    cout<<"nxstrip nystrip  "<< ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize() << " "<< ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize() <<endl;
 
 	    if (ClustsInTrackBank[iji][nlay].size()==1 &&  ClustsInTrackBank[iji][nlay][0]->GetXStripClusterSize()<5 && ClustsInTrackBank[iji][nlay][0]->GetYStripClusterSize()<5 ){
 
@@ -157,7 +157,7 @@ void InoLinearTrackFitAlg::RunAlg() {
 	      Xusedpos[nlay]=false;
 	      Yusedpos[nlay]=false;
 	    }
-     }
+	    // }
 
       cout<<nlay<<" "<<Xpos[nlay]<<" "<<Ypos[nlay]<<" "<<zval[nlay]<<" "<<Xusedpos[nlay]<<" "<<Yusedpos[nlay]<<" "<<errxsq[nlay]<<" "<<errysq[nlay]<<endl;
 
@@ -484,6 +484,8 @@ void InoLinearTrackFitAlg::RunAlg() {
 
 	      fLinearTrackCand->SetChi2(xchi2);
 	      fLinearTrackCand->SetChi22(ychi2);
+	      fLinearTrackCand->SetNDOF(Nx-2);
+	      fLinearTrackCand->SetNDOF2(Ny-2);
 
 
    for (int jk =0; jk<cluster_size;jk++) {

@@ -329,6 +329,9 @@ public:
   Int_t           nhits_finder[ntrkmx];   //[ntrkt]
   Float_t         chisq[ntrkmx];   //[ntrkt]
   Float_t chisq2[ntrkmx];
+  G4int ndof[ntrkmx];
+  G4int ndof2[ntrkmx];
+  
   Float_t         cvalue[ntrkmx];   //[ntrkt]
   Int_t           fc_or_pc[ntrkmx];   //[ntrkt]
   Float_t         trkmm[ntrkmx];   //[ntrkt]
@@ -360,7 +363,6 @@ public:
   G4float XPosdev[nlayermx];
   G4float YPosdev[nlayermx];
 
-  Float_t clustTime[10];
 
   
   //Position Resolutions JIM
@@ -370,6 +372,16 @@ public:
   Float_t extPosY[10];
   Int_t nXStrips[10];
   Int_t nYStrips[10];
+
+  Float_t inPosfX[10];
+  Float_t extPosfX[10];
+  Float_t inPosfY[10];
+  Float_t extPosfY[10];
+  Int_t nfXStrips[10];
+  Int_t nfYStrips[10];
+
+
+  
   Float_t XchisqOccu[10];
   Float_t YchisqOccu[10];
   Int_t XndfOccu[10];
@@ -462,103 +474,54 @@ public:
   G4float yytyerr[ntrkmx];
   G4float yytxerr[ntrkmx];
     G4float txtyerr[ntrkmx];
-  //
-
-  G4float XdevLay1[ntrkmx];
-   G4float YdevLay1[ntrkmx];
-  G4float XdevLay2[ntrkmx];
-   G4float YdevLay2[ntrkmx];
-
-  G4float XdevLay3[ntrkmx];
-  G4float YdevLay3[ntrkmx];
-
-  G4float XdevLay4[ntrkmx];
-  G4float YdevLay4[ntrkmx];
-
-  G4float XdevLay5[ntrkmx];
-  G4float YdevLay5[ntrkmx];
-
-  G4float XdevLay6[ntrkmx];
-  G4float YdevLay6[ntrkmx];
-
-  G4float XdevLay7[ntrkmx];
-  G4float YdevLay7[ntrkmx];
-
-  G4float XdevLay8[ntrkmx];
-  G4float YdevLay8[ntrkmx];
-
-  G4float XdevLay9[ntrkmx];
-  G4float YdevLay9[ntrkmx];
-
-  G4float XdevLay10[ntrkmx];
-  G4float YdevLay10[ntrkmx];
-
-  G4float XdevLay11[ntrkmx];
-  G4float YdevLay11[ntrkmx];
-
-  G4float XdevLay12[ntrkmx];
-  G4float YdevLay12[ntrkmx];
-
-
-
-
-
-
-
-
-
-
-  G4float L0_StrpNo[ntrkmx];
-  G4float L1_StrpNo[ntrkmx];
-  G4float L2_StrpNo[ntrkmx];
-  G4float L3_StrpNo[ntrkmx];
-
-  G4int cmv_lay[ntrkmx];
-    G4int cmv_locno00[ntrkmx];
-    G4int cmv_locno01[ntrkmx];
-    G4int cmv_locno02[ntrkmx];
-    G4int cmv_locno03[ntrkmx];
-
-
-    G4int cmv_locno10[ntrkmx];
-  G4int cmv_locno11[ntrkmx];
-    G4int cmv_locno12[ntrkmx];
-
-    G4int cmv_locno20[ntrkmx];
-    G4int cmv_locno21[ntrkmx];
-    G4int cmv_locno22[ntrkmx];
-
-    G4int cmv_locno30[ntrkmx];
-    G4int cmv_locno31[ntrkmx];
-    G4int cmv_locno32[ntrkmx];
-
-   G4int cmv_locno40[ntrkmx];
-    G4int cmv_locno41[ntrkmx];
-    G4int cmv_locno42[ntrkmx];
-
-     G4int cmv_locno50[ntrkmx];
-    G4int cmv_locno51[ntrkmx];
-    G4int cmv_locno52[ntrkmx];
-
-     G4int cmv_locno60[ntrkmx];
-    G4int cmv_locno61[ntrkmx];
-    G4int cmv_locno62[ntrkmx];
-
-  G4int cmv_stripno[ntrkmx];
-
-  G4float extrapolatim00[ntrkmx];
-  G4float extrapolatim01[ntrkmx];
-    G4float extrapolatim02[ntrkmx];
-    G4float extrapolatim03[ntrkmx];
-
-
-    G4int Trig00[ntrkmx];
-  G4int Trig01[ntrkmx];
-    G4int Trig02[ntrkmx];
-    G4int Trig03[ntrkmx];
+ 
 
   G4float atim[ntrkmx];
 
+
+  
+  //cmvd extrapol :
+
+  static const unsigned int cmvdnlayermx=32;
+
+  unsigned int CMVDnLayer;
+  
+  
+  G4float CMVDTruePosX[32];
+  G4float CMVDTruePosY[32];
+  G4float CMVDTruePosZ[32];
+
+  G4float CMVDRecoPosX[32];
+  G4float CMVDRecoPosY[32];
+  G4float CMVDRecoPosZ[32];
+
+  G4float CMVDWRecoPosX[32];
+  G4float CMVDWRecoPosY[32];
+  G4float CMVDWRecoPosZ[32];
+  
+  G4float CMVDExpPosX[32];
+  G4float CMVDExpPosY[32];
+  G4float CMVDExpPosZ[32];
+
+  G4int CMVDExpnHit[32];
+  G4int CMVDisExpIn[32];
+  G4int CMVDisHit[32];
+
+
+  G4int CMVDpl2[32];
+  G4int CMVDClustsInLay[32];
+  G4int CMVDHitsInLay[32];
+  G4int CMVDClusterSize[32];
+  
+  
+  //
+
+ 
+
+
+
+
+  
 
 	static const unsigned int cmv_nhtmx=10000;
 
@@ -1349,7 +1312,8 @@ G4int clustersize62[ntrkmx];
 	// 7 bit for Strip
 	// 2 bit for SiPM
   unsigned int cmv_digitimpul[cmv_ndigihtmx]; // 12bit for energy and 20 bit for time
-
+   unsigned int cmv_digitime[cmv_ndigihtmx];
+   unsigned int cmv_digipul[cmv_ndigihtmx];
   float cmv_digiposx[cmv_ndigihtmx];
   float cmv_digiposy[cmv_ndigihtmx];
   float cmv_digiposz[cmv_ndigihtmx];

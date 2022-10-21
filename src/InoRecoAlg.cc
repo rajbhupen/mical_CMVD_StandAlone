@@ -607,6 +607,8 @@ void InoRecoAlg::SaveRecoDataToRootFiles(unsigned int iTrackNum, InoTrackCand* p
   pAnalysis->nhits[iTrackNum] = (pfittedTrack->GetNDOF()+5)/2;
   pAnalysis->chisq[iTrackNum] =  pfittedTrack->GetChi2();
   pAnalysis->chisq2[iTrackNum] =  pfittedTrack->GetChi22();
+  pAnalysis->ndof[iTrackNum] =  pfittedTrack->GetNDOF();
+  pAnalysis->ndof2[iTrackNum] =  pfittedTrack->GetNDOF2();
   pAnalysis->cvalue[iTrackNum] = pfittedTrack->Getcval();
   // pAnalysis->track_merge_flg[iTrackNum] = pfittedTrack->GetTrackMergeVar();
   pAnalysis->fc_or_pc[iTrackNum] = pfittedTrack->GetFCPC();

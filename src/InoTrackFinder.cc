@@ -1289,7 +1289,7 @@ void InoTrackFinder::FormTheClusters() {
   for (unsigned ix=0; ix<inoCluster_pointer->InoCluster_list.size() ; ix++) {
     InoCluster* clust = inoCluster_pointer->InoCluster_list[ix];
     clust->Print();
-    pAnalysis->clustTime[clust->GetZPlane()] = clust->GetTime();
+    //    pAnalysis->clustTime[clust->GetZPlane()] = clust->GetTime();
   }
   
   

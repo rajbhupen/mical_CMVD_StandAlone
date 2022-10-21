@@ -1,11 +1,12 @@
 
 #include "CmvCluster.h"
+#include "CmvHit.h"
 //#include "Validity/VldContext.h"
 #include <cmath>
 #include "TMath.h"
 #include <iostream>
 using namespace std;
-
+/*
 CmvCluster::CmvCluster() :
   clustersize(-1),  isUsed(0),
   plane(-1), layer(-1), strip(-1),
@@ -62,7 +63,7 @@ CmvCluster::CmvCluster(CmvHit* L0, CmvHit* L1):
 {
 
   paradef = micalDetectorParameterDef::AnPointer; //AAR:
-  pAnalysis = MultiSimAnalysisDigi::AnPointer;
+  pAnalysis = MultiSimAnalysis::AnPointer;
   PhotonSpeed = pAnalysis->GetPhotonSpeedVal();
   // double CMVadctons = pAnalysis->GetCMVadctons();
   // double pos[3]={0,0,0};
@@ -233,7 +234,7 @@ void CmvCluster::CombineClusts(CmvCluster* C2)
 {
 
   paradef = micalDetectorParameterDef::AnPointer; //AAR:
-  pAnalysis = MultiSimAnalysisDigi::AnPointer;
+  pAnalysis = MultiSimAnalysis::AnPointer;
   PhotonSpeed = pAnalysis->GetPhotonSpeedVal();
   double CMVadctons = pAnalysis->GetCMVadctons();
   double pos[3]={0,0,0};
@@ -395,7 +396,7 @@ CmvCluster::CmvCluster(CmvCluster* C0, CmvCluster* C1):
 {
 
   paradef = micalDetectorParameterDef::AnPointer; //AAR:
-  pAnalysis = MultiSimAnalysisDigi::AnPointer;
+  pAnalysis = MultiSimAnalysis::AnPointer;
   PhotonSpeed = pAnalysis->GetPhotonSpeedVal();
   double CMVadctons = pAnalysis->GetCMVadctons();
   double pos[3]={0,0,0};
@@ -600,3 +601,187 @@ void CmvCluster::Print() {
 
 
 // }
+
+*/
+
+CmvCluster::CmvCluster(CmvHit* hit) :
+  fPlane(-1),fLayer(-1),
+ fStrip(-1), fBegStrip(-1),fEndStrip(-1),
+
+  fClusterSize(0), isUsed(0),
+  
+  fTruePosX(-1000), fBegTruePosX(-1000), fEndTruePosX(-1000),
+  fTruePosY(-1000), fBegTruePosY(-1000), fEndTruePosY(-1000),
+  fTruePosZ(-1000), fBegTruePosZ(-1000), fEndTruePosZ(-1000),
+
+  fRecoPosX(-1000), fBegRecoPosX(-1000), fEndRecoPosX(-1000),
+  fRecoPosY(-1000), fBegRecoPosY(-1000), fEndRecoPosY(-1000),
+  fRecoPosZ(-1000), fBegRecoPosZ(-1000), fEndRecoPosZ(-1000),
+
+  fWRecoPosX(-1000), fWRecoPosY(-1000),fWRecoPosZ(-1000),
+  
+  // fLeTime (-1000), fBegLeTime (-1000), fEndLeTime (-1000),
+  // fRiTime(-1000), fBegRiTime(-1000), fEndRiTime(-1000),
+
+  fPulse (-1000), fBegPulse (-1000), fEndPulse (-1000),
+
+
+  
+  fXPosErr(-1000),  fYPosErr(-1000), fZPosErr(-1000),
+  fMomentum(-1000), fTheta(-1000),  fPhi(-1000), PhotonSpeed(162.0), layergap(0.02)
+
+
+{
+  paradef = micalDetectorParameterDef::AnPointer; //AAR: 
+
+  this->AddHits(hit);
+}
+
+
+CmvCluster::~CmvCluster()
+{
+  HitsInCmvCluster.clear();
+}
+
+
+void CmvCluster::AddHits(CmvHit* hit) {
+  if(HitsInCmvCluster.size()==0) {
+    HitsInCmvCluster.push_back(hit);
+    fPlane=hit->GetPlane();
+    fLayer = hit->GetLayer();
+
+    fStrip = hit->GetStrip();
+    fBegStrip = hit->GetStrip();
+    fEndStrip = hit->GetStrip();    
+    
+    isUsed    = hit->isUsed;
+    
+    fTruePosX = hit->GetTruePosX();   fBegTruePosX = hit->GetTruePosX();  fEndTruePosX = hit->GetTruePosX();    
+    fTruePosY = hit->GetTruePosY();   fBegTruePosY = hit->GetTruePosY();  fEndTruePosY = hit->GetTruePosY(); 
+    fTruePosZ = hit->GetTruePosZ();   fBegTruePosZ = hit->GetTruePosZ();  fEndTruePosZ = hit->GetTruePosZ();
+ 
+
+
+    fRecoPosX = hit->GetRecoPosX();   fBegRecoPosX = hit->GetRecoPosX();  fEndRecoPosX = hit->GetRecoPosX();    
+    fRecoPosY = hit->GetRecoPosY();   fBegRecoPosY = hit->GetRecoPosY();  fEndRecoPosY = hit->GetRecoPosY(); 
+    fRecoPosZ = hit->GetRecoPosZ();   fBegRecoPosZ = hit->GetRecoPosZ();  fEndRecoPosZ = hit->GetRecoPosZ();
+
+
+    fWRecoPosX = hit->GetRecoPosX();
+    fWRecoPosY = hit->GetRecoPosY();
+    fWRecoPosZ = hit->GetRecoPosZ();
+    
+  // fLeTime = hit->fLeTime; fBegLeTime = hit->fLeTime; fEndLeTime = hit->fLeTime; 
+  // fRiTime = hit->fRiTime; fBegRiTime = hit->fRiTime; fEndRiTime = hit->fRiTime;
+
+  
+    fBegPulse = hit->GetPulse();
+    fEndPulse = hit->GetPulse();
+
+  
+  fXPosErr = hit->GetPosXErr();
+  fYPosErr = hit->GetPosYErr(); 
+  fZPosErr = hit->GetPosZErr(); 
+	
+  fMomentum = hit->GetGenMom(); 
+  fTheta = hit->GetGenThe();  
+  fPhi = hit->GetGenPhi();   
+  PhotonSpeed = hit->PhotonSpeed;
+  layergap = hit->layergap;
+
+  fPulse = 0;
+
+  } else {
+    if(this->ContainsHit(hit)==true) {return;}
+    HitsInCmvCluster.push_back(hit);   
+    
+    ////  if (hit->GetXYPosErr()<100) {
+      if(hit->GetStrip()<fBegStrip) fBegStrip=hit->GetStrip();
+      if(hit->GetStrip()>fEndStrip) fEndStrip=hit->GetStrip();
+
+      if(hit->GetTruePosX()<fBegTruePosX) fBegTruePosX=hit->GetTruePosX();
+      if(hit->GetTruePosY()<fBegTruePosY) fBegTruePosY=hit->GetTruePosY();
+      if(hit->GetTruePosZ()<fBegTruePosZ) fBegTruePosZ=hit->GetTruePosZ();
+ 
+      if(hit->GetRecoPosX()<fBegRecoPosX) fBegRecoPosX=hit->GetRecoPosX();
+      if(hit->GetRecoPosY()<fBegRecoPosY) fBegRecoPosY=hit->GetRecoPosY();
+      if(hit->GetRecoPosZ()<fBegRecoPosZ) fBegRecoPosZ=hit->GetRecoPosZ();
+
+     if(hit->GetPulse()<fBegPulse) fBegPulse=hit->GetPulse();
+      if(hit->GetPulse()>fEndPulse) fEndPulse=hit->GetPulse();
+
+ 
+
+      //just Avg:
+    fTruePosX = ( fClusterSize*fTruePosX + hit->GetTruePosX() )/(fClusterSize + 1); 
+    fTruePosY = ( fClusterSize*fTruePosY + hit->GetTruePosY() )/(fClusterSize + 1);
+    fTruePosZ = ( fClusterSize*fTruePosZ + hit->GetTruePosZ() )/(fClusterSize + 1); 
+
+    fRecoPosX = ( fClusterSize*fRecoPosX + hit->GetRecoPosX() )/(fClusterSize + 1); 
+    fRecoPosY = ( fClusterSize*fRecoPosY + hit->GetRecoPosY() )/(fClusterSize + 1);
+    fRecoPosZ = ( fClusterSize*fRecoPosZ + hit->GetRecoPosZ() )/(fClusterSize + 1); 
+
+    cout<<".. fPulse fWRecoPosX hit->GetRecoPosX() hit->GetPulse() "<<  fPulse<<" "<< fWRecoPosX<<" "<< hit->GetRecoPosX()<<" "<< hit->GetPulse()<<endl;
+    //energy weighted average
+    fWRecoPosX = ( fPulse*fWRecoPosX + hit->GetRecoPosX()*hit->GetPulse() )/(fPulse+hit->GetPulse() );
+    fWRecoPosY = ( fPulse*fWRecoPosY + hit->GetRecoPosY()*hit->GetPulse() )/(fPulse+hit->GetPulse() );
+    fWRecoPosZ = ( fPulse*fWRecoPosZ + hit->GetRecoPosZ()*hit->GetPulse() )/(fPulse+hit->GetPulse() );
+      
+  }
+  
+
+    
+  fPulse += hit->GetPulse();
+
+
+    cout<<" fPulse fWRecoPosX hit->GetRecoPosX() hit->GetPulse() "<<  fPulse<<" "<< fWRecoPosX<<" "<< hit->GetRecoPosX()<<" "<< hit->GetPulse()<<endl;
+
+
+  fClusterSize++;
+  return;
+}
+
+bool CmvCluster::ContainsHit(CmvHit* hit) {
+  for(unsigned int ij=0; ij<HitsInCmvCluster.size(); ++ij) {
+    if(hit==HitsInCmvCluster[ij]) {return true;}
+  }
+  return false;
+}
+
+
+
+CmvHit* CmvCluster::GetHit(unsigned int ij) const {
+  if(ij<HitsInCmvCluster.size()) {return HitsInCmvCluster[ij];}
+  else {return 0;}
+
+}
+
+void CmvCluster::Print() {
+
+  cout<<" CmvCluster():"
+      <<" Plane = "<<fPlane
+      <<" Layer = "<<fLayer
+      <<" Beg Hit = "<< std::setw(8)<<fBegStrip 
+      <<" End Hit = "<< std::setw(8)<<fEndStrip 
+      <<" ClusterNo = "<< std::setw(8)<<fStrip 
+      <<" Beg Pulse = "<< std::setw(8)<<fBegPulse 
+      <<" End Pulse = "<< std::setw(8)<<fEndPulse 
+      <<" Pulse = "<< std::setw(8)<<fPulse 
+        
+      <<" BegTruePos = ("<<fBegTruePosX<<","<<fBegTruePosY<<","<<fBegTruePosZ<<")"
+      <<" EndTruePos = ("<<fEndTruePosX<<","<<fEndTruePosY<<","<<fEndTruePosZ<<")"
+      <<" TruePos = ("<<fTruePosX<<","<<fTruePosY<<","<<fTruePosZ<<")"
+
+      <<" BegRecoPos = ("<<fBegRecoPosX<<","<<fBegRecoPosY<<","<<fBegRecoPosZ<<")"
+      <<" EndRecoPos = ("<<fEndRecoPosX<<","<<fEndRecoPosY<<","<<fEndRecoPosZ<<")"
+      <<" RecoPos = ("<<fRecoPosX<<","<<fRecoPosY<<","<<fRecoPosZ<<")"
+    
+      <<" WRecoPos = ("<<fWRecoPosX<<","<<fWRecoPosY<<","<<fWRecoPosZ<<")"
+
+      <<" ClusterSize = "<< std::setw(8)<<fClusterSize
+      <<endl;
+  // for(unsigned int ij=0; ij<HitsInCmvCluster.size(); ij++) {
+  //   HitsInCmvCluster[ij]->Print();
+  // }
+ 
+}
