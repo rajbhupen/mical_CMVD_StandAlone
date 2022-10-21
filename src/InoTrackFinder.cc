@@ -833,11 +833,11 @@ void InoTrackFinder::FormStripCluster() {
 	    // int truetime2 = StripBank[ij][kl]->GetTrueTime();
 	    //	 	cout<<stripno2<<endl;
 
-	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) continue;
+	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) break;
 	    //	 //	 if(StripBank[ij][kl]->GetSmrTime() > 800 || StripBank[ij][kl]->GetSmrTime()<150 )continue;//290 is mean of smrtime without noise/multiplicity
 	 
 	    //loop over the hits in that plane
-	    if ( abs(StripXClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) continue;
+	    if ( abs(StripXClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) break;
 	    if(!( StripBank[ij][kl]->GetUsed())) {
 	   
 	      cout<<"check1"<<endl;
@@ -971,10 +971,10 @@ void InoTrackFinder::FormStripCluster() {
 	    // int truetime2 = StripBank[ij][kl]->GetTrueTime();
 	 
 
-	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) continue;
+	    if( abs(StripBank[ij][kl-1]->GetStrip()-StripBank[ij][kl]->GetStrip() )>2 ) break;
 	    ////	 if(StripBank[ij][kl]->GetSmrTime() > 800 || StripBank[ij][kl]->GetSmrTime()<150 )continue;//290 is mean of smrtime without noise/multiplicity
 	    ////	 if( abs(StripBank[ij][kl-1]->GetSmrTime()-StripBank[ij][kl]->GetSmrTime())>50 ) continue; //5/0.1
-	    if ( abs(StripYClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) continue;
+	    if ( abs(StripYClust->GetSmrTime()-StripBank[ij][kl]->GetSmrTime() ) >50 ) break;
 
 	 
 	    //loop over the hits in that plane
