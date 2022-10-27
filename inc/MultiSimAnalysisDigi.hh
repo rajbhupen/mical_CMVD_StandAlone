@@ -202,7 +202,7 @@ public:
   Float_t         simpz[nsimhtmx];   //[nsimht]
   Float_t         simlocvx[nsimhtmx];   //[nsimht]
   Float_t         simlocvy[nsimhtmx];   //[nsimht]
-
+ Float_t         simlocvz[nsimhtmx];   //[nsimht]
   // ICALsim Root Files Input Data Read
   static const unsigned int ndigihtmx=5000;
   UInt_t          ndigiht;

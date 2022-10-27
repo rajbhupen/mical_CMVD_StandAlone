@@ -143,13 +143,23 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
 
   cout << " opening root file " << infile << " inout " <<  isInOut << endl;
 
-  if(isInOut==0 ||isInOut==3 ) { ////inout3
+  if(isInOut==0 ||isInOut==3 || isInOut==1 ) { ////inout3
     //Input is sim file from MC for sim to reco(3) or sim to digi(0)
+
+    if(isInOut==3 || isInOut==0){
     sprintf(inRootFile,"%s",infile);
     inputRootFile = new TFile(inRootFile, "read");
     cout<< "Data is read from simulation output rootfile : "<< inRootFile <<endl;
-
     inputEventTree = (TTree*)inputRootFile->Get("T3"); //T1
+    }
+    else if(isInOut==1){
+   sprintf(inRootFile,"%s",infile);
+    inputRootFile = new TFile(inRootFile, "read");
+    cout<< "Data is read from digitization output file : "<< inRootFile  <<endl;
+    inputEventTree = (TTree*)inputRootFile->Get("T1"); //T2
+    }
+
+    
     inputEventTree->SetBranchAddress("irun",&irun);
     inputEventTree->SetBranchAddress("ievt",&ievt);
     inputEventTree->SetBranchAddress("ngent",&ngent);
@@ -175,6 +185,9 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("simlocvy", simlocvy);
     inputEventTree->SetBranchAddress("ngenerated", &ngenerated);
     inputEventTree->SetBranchAddress("naperture", &naperture);
+    inputEventTree->SetBranchAddress("trigx", &trigx);
+    inputEventTree->SetBranchAddress("trigy", &trigy);
+
     if(CardFile->GetCMVD()==1){
   //cmv
     inputEventTree->SetBranchAddress("cmv_nsimhit", &cmv_nsimhit);
@@ -192,28 +205,9 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("cmv_simlocy", cmv_simlocy);
  inputEventTree->SetBranchAddress("cmv_simlocz", cmv_simlocz);
     }// if(CardFile->GetCMVD()==1){
-  } else if(isInOut==1) {
-    sprintf(inRootFile,"%s",infile);
-    inputRootFile = new TFile(inRootFile, "read");
-    cout<< "Data is read from digitization output file : "<< inRootFile  <<endl;
 
-    inputEventTree = (TTree*)inputRootFile->Get("T1"); //T2
-    inputEventTree->SetBranchAddress("irun",&irun);
-    inputEventTree->SetBranchAddress("ievt",&ievt);
-    inputEventTree->SetBranchAddress("ngent",&ngent);
-    inputEventTree->SetBranchAddress("pidin",pidin);
-    inputEventTree->SetBranchAddress("momin",momin);
-    inputEventTree->SetBranchAddress("thein",thein);
-    inputEventTree->SetBranchAddress("phiin",phiin);
-    inputEventTree->SetBranchAddress("posxin",posxin);
-    inputEventTree->SetBranchAddress("posyin",posyin);
-    inputEventTree->SetBranchAddress("poszin",poszin);
+    if(isInOut==1) {
     inputEventTree->SetBranchAddress("ndigiht", &ndigiht);
-    inputEventTree->SetBranchAddress("trigx", &trigx);
-    inputEventTree->SetBranchAddress("trigy", &trigy);
-    inputEventTree->SetBranchAddress("ngenerated", &ngenerated);
-    inputEventTree->SetBranchAddress("naperture", &naperture);
-    //    inputEventTree->SetBranchAddress("triggeracceptance", &triggeracceptance);
     inputEventTree->SetBranchAddress("stripid", stripid);
     inputEventTree->SetBranchAddress("digipdgid", digipdgid);
     inputEventTree->SetBranchAddress("digitime", digitime);
@@ -232,7 +226,7 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("cmv_sipmid", cmv_sipmid);
     inputEventTree->SetBranchAddress("cmv_digipdgid", cmv_digipdgid);
     inputEventTree->SetBranchAddress("cmv_digitimpul", cmv_digitimpul);
-        inputEventTree->SetBranchAddress("cmv_digitime", cmv_digitime);
+    inputEventTree->SetBranchAddress("cmv_digitime", cmv_digitime);
     inputEventTree->SetBranchAddress("cmv_digipul", cmv_digipul);
     inputEventTree->SetBranchAddress("cmv_digiposx", cmv_digiposx);
     inputEventTree->SetBranchAddress("cmv_digiposy", cmv_digiposy);
@@ -242,9 +236,11 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("cmv_digiphi", cmv_digiphi);
     inputEventTree->SetBranchAddress("cmv_digilocx", cmv_digilocx);
     inputEventTree->SetBranchAddress("cmv_digilocy", cmv_digilocy);
-        inputEventTree->SetBranchAddress("cmv_digilocz", cmv_digilocz);
+    inputEventTree->SetBranchAddress("cmv_digilocz", cmv_digilocz);
     //cmv
      }// if(CardFile->GetCMVD()==1){
+
+    }
   } else if(isInOut==2) { // datareading
     sprintf(inRootFile,"%s",infile);
     inputRootFile = new TFile(inRootFile, "read");
@@ -286,8 +282,8 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     //These are common to all:
 
     pEventTree->Branch("irun",&irun,"irun/i"); //VALGRIND
-   pEventTree->Branch("ievt",&ievt2,"ievt/i");
-  pEventTree->Branch("ngent",&ngent,"ngent/i");
+    pEventTree->Branch("ievt",&ievt2,"ievt/i");
+    pEventTree->Branch("ngent",&ngent,"ngent/i");
     pEventTree->Branch("pidin",pidin,"pidin[ngent]/I");
     pEventTree->Branch("ievt_wt",&ievt_wt,"ievt_wt/F");
     pEventTree->Branch("intxn_id",&intxn_id,"intxn_id/I");
@@ -302,11 +298,29 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
 
 
     //DigiOutput
-     if (isInOut==0 || isInOut==3  ){
+     if (isInOut==0 || isInOut==3 || isInOut==1 ){
+
+
+       pEventTree->Branch("nsimht", &nsimht, "nsimht/i");
+       pEventTree->Branch("detid", detid, "detid[nsimht]/i");
+       pEventTree->Branch("simpdgid", simpdgid, "simpdgid[nsimht]/I");
+       pEventTree->Branch("simtime", simtime, "simtime[nsimht]/F");
+       pEventTree->Branch("simenr", simenr, "simenr[nsimht]/F");
+       pEventTree->Branch("simvx", simvx, "simvx[nsimht]/F");
+       pEventTree->Branch("simvy", simvy, "simvy[nsimht]/F");
+       pEventTree->Branch("simvz", simvz, "simvz[nsimht]/F");
+       pEventTree->Branch("simpx", simpx, "simpx[nsimht]/F");
+       pEventTree->Branch("simpy", simpy, "simpy[nsimht]/F");
+       pEventTree->Branch("simpz", simpz, "simpz[nsimht]/F");
+       pEventTree->Branch("simlocvx", simlocvx, "simlocvx[nsimht]/F");
+       pEventTree->Branch("simlocvy", simlocvy, "simlocvy[nsimht]/F");
+       pEventTree->Branch("simlocvz", simlocvz, "simlocvz[nsimht]/F");
+
+       
+       
     pEventTree->Branch("ndigiht", &ndigiht, "ndigiht/i");
     pEventTree->Branch("trigx", &trigx, "trigx/I");
     pEventTree->Branch("trigy", &trigy, "trigy/I");
-
     pEventTree->Branch("triggeracceptance",&triggeracceptance,"triggeracceptance/i");
     pEventTree->Branch("stripid", stripid, "stripid[ndigiht]/i");
     pEventTree->Branch("digipdgid", digipdgid, "digipdgid[ndigiht]/I");
@@ -322,6 +336,24 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
 
        cout<<"check4"<<endl;
      if(CardFile->GetCMVD()==1){
+
+       pEventTree->Branch("cmv_nsimhit", &cmv_nsimhit, "cmv_nsimhit/i");
+       pEventTree->Branch("cmv_detid", cmv_detid, "cmv_detid[cmv_nsimhit]/I") ;
+       pEventTree->Branch("cmv_simpdgid", cmv_simpdgid, "cmv_simpdgid[cmv_nsimhit]/I");
+       pEventTree->Branch("cmv_simtime", cmv_simtime, "cmv_simtime[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simenr", cmv_simenr, "cmv_simenr[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simposx", cmv_simposx, "cmv_simposx[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simposy", cmv_simposy, "cmv_simposy[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simposz", cmv_simposz, "cmv_simposz[cmv_nsimhit]/F");
+       
+       pEventTree->Branch("cmv_simpx", cmv_simpx, "cmv_simpx[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simpy", cmv_simpy, "cmv_simpy[cmv_nsimhit]/F");
+       pEventTree->Branch("cmv_simpz", cmv_simpz, "cmv_simpz[cmv_nsimhit]/F");
+       
+     pEventTree->Branch("cmv_simlocx", cmv_simlocx, "cmv_simlocx[cmv_nsimhit]/F");
+     pEventTree->Branch("cmv_simlocy", cmv_simlocy, "cmv_simlocy[cmv_nsimhit]/F");
+     pEventTree->Branch("cmv_simlocz", cmv_simlocz, "cmv_simlocz[cmv_nsimhit]/F");
+     
        //cmv
     pEventTree->Branch("cmv_ndigihit", &cmv_ndigihit, "cmv_ndigihit/i");
     pEventTree->Branch("cmv_sipmid", cmv_sipmid, "cmv_sipmid[cmv_ndigihit]/i") ;
@@ -357,8 +389,8 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("nhits",nhits,"nhits[ntrkt]/I");
     pEventTree->Branch("nhits_finder",nhits_finder,"nhits_finder[ntrkt]/I");
     pEventTree->Branch("chisq",chisq,"chisq[ntrkt]/F");
-      pEventTree->Branch("chisq2",chisq2,"chisq2[ntrkt]/F");
-          pEventTree->Branch("ndof",ndof,"ndof[ntrkt]/i");
+    pEventTree->Branch("chisq2",chisq2,"chisq2[ntrkt]/F");
+    pEventTree->Branch("ndof",ndof,"ndof[ntrkt]/i");
     pEventTree->Branch("ndof2",ndof2,"ndof2[ntrkt]/i");
     pEventTree->Branch("cvalue",cvalue,"cvalue[ntrkt]/F");
     pEventTree->Branch("trkmm",trkmm,"trkmm[ntrkt]/F");
@@ -582,17 +614,11 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
 
  }// if(CardFile->GetCMVD()==1){
 
-    pEventTree->Branch("momend",momend,"momend[ntrkt]/F");
-    pEventTree->Branch("theend",theend,"theend[ntrkt]/F");
-    pEventTree->Branch("phiend",phiend,"phiend[ntrkt]/F");
-    pEventTree->Branch("posxend",posxend,"posxend[ntrkt]/F");
-    pEventTree->Branch("posyend",posyend,"posyend[ntrkt]/F");
-    pEventTree->Branch("poszend",poszend,"poszend[ntrkt]/F");
+   
     pEventTree->Branch("tx_end",tx_end,"tx_end[ntrkt]/F");
     pEventTree->Branch("ty_end",ty_end,"ty_end[ntrkt]/F");
 
-    pEventTree->Branch("momds"   ,momds   ,"momds[ntrkt]/F");
-    pEventTree->Branch("momrg"   ,momrg   ,"momrg[ntrkt]/F");
+
 
     pEventTree->Branch("mcxgnvx" ,mcxgnvx ,"mcxgnvx[ntrkt]/F");
     pEventTree->Branch("mcygnvx" ,mcygnvx ,"mcygnvx[ntrkt]/F");
@@ -603,8 +629,6 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("thegnend",thegnend,"thegnend[ntrkt]/F");
     pEventTree->Branch("phignend",phignend,"phignend[ntrkt]/F");
 
-    pEventTree->Branch("vtxzplane",vtxzplane,"vtxzplane[ntrkt]/I");
-    pEventTree->Branch("endzplane",endzplane,"endzplane[ntrkt]/I");
     pEventTree->Branch("ntrkcl",ntrkcl,"ntrkcl[ntrkt]/I");
     pEventTree->Branch("ntrkst",ntrkst,"ntrkst[ntrkt]/I");
     pEventTree->Branch("range", &range, "range/F");
