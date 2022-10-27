@@ -30,34 +30,7 @@ then see following flags to run the code:
 //argv[9]:Gdml Option: 0:- One stack center & No CMVD, 1:- Two Stacks & No CMVD, 2:  Two Stacks with CMVD
 
 
+for CMVD SL:
 
+./anal_ical MC_test_digi.log 1 0.1 corrections_pos_time_26122018.root 1000 1 0 0 2 1>out.txt 2>err.txt
 
-
-
-//
-
-#...............................Single Stack 
-#Digi to reco.....................
-
-For data: ./anal_ical data_test_digi.log 2 0.1 corrections_pos_time_26122018.root 1000 0 1 0 0 
-
-For MC: ./anal_ical MC_test_digi.log 1 0.1 corrections_pos_time_26122018.root 1000 0 0 0 0 
-
-# 2: is for data
-#last 0: is for Single stack geometry.
-
-..................................................................
-
-# Collated input files which consists of inefficiency and multiplicity is called whenever one does sim to digi or sim to reco.
-# Alignment and offset correction called only for data.
-
-
-#root Filename to be given in data_test_digi.log
-(Do not include _digi.root in the name)
-- MC rootfilenames to be listed in MC_test_digi.log
-
-
-#MC Digi input data in datadigi/
-#Experiment digi input data in rredata/
-
-# Output will be stored in recodata/
