@@ -36,7 +36,8 @@
 int main(int argc, char** argv) {
 
   cout<<"---------------------------------------"<<endl;
-  G4cout <<"argc "<<argc<<" "<<argv[0]<<" "<<argv[1]<<" "<<argv[2]<<" "<<argv[3]<<" "<<argv[4]<<" "<<argv[5]<<" "<<argv[6]<<" "<<argv[7]<<" "<<argv[8]<<" "<<argv[9]<<G4endl;
+  G4cout <<"argc "<<argc<<" "<<argv[0]<<" "<<argv[1]<<" "<<argv[2]<<" "<<argv[3]<<" "<<argv[4]<<" "<<argv[5]<<" "<<argv[6]<<" "<<argv[7]<<" "<<argv[8]<<" "<<argv[9]<< " "<<argv[10]<<" "<<argv[11]<<G4endl;
+
   bool runcode = true;
 
   ParameterMessenger* detectorConfig = new ParameterMessenger();
@@ -48,6 +49,9 @@ int main(int argc, char** argv) {
   int MagFlag =  atoi(argv[7]);
   int TrackFitFlag =  atoi(argv[8]);
   int gdmlOption = atoi(argv[9]);
+  int SiPMThreshold = atoi(argv[10]);
+  int nSiPM = atoi(argv[11]);
+
   int collatedIn;
 
 
@@ -66,6 +70,9 @@ int main(int argc, char** argv) {
   detectorConfig->SetTrackFit(TrackFitFlag);
   detectorConfig->SetgdmlOption(gdmlOption);
 
+    detectorConfig->SetSiPMThreshold(SiPMThreshold);
+  detectorConfig->SetnSiPM(nSiPM);
+
 
   detectorConfig->PrintParameters();
 
@@ -75,6 +82,8 @@ int main(int argc, char** argv) {
   cout<<"CMVD: "<<  detectorConfig->GetCMVD();
   cout<<"Mag: "<< detectorConfig->GetMag();
   cout<<"gdmlOption: "<< detectorConfig->GetgdmlOption();
+  cout<<" SiPMThreshold: "<< detectorConfig->GetSiPMThreshold();
+  cout<<" nSiPM: "<< detectorConfig->GetnSiPM();
 
   micalDetectorParameterDef* paradef = new micalDetectorParameterDef;
   InoGeometry_Manager* geoManager;
@@ -150,8 +159,9 @@ int main(int argc, char** argv) {
 	sprintf(outfile,"./fileOut/%s_data",outfileName.c_str());
       }
 	else if(InputOutput==4){
-	sprintf(outfile,"./fileOut/%s_extrapol",outfileName.c_str());
-	  
+	  //	sprintf(outfile,"./fileOut/%s_extrapol",outfileName.c_str());
+	  sprintf(outfile,"./fileOut_%d_Threshold_%dormore/%s_%d_Threshold_%d_ormore_extrapol",SiPMThreshold,nSiPM+1,outfileName.c_str(),SiPMThreshold,nSiPM+1);
+
 
       } else {  //inout3
 	sprintf(outfile,"./fileOut/%s_reco",outfileName.c_str());

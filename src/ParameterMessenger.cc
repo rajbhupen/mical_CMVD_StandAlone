@@ -32,7 +32,8 @@ ParameterMessenger::ParameterMessenger() {
   SetTimeToDigiConv(0.1);
   SetPhotonSpeed(162.0);
   SetCMVadctons(0.1);
-
+  SetSiPMThreshold(167);//2.5 p e threshold to form hits                                               
+  SetnSiPM(1);// more than 1 (2 or more sipm must have pulse greter than threshold to form hit)  
 }  
   
 ParameterMessenger::ParameterMessenger(char* infile)
@@ -321,4 +322,6 @@ void ParameterMessenger::PrintParameters()
   cout<<"Mag: "<<Magval<<" ";
   cout<<"TrackFit: "<<TrackFitval<<G4endl;
   cout<<"gdmlOption: "<<gdmlOption<<G4endl;
+  cout<<" SiPMThreshold "<<SiPMThreshold<<G4endl;
+  cout<<" nSiPM "<<nSiPM<<endl;
 }

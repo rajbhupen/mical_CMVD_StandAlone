@@ -31,6 +31,8 @@ void  PrintParameters();
   double GetTimeToDigiConv() {return TimeToDigiConv;}
     double GetPhotonSpeed(){return PhotonSpeed;}
   double GetCMVadctons(){return CMVadctons;}
+  int GetSiPMThreshold(){return SiPMThreshold;}
+  int GetnSiPM(){return nSiPM;}
 
   int GetCollatedIn() {return CollatedIn;}
   int GetMag(){return Magval;}
@@ -61,6 +63,8 @@ void  PrintParameters();
   void SetgdmlOption(int val){gdmlOption=val;}
   void SetPhotonSpeed(G4double val){PhotonSpeed=val;};
   void SetCMVadctons(G4double val){CMVadctons=val;};
+  void SetSiPMThreshold(int val){SiPMThreshold=val;}
+  void SetnSiPM(int val){nSiPM=val;}
 
 protected:
 
@@ -88,6 +92,8 @@ private:
   double TimeToDigiConv;
   double PhotonSpeed;
   double CMVadctons;
+  int SiPMThreshold;
+  int nSiPM;
 
 };
 
