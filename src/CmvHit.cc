@@ -136,7 +136,7 @@ CmvHit::CmvHit(SipmHit* L0,  SipmHit* L1, SipmHit* R0, SipmHit* R1, double* posv
     nvalidHit++;
   }
 	
-  if (R0 && R0->GetStrip()) {
+  if (R0 && R0->GetStripId()) {
     if(debug)  cout<<"R0 "<< R0->GetStripId()<<endl;
     fRiMiSipm=R0;
     int id=R0->GetSiPM();
