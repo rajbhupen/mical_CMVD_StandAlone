@@ -50,14 +50,14 @@ public:
   void SetUnCorrTimeError(G4double val);
   void SetTimeToDigiConvVal(G4double val);
   void SetSignalSpeedVal(G4double val);
-  	void SetPhotonSpeedVal(G4double val);
-	void SetCMVadctons(G4double val);
+  void SetPhotonSpeedVal(G4double val);
+  void SetCMVadctons(G4double val);
   double GetCorrTimeError() {return CorrTimeError;}
   double GetUnCorrTimeError() {return UnCorrTimeError;}
   double GetTimeToDigiConvVal() {return TimeToDigiConv;}
   double GetSignalSpeedVal() {return SignalSpeed;}
-	double GetPhotonSpeedVal() {return PhotonSpeed;}
-	double GetCMVadctons() {return CMVadctons;}
+  double GetPhotonSpeedVal() {return PhotonSpeed;}
+  double GetCMVadctons() {return CMVadctons;}
   int isInOut;
   int isVisOut;
   int isXtermOut;
@@ -87,8 +87,8 @@ public:
   TH2D* xyvsbydiff;
   TH2D* xyvsbxindiff;
   TH2D* xyvsbyindiff;
-    TH2D* xyvsbxout;
-    TH2D* xyvsbyout;
+  TH2D* xyvsbxout;
+  TH2D* xyvsbyout;
   // Collated Histograms
   TH2D* inefficiency_corx[20];
   TH2D* inefficiency_uncx[20];
@@ -133,15 +133,15 @@ public:
   TH1D* tshift_xtdc_minus_ref[20][8];
   TH1D* tshift_ytdc_minus_ref[20][8];
 
-    Hits *H;
-    HitPos *Hp;
+  Hits *H;
+  HitPos *Hp;
   int EveCnt;
   int nloops;
-    TH1F  *pdedz[20];
-    TH1F  *hitDist;    //asm
-    TH1F  *TrkDist;    //asm
-    TH1F  *EffDist;    //asm
-    TH1F  *InoTrack_listsize;   //asm
+  TH1F  *pdedz[20];
+  TH1F  *hitDist;    //asm
+  TH1F  *TrkDist;    //asm
+  TH1F  *EffDist;    //asm
+  TH1F  *InoTrack_listsize;   //asm
   TFile *pRootFile;
   TFile *inputRootFile;
   TFile *pVisFile;
@@ -202,7 +202,7 @@ public:
   Float_t         simpz[nsimhtmx];   //[nsimht]
   Float_t         simlocvx[nsimhtmx];   //[nsimht]
   Float_t         simlocvy[nsimhtmx];   //[nsimht]
- Float_t         simlocvz[nsimhtmx];   //[nsimht]
+  Float_t         simlocvz[nsimhtmx];   //[nsimht]
   // ICALsim Root Files Input Data Read
   static const unsigned int ndigihtmx=5000;
   UInt_t          ndigiht;
@@ -223,28 +223,28 @@ public:
 
   // Reco Output store for both sim.
   static const unsigned int nvishtmx=5000;
-  G4float fitposxx[nvishtmx];
-  G4float fitposyy[nvishtmx];
-  G4float fitposzz[nvishtmx];
-  G4float fitlayzz[nvishtmx];
-  G4float fitlayx2[nvishtmx];
-  G4float fitlayx3[nvishtmx];
-  G4float fitlayx4[nvishtmx];
-  G4float fitlaymom[nvishtmx];
-  G4float fitlaythe[nvishtmx];
-  G4float fitlayphi[nvishtmx];
-  G4float extrapolxx[nvishtmx];
-  G4float extrapolyy[nvishtmx];
-  G4float extrapolmom[nvishtmx];
+  Float_t fitposxx[nvishtmx];
+  Float_t fitposyy[nvishtmx];
+  Float_t fitposzz[nvishtmx];
+  Float_t fitlayzz[nvishtmx];
+  Float_t fitlayx2[nvishtmx];
+  Float_t fitlayx3[nvishtmx];
+  Float_t fitlayx4[nvishtmx];
+  Float_t fitlaymom[nvishtmx];
+  Float_t fitlaythe[nvishtmx];
+  Float_t fitlayphi[nvishtmx];
+  Float_t extrapolxx[nvishtmx];
+  Float_t extrapolyy[nvishtmx];
+  Float_t extrapolmom[nvishtmx];
 
-  G4float momdiff1;
-  G4float radialdiff1;
+  Float_t momdiff1;
+  Float_t radialdiff1;
 
   unsigned int nvisht;
-  G4float clstposxx[nvishtmx];
-  G4float clstposyy[nvishtmx];
-  G4float clstposzz[nvishtmx];
-  G4int clstposzpln[nvishtmx];
+  Float_t clstposxx[nvishtmx];
+  Float_t clstposyy[nvishtmx];
+  Float_t clstposzz[nvishtmx];
+  Int_t clstposzpln[nvishtmx];
   unsigned int nvisclst;
 
   static  const unsigned int nthtmx=100;
@@ -329,8 +329,8 @@ public:
   Int_t           nhits_finder[ntrkmx];   //[ntrkt]
   Float_t         chisq[ntrkmx];   //[ntrkt]
   Float_t chisq2[ntrkmx];
-  G4int ndof[ntrkmx];
-  G4int ndof2[ntrkmx];
+  Int_t ndof[ntrkmx];
+  Int_t ndof2[ntrkmx];
   
   Float_t         cvalue[ntrkmx];   //[ntrkt]
   Int_t           fc_or_pc[ntrkmx];   //[ntrkt]
@@ -347,21 +347,21 @@ public:
 
   //ROOF RSA
 
-	G4float momrf[ntrkmx]; 	  //Measured momentum of reconstrued track
-	G4float therf[ntrkmx];	  //Measured polar angle of track
-	G4float phirf[ntrkmx];        //Measured azimuthal angle of track
-	G4float posxrf[ntrkmx];	  //Starting X-position
-	G4float posyrf[ntrkmx];       //Starting Y-position
-	G4float poszrf[ntrkmx];       //Starting Z-position
+  Float_t momrf[ntrkmx]; 	  //Measured momentum of reconstrued track
+  Float_t therf[ntrkmx];	  //Measured polar angle of track
+  Float_t phirf[ntrkmx];        //Measured azimuthal angle of track
+  Float_t posxrf[ntrkmx];	  //Starting X-position
+  Float_t posyrf[ntrkmx];       //Starting Y-position
+  Float_t poszrf[ntrkmx];       //Starting Z-position
 
-    static const unsigned int nlayermx=10;
+  static const unsigned int nlayermx=10;
   //for posresolution SL
-  G4float XPosdev_exclu[nlayermx];
-  G4float YPosdev_exclu[nlayermx];
+  Float_t XPosdev_exclu[nlayermx];
+  Float_t YPosdev_exclu[nlayermx];
   
 
-  G4float XPosdev[nlayermx];
-  G4float YPosdev[nlayermx];
+  Float_t XPosdev[nlayermx];
+  Float_t YPosdev[nlayermx];
 
 
   
@@ -466,17 +466,17 @@ public:
 
 
 
-  G4float atimslope[ntrkmx];
-  G4float atiminter[ntrkmx];
+  Float_t atimslope[ntrkmx];
+  Float_t atiminter[ntrkmx];
 
-  G4float xxtxerr[ntrkmx];
-  G4float xxtyerr[ntrkmx];
-  G4float yytyerr[ntrkmx];
-  G4float yytxerr[ntrkmx];
-    G4float txtyerr[ntrkmx];
+  Float_t xxtxerr[ntrkmx];
+  Float_t xxtyerr[ntrkmx];
+  Float_t yytyerr[ntrkmx];
+  Float_t yytxerr[ntrkmx];
+  Float_t txtyerr[ntrkmx];
  
 
-  G4float atim[ntrkmx];
+  Float_t atim[ntrkmx];
 
 
   
@@ -487,31 +487,31 @@ public:
   unsigned int CMVDnLayer;
   
   
-  G4float CMVDTruePosX[32];
-  G4float CMVDTruePosY[32];
-  G4float CMVDTruePosZ[32];
+  Float_t CMVDTruePosX[32];
+  Float_t CMVDTruePosY[32];
+  Float_t CMVDTruePosZ[32];
 
-  G4float CMVDRecoPosX[32];
-  G4float CMVDRecoPosY[32];
-  G4float CMVDRecoPosZ[32];
+  Float_t CMVDRecoPosX[32];
+  Float_t CMVDRecoPosY[32];
+  Float_t CMVDRecoPosZ[32];
 
-  G4float CMVDWRecoPosX[32];
-  G4float CMVDWRecoPosY[32];
-  G4float CMVDWRecoPosZ[32];
+  Float_t CMVDWRecoPosX[32];
+  Float_t CMVDWRecoPosY[32];
+  Float_t CMVDWRecoPosZ[32];
   
-  G4float CMVDExpPosX[32];
-  G4float CMVDExpPosY[32];
-  G4float CMVDExpPosZ[32];
+  Float_t CMVDExpPosX[32];
+  Float_t CMVDExpPosY[32];
+  Float_t CMVDExpPosZ[32];
 
-  G4int CMVDExpnHit[32];
-  G4int CMVDisExpIn[32];
-  G4int CMVDisHit[32];
+  Int_t CMVDExpnHit[32];
+  Int_t CMVDisExpIn[32];
+  Int_t CMVDisHit[32];
 
 
-  G4int CMVDpl2[32];
-  G4int CMVDClustsInLay[32];
-  G4int CMVDHitsInLay[32];
-  G4int CMVDClusterSize[32];
+  Int_t CMVDpl2[32];
+  Int_t CMVDClustsInLay[32];
+  Int_t CMVDHitsInLay[32];
+  Int_t CMVDClusterSize[32];
   
   
   //
@@ -523,45 +523,45 @@ public:
 
   
 
-	static const unsigned int cmv_nhtmx=10000;
+  static const unsigned int cmv_nhtmx=10000;
 
   unsigned int cmv_nhit;
   //cmvd cluster hit:
   unsigned int cmv_hitid[ cmv_nhtmx];
-  G4int cmv_hitpdgid[ cmv_nhtmx];
-  G4float cmv_hitLeTim[ cmv_nhtmx];
-  G4float cmv_hitRiTim[ cmv_nhtmx];
-  G4float cmv_hitLePul[ cmv_nhtmx];
-  G4float cmv_hitRiPul[ cmv_nhtmx];
-  G4float cmv_hitTrueposx[ cmv_nhtmx];
-  G4float cmv_hitTrueposy[ cmv_nhtmx];
-  G4float cmv_hitTrueposz[ cmv_nhtmx];
-  G4float cmv_hitRecoposx[ cmv_nhtmx];
-  G4float cmv_hitRecoposy[ cmv_nhtmx];
-  G4float cmv_hitRecoposz[ cmv_nhtmx];
+  Int_t cmv_hitpdgid[ cmv_nhtmx];
+  Float_t cmv_hitLeTim[ cmv_nhtmx];
+  Float_t cmv_hitRiTim[ cmv_nhtmx];
+  Float_t cmv_hitLePul[ cmv_nhtmx];
+  Float_t cmv_hitRiPul[ cmv_nhtmx];
+  Float_t cmv_hitTrueposx[ cmv_nhtmx];
+  Float_t cmv_hitTrueposy[ cmv_nhtmx];
+  Float_t cmv_hitTrueposz[ cmv_nhtmx];
+  Float_t cmv_hitRecoposx[ cmv_nhtmx];
+  Float_t cmv_hitRecoposy[ cmv_nhtmx];
+  Float_t cmv_hitRecoposz[ cmv_nhtmx];
 
 
-  //  G4int cmv_hitsiz[ cmv_nhtmx];
+  //  Int_t cmv_hitsiz[ cmv_nhtmx];
 
   //cmv_ cluster:
 
 
   static const unsigned int cmv_nclustmx=10000;
-  unsigned int cmv_nclust;
+  UInt_t cmv_nclust;
   //cmvd cluster hit:
-  unsigned int cmv_clustid[ cmv_nclustmx];
-  G4int cmv_clustpdgid[ cmv_nclustmx];
-  G4float cmv_clustLeTim[ cmv_nclustmx];
-  G4float cmv_clustRiTim[ cmv_nclustmx];
-  G4float cmv_clustLePul[ cmv_nclustmx];
-  G4float cmv_clustRiPul[ cmv_nclustmx];
-  G4float cmv_clustTrueposx[ cmv_nclustmx];
-  G4float cmv_clustTrueposy[ cmv_nclustmx];
-  G4float cmv_clustTrueposz[ cmv_nclustmx];
-  G4float cmv_clustRecoposx[ cmv_nclustmx];
-  G4float cmv_clustRecoposy[ cmv_nclustmx];
-  G4float cmv_clustRecoposz[ cmv_nclustmx];
-  G4int cmv_clustsiz[ cmv_nclustmx];
+  UInt_t cmv_clustid[ cmv_nclustmx];
+  Int_t cmv_clustpdgid[ cmv_nclustmx];
+  Float_t cmv_clustLeTim[ cmv_nclustmx];
+  Float_t cmv_clustRiTim[ cmv_nclustmx];
+  Float_t cmv_clustLePul[ cmv_nclustmx];
+  Float_t cmv_clustRiPul[ cmv_nclustmx];
+  Float_t cmv_clustTrueposx[ cmv_nclustmx];
+  Float_t cmv_clustTrueposy[ cmv_nclustmx];
+  Float_t cmv_clustTrueposz[ cmv_nclustmx];
+  Float_t cmv_clustRecoposx[ cmv_nclustmx];
+  Float_t cmv_clustRecoposy[ cmv_nclustmx];
+  Float_t cmv_clustRecoposz[ cmv_nclustmx];
+  Int_t cmv_clustsiz[ cmv_nclustmx];
 
 
 
@@ -575,53 +575,53 @@ public:
   //cmvd extrapol :
 
 
-	static const unsigned int cmv_nexphtmx=1000;
+  static const unsigned int cmv_nexphtmx=1000;
 
-  unsigned int cmv_nexphit;
-
-
-  unsigned int cmv_expid[cmv_nexphtmx];
-
-  G4float cmv_Expposx[cmv_nexphtmx];
- G4float cmv_Expposy[cmv_nexphtmx];
- G4float cmv_Expposz[cmv_nexphtmx];
+  UInt_t cmv_nexphit;
 
 
+  UInt_t cmv_expid[cmv_nexphtmx];
 
-  G4float cmv_DCAposx[cmv_nexphtmx];
- G4float cmv_DCAposy[cmv_nexphtmx];
- G4float cmv_DCAposz[cmv_nexphtmx];
+  Float_t cmv_Expposx[cmv_nexphtmx];
+  Float_t cmv_Expposy[cmv_nexphtmx];
+  Float_t cmv_Expposz[cmv_nexphtmx];
 
 
 
-  G4float distofclosapp[ntrkmx];
-  G4int planeedge[ntrkmx];
-  G4int clustersize00[ntrkmx];
+  Float_t cmv_DCAposx[cmv_nexphtmx];
+  Float_t cmv_DCAposy[cmv_nexphtmx];
+  Float_t cmv_DCAposz[cmv_nexphtmx];
 
-  G4float extrapolposx00[ntrkmx];
-  G4float extrapolposy00[ntrkmx];
-  G4float extrapolposz00[ntrkmx];
 
-  G4float extrapolposxerr00[ntrkmx];
-  G4float extrapolposyerr00[ntrkmx];
-  G4float extrapolposzerr00[ntrkmx];
 
-  G4float cmvhitrecoposx00[ntrkmx];
-  G4float cmvhitrecoposy00[ntrkmx];
-  G4float cmvhitrecoposz00[ntrkmx];
+  Float_t distofclosapp[ntrkmx];
+  Int_t planeedge[ntrkmx];
+  Int_t clustersize00[ntrkmx];
 
-  G4float cmvhittrueposx00[ntrkmx];
-  G4float cmvhittrueposy00[ntrkmx];
-  G4float cmvhittrueposz00[ntrkmx];
+  Float_t extrapolposx00[ntrkmx];
+  Float_t extrapolposy00[ntrkmx];
+  Float_t extrapolposz00[ntrkmx];
 
-  G4float cmvhitrecoposxerr00[ntrkmx];
-  G4float cmvhitrecoposyerr00[ntrkmx];
-  G4float cmvhitrecoposzerr00[ntrkmx];
+  Float_t extrapolposxerr00[ntrkmx];
+  Float_t extrapolposyerr00[ntrkmx];
+  Float_t extrapolposzerr00[ntrkmx];
 
-  G4float LeTime00[ntrkmx];
-  G4float RiTime00[ntrkmx];
-  G4float LePulse00[ntrkmx];
-  G4float RiPulse00[ntrkmx];
+  Float_t cmvhitrecoposx00[ntrkmx];
+  Float_t cmvhitrecoposy00[ntrkmx];
+  Float_t cmvhitrecoposz00[ntrkmx];
+
+  Float_t cmvhittrueposx00[ntrkmx];
+  Float_t cmvhittrueposy00[ntrkmx];
+  Float_t cmvhittrueposz00[ntrkmx];
+
+  Float_t cmvhitrecoposxerr00[ntrkmx];
+  Float_t cmvhitrecoposyerr00[ntrkmx];
+  Float_t cmvhitrecoposzerr00[ntrkmx];
+
+  Float_t LeTime00[ntrkmx];
+  Float_t RiTime00[ntrkmx];
+  Float_t LePulse00[ntrkmx];
+  Float_t RiPulse00[ntrkmx];
 
   //   pEventTree->Branch("LeTime31", LeTime31, "LeTime31[ntrkt]/F");
   // pEventTree->Branch("RiTime31", RiTime31, "RiTime31[ntrkt]/F");
@@ -633,698 +633,698 @@ public:
 
 
 
-  G4int clustersize01[ntrkmx];
+  Int_t clustersize01[ntrkmx];
 
-  G4float extrapolposx01[ntrkmx];
-  G4float extrapolposy01[ntrkmx];
-  G4float extrapolposz01[ntrkmx];
+  Float_t extrapolposx01[ntrkmx];
+  Float_t extrapolposy01[ntrkmx];
+  Float_t extrapolposz01[ntrkmx];
 
-  G4float extrapolposxerr01[ntrkmx];
-  G4float extrapolposyerr01[ntrkmx];
-  G4float extrapolposzerr01[ntrkmx];
+  Float_t extrapolposxerr01[ntrkmx];
+  Float_t extrapolposyerr01[ntrkmx];
+  Float_t extrapolposzerr01[ntrkmx];
 
-  G4float cmvhitrecoposx01[ntrkmx];
-  G4float cmvhitrecoposy01[ntrkmx];
-  G4float cmvhitrecoposz01[ntrkmx];
+  Float_t cmvhitrecoposx01[ntrkmx];
+  Float_t cmvhitrecoposy01[ntrkmx];
+  Float_t cmvhitrecoposz01[ntrkmx];
 
-  G4float cmvhittrueposx01[ntrkmx];
-  G4float cmvhittrueposy01[ntrkmx];
-  G4float cmvhittrueposz01[ntrkmx];
+  Float_t cmvhittrueposx01[ntrkmx];
+  Float_t cmvhittrueposy01[ntrkmx];
+  Float_t cmvhittrueposz01[ntrkmx];
 
-  G4float cmvhitrecoposxerr01[ntrkmx];
-  G4float cmvhitrecoposyerr01[ntrkmx];
-  G4float cmvhitrecoposzerr01[ntrkmx];
+  Float_t cmvhitrecoposxerr01[ntrkmx];
+  Float_t cmvhitrecoposyerr01[ntrkmx];
+  Float_t cmvhitrecoposzerr01[ntrkmx];
 
-  G4float LeTime01[ntrkmx];
-  G4float RiTime01[ntrkmx];
-  G4float LePulse01[ntrkmx];
-  G4float RiPulse01[ntrkmx];
+  Float_t LeTime01[ntrkmx];
+  Float_t RiTime01[ntrkmx];
+  Float_t LePulse01[ntrkmx];
+  Float_t RiPulse01[ntrkmx];
 
 
-    G4int clustersize02[ntrkmx];
-  G4float extrapolposx02[ntrkmx];
-  G4float extrapolposy02[ntrkmx];
-  G4float extrapolposz02[ntrkmx];
+  Int_t clustersize02[ntrkmx];
+  Float_t extrapolposx02[ntrkmx];
+  Float_t extrapolposy02[ntrkmx];
+  Float_t extrapolposz02[ntrkmx];
 
-  G4float extrapolposxerr02[ntrkmx];
-  G4float extrapolposyerr02[ntrkmx];
-  G4float extrapolposzerr02[ntrkmx];
+  Float_t extrapolposxerr02[ntrkmx];
+  Float_t extrapolposyerr02[ntrkmx];
+  Float_t extrapolposzerr02[ntrkmx];
 
-  G4float cmvhitrecoposx02[ntrkmx];
-  G4float cmvhitrecoposy02[ntrkmx];
-  G4float cmvhitrecoposz02[ntrkmx];
+  Float_t cmvhitrecoposx02[ntrkmx];
+  Float_t cmvhitrecoposy02[ntrkmx];
+  Float_t cmvhitrecoposz02[ntrkmx];
 
-  G4float cmvhittrueposx02[ntrkmx];
-  G4float cmvhittrueposy02[ntrkmx];
-  G4float cmvhittrueposz02[ntrkmx];
+  Float_t cmvhittrueposx02[ntrkmx];
+  Float_t cmvhittrueposy02[ntrkmx];
+  Float_t cmvhittrueposz02[ntrkmx];
 
-  G4float cmvhitrecoposxerr02[ntrkmx];
-  G4float cmvhitrecoposyerr02[ntrkmx];
-  G4float cmvhitrecoposzerr02[ntrkmx];
+  Float_t cmvhitrecoposxerr02[ntrkmx];
+  Float_t cmvhitrecoposyerr02[ntrkmx];
+  Float_t cmvhitrecoposzerr02[ntrkmx];
 
 
 
 
-  G4float LeTime02[ntrkmx];
-  G4float RiTime02[ntrkmx];
-  G4float LePulse02[ntrkmx];
-  G4float RiPulse02[ntrkmx];
+  Float_t LeTime02[ntrkmx];
+  Float_t RiTime02[ntrkmx];
+  Float_t LePulse02[ntrkmx];
+  Float_t RiPulse02[ntrkmx];
 
 
 
-  G4int clustersize03[ntrkmx];
+  Int_t clustersize03[ntrkmx];
 
 
 
 
 
 
-  G4float extrapolposx03[ntrkmx];
-  G4float extrapolposy03[ntrkmx];
-  G4float extrapolposz03[ntrkmx];
+  Float_t extrapolposx03[ntrkmx];
+  Float_t extrapolposy03[ntrkmx];
+  Float_t extrapolposz03[ntrkmx];
 
-  G4float extrapolposxerr03[ntrkmx];
-  G4float extrapolposyerr03[ntrkmx];
-  G4float extrapolposzerr03[ntrkmx];
+  Float_t extrapolposxerr03[ntrkmx];
+  Float_t extrapolposyerr03[ntrkmx];
+  Float_t extrapolposzerr03[ntrkmx];
 
-  G4float cmvhitrecoposx03[ntrkmx];
-  G4float cmvhitrecoposy03[ntrkmx];
-  G4float cmvhitrecoposz03[ntrkmx];
+  Float_t cmvhitrecoposx03[ntrkmx];
+  Float_t cmvhitrecoposy03[ntrkmx];
+  Float_t cmvhitrecoposz03[ntrkmx];
 
-  G4float cmvhittrueposx03[ntrkmx];
-  G4float cmvhittrueposy03[ntrkmx];
-  G4float cmvhittrueposz03[ntrkmx];
+  Float_t cmvhittrueposx03[ntrkmx];
+  Float_t cmvhittrueposy03[ntrkmx];
+  Float_t cmvhittrueposz03[ntrkmx];
 
-  G4float cmvhitrecoposxerr03[ntrkmx];
-  G4float cmvhitrecoposyerr03[ntrkmx];
-  G4float cmvhitrecoposzerr03[ntrkmx];
+  Float_t cmvhitrecoposxerr03[ntrkmx];
+  Float_t cmvhitrecoposyerr03[ntrkmx];
+  Float_t cmvhitrecoposzerr03[ntrkmx];
 
-  G4float LeTime03[ntrkmx];
-  G4float RiTime03[ntrkmx];
-  G4float LePulse03[ntrkmx];
-  G4float RiPulse03[ntrkmx];
+  Float_t LeTime03[ntrkmx];
+  Float_t RiTime03[ntrkmx];
+  Float_t LePulse03[ntrkmx];
+  Float_t RiPulse03[ntrkmx];
 
 
-  G4float debug[ntrkmx];
+  Float_t debug[ntrkmx];
 
 
-G4int clustersize10[ntrkmx];
+  Int_t clustersize10[ntrkmx];
 
-  G4float extrapolposx10[ntrkmx];
-  G4float extrapolposy10[ntrkmx];
-  G4float extrapolposz10[ntrkmx];
+  Float_t extrapolposx10[ntrkmx];
+  Float_t extrapolposy10[ntrkmx];
+  Float_t extrapolposz10[ntrkmx];
 
-  G4float extrapolposxerr10[ntrkmx];
-  G4float extrapolposyerr10[ntrkmx];
-  G4float extrapolposzerr10[ntrkmx];
+  Float_t extrapolposxerr10[ntrkmx];
+  Float_t extrapolposyerr10[ntrkmx];
+  Float_t extrapolposzerr10[ntrkmx];
 
-  G4float cmvhitrecoposx10[ntrkmx];
-  G4float cmvhitrecoposy10[ntrkmx];
-  G4float cmvhitrecoposz10[ntrkmx];
+  Float_t cmvhitrecoposx10[ntrkmx];
+  Float_t cmvhitrecoposy10[ntrkmx];
+  Float_t cmvhitrecoposz10[ntrkmx];
 
-  G4float cmvhittrueposx10[ntrkmx];
-  G4float cmvhittrueposy10[ntrkmx];
-  G4float cmvhittrueposz10[ntrkmx];
+  Float_t cmvhittrueposx10[ntrkmx];
+  Float_t cmvhittrueposy10[ntrkmx];
+  Float_t cmvhittrueposz10[ntrkmx];
 
-  G4float cmvhitrecoposxerr10[ntrkmx];
-  G4float cmvhitrecoposyerr10[ntrkmx];
-  G4float cmvhitrecoposzerr10[ntrkmx];
+  Float_t cmvhitrecoposxerr10[ntrkmx];
+  Float_t cmvhitrecoposyerr10[ntrkmx];
+  Float_t cmvhitrecoposzerr10[ntrkmx];
 
-  G4float LeTime10[ntrkmx];
-  G4float RiTime10[ntrkmx];
-  G4float LePulse10[ntrkmx];
-  G4float RiPulse10[ntrkmx];
+  Float_t LeTime10[ntrkmx];
+  Float_t RiTime10[ntrkmx];
+  Float_t LePulse10[ntrkmx];
+  Float_t RiPulse10[ntrkmx];
 
-  G4int clustersize11[ntrkmx];
+  Int_t clustersize11[ntrkmx];
 
-  G4float extrapolposx11[ntrkmx];
-  G4float extrapolposy11[ntrkmx];
-  G4float extrapolposz11[ntrkmx];
+  Float_t extrapolposx11[ntrkmx];
+  Float_t extrapolposy11[ntrkmx];
+  Float_t extrapolposz11[ntrkmx];
 
-  G4float extrapolposxerr11[ntrkmx];
-  G4float extrapolposyerr11[ntrkmx];
-  G4float extrapolposzerr11[ntrkmx];
+  Float_t extrapolposxerr11[ntrkmx];
+  Float_t extrapolposyerr11[ntrkmx];
+  Float_t extrapolposzerr11[ntrkmx];
 
-  G4float cmvhitrecoposx11[ntrkmx];
-  G4float cmvhitrecoposy11[ntrkmx];
-  G4float cmvhitrecoposz11[ntrkmx];
+  Float_t cmvhitrecoposx11[ntrkmx];
+  Float_t cmvhitrecoposy11[ntrkmx];
+  Float_t cmvhitrecoposz11[ntrkmx];
 
-  G4float cmvhittrueposx11[ntrkmx];
-  G4float cmvhittrueposy11[ntrkmx];
-  G4float cmvhittrueposz11[ntrkmx];
+  Float_t cmvhittrueposx11[ntrkmx];
+  Float_t cmvhittrueposy11[ntrkmx];
+  Float_t cmvhittrueposz11[ntrkmx];
 
-  G4float cmvhitrecoposxerr11[ntrkmx];
-  G4float cmvhitrecoposyerr11[ntrkmx];
-  G4float cmvhitrecoposzerr11[ntrkmx];
+  Float_t cmvhitrecoposxerr11[ntrkmx];
+  Float_t cmvhitrecoposyerr11[ntrkmx];
+  Float_t cmvhitrecoposzerr11[ntrkmx];
 
-  G4float LeTime11[ntrkmx];
-  G4float RiTime11[ntrkmx];
-  G4float LePulse11[ntrkmx];
-  G4float RiPulse11[ntrkmx];
+  Float_t LeTime11[ntrkmx];
+  Float_t RiTime11[ntrkmx];
+  Float_t LePulse11[ntrkmx];
+  Float_t RiPulse11[ntrkmx];
 
 
-G4int clustersize12[ntrkmx];
+  Int_t clustersize12[ntrkmx];
 
 
-  G4float extrapolposx12[ntrkmx];
-  G4float extrapolposy12[ntrkmx];
-  G4float extrapolposz12[ntrkmx];
+  Float_t extrapolposx12[ntrkmx];
+  Float_t extrapolposy12[ntrkmx];
+  Float_t extrapolposz12[ntrkmx];
 
-  G4float extrapolposxerr12[ntrkmx];
-  G4float extrapolposyerr12[ntrkmx];
-  G4float extrapolposzerr12[ntrkmx];
+  Float_t extrapolposxerr12[ntrkmx];
+  Float_t extrapolposyerr12[ntrkmx];
+  Float_t extrapolposzerr12[ntrkmx];
 
-  G4float cmvhitrecoposx12[ntrkmx];
-  G4float cmvhitrecoposy12[ntrkmx];
-  G4float cmvhitrecoposz12[ntrkmx];
+  Float_t cmvhitrecoposx12[ntrkmx];
+  Float_t cmvhitrecoposy12[ntrkmx];
+  Float_t cmvhitrecoposz12[ntrkmx];
 
-  G4float cmvhittrueposx12[ntrkmx];
-  G4float cmvhittrueposy12[ntrkmx];
-  G4float cmvhittrueposz12[ntrkmx];
+  Float_t cmvhittrueposx12[ntrkmx];
+  Float_t cmvhittrueposy12[ntrkmx];
+  Float_t cmvhittrueposz12[ntrkmx];
 
-  G4float cmvhitrecoposxerr12[ntrkmx];
-  G4float cmvhitrecoposyerr12[ntrkmx];
-  G4float cmvhitrecoposzerr12[ntrkmx];
+  Float_t cmvhitrecoposxerr12[ntrkmx];
+  Float_t cmvhitrecoposyerr12[ntrkmx];
+  Float_t cmvhitrecoposzerr12[ntrkmx];
 
-  G4float LeTime12[ntrkmx];
-  G4float RiTime12[ntrkmx];
-  G4float LePulse12[ntrkmx];
-  G4float RiPulse12[ntrkmx];
+  Float_t LeTime12[ntrkmx];
+  Float_t RiTime12[ntrkmx];
+  Float_t LePulse12[ntrkmx];
+  Float_t RiPulse12[ntrkmx];
 
 
 
-G4int clustersize21[ntrkmx];
+  Int_t clustersize21[ntrkmx];
 
-  G4float extrapolposx21[ntrkmx];
-  G4float extrapolposy21[ntrkmx];
-  G4float extrapolposz21[ntrkmx];
+  Float_t extrapolposx21[ntrkmx];
+  Float_t extrapolposy21[ntrkmx];
+  Float_t extrapolposz21[ntrkmx];
 
-  G4float extrapolposxerr21[ntrkmx];
-  G4float extrapolposyerr21[ntrkmx];
-  G4float extrapolposzerr21[ntrkmx];
+  Float_t extrapolposxerr21[ntrkmx];
+  Float_t extrapolposyerr21[ntrkmx];
+  Float_t extrapolposzerr21[ntrkmx];
 
-  G4float cmvhitrecoposx21[ntrkmx];
-  G4float cmvhitrecoposy21[ntrkmx];
-  G4float cmvhitrecoposz21[ntrkmx];
+  Float_t cmvhitrecoposx21[ntrkmx];
+  Float_t cmvhitrecoposy21[ntrkmx];
+  Float_t cmvhitrecoposz21[ntrkmx];
 
-  G4float cmvhittrueposx21[ntrkmx];
-  G4float cmvhittrueposy21[ntrkmx];
-  G4float cmvhittrueposz21[ntrkmx];
+  Float_t cmvhittrueposx21[ntrkmx];
+  Float_t cmvhittrueposy21[ntrkmx];
+  Float_t cmvhittrueposz21[ntrkmx];
 
-  G4float cmvhitrecoposxerr21[ntrkmx];
-  G4float cmvhitrecoposyerr21[ntrkmx];
-  G4float cmvhitrecoposzerr21[ntrkmx];
+  Float_t cmvhitrecoposxerr21[ntrkmx];
+  Float_t cmvhitrecoposyerr21[ntrkmx];
+  Float_t cmvhitrecoposzerr21[ntrkmx];
 
 
-  G4float LeTime21[ntrkmx];
-  G4float RiTime21[ntrkmx];
-  G4float LePulse21[ntrkmx];
-  G4float RiPulse21[ntrkmx];
+  Float_t LeTime21[ntrkmx];
+  Float_t RiTime21[ntrkmx];
+  Float_t LePulse21[ntrkmx];
+  Float_t RiPulse21[ntrkmx];
 
-G4int clustersize20[ntrkmx];
+  Int_t clustersize20[ntrkmx];
 
-  G4float extrapolposx20[ntrkmx];
-  G4float extrapolposy20[ntrkmx];
-  G4float extrapolposz20[ntrkmx];
+  Float_t extrapolposx20[ntrkmx];
+  Float_t extrapolposy20[ntrkmx];
+  Float_t extrapolposz20[ntrkmx];
 
-  G4float extrapolposxerr20[ntrkmx];
-  G4float extrapolposyerr20[ntrkmx];
-  G4float extrapolposzerr20[ntrkmx];
+  Float_t extrapolposxerr20[ntrkmx];
+  Float_t extrapolposyerr20[ntrkmx];
+  Float_t extrapolposzerr20[ntrkmx];
 
-  G4float cmvhitrecoposx20[ntrkmx];
-  G4float cmvhitrecoposy20[ntrkmx];
-  G4float cmvhitrecoposz20[ntrkmx];
+  Float_t cmvhitrecoposx20[ntrkmx];
+  Float_t cmvhitrecoposy20[ntrkmx];
+  Float_t cmvhitrecoposz20[ntrkmx];
 
-  G4float cmvhittrueposx20[ntrkmx];
-  G4float cmvhittrueposy20[ntrkmx];
-  G4float cmvhittrueposz20[ntrkmx];
+  Float_t cmvhittrueposx20[ntrkmx];
+  Float_t cmvhittrueposy20[ntrkmx];
+  Float_t cmvhittrueposz20[ntrkmx];
 
-  G4float cmvhitrecoposxerr20[ntrkmx];
-  G4float cmvhitrecoposyerr20[ntrkmx];
-  G4float cmvhitrecoposzerr20[ntrkmx];
+  Float_t cmvhitrecoposxerr20[ntrkmx];
+  Float_t cmvhitrecoposyerr20[ntrkmx];
+  Float_t cmvhitrecoposzerr20[ntrkmx];
 
-  G4float LeTime20[ntrkmx];
-  G4float RiTime20[ntrkmx];
-  G4float LePulse20[ntrkmx];
-  G4float RiPulse20[ntrkmx];
+  Float_t LeTime20[ntrkmx];
+  Float_t RiTime20[ntrkmx];
+  Float_t LePulse20[ntrkmx];
+  Float_t RiPulse20[ntrkmx];
 
-G4int clustersize22[ntrkmx];
+  Int_t clustersize22[ntrkmx];
 
-  G4float extrapolposx22[ntrkmx];
-  G4float extrapolposy22[ntrkmx];
-  G4float extrapolposz22[ntrkmx];
+  Float_t extrapolposx22[ntrkmx];
+  Float_t extrapolposy22[ntrkmx];
+  Float_t extrapolposz22[ntrkmx];
 
-  G4float extrapolposxerr22[ntrkmx];
-  G4float extrapolposyerr22[ntrkmx];
-  G4float extrapolposzerr22[ntrkmx];
+  Float_t extrapolposxerr22[ntrkmx];
+  Float_t extrapolposyerr22[ntrkmx];
+  Float_t extrapolposzerr22[ntrkmx];
 
-  G4float cmvhitrecoposx22[ntrkmx];
-  G4float cmvhitrecoposy22[ntrkmx];
-  G4float cmvhitrecoposz22[ntrkmx];
+  Float_t cmvhitrecoposx22[ntrkmx];
+  Float_t cmvhitrecoposy22[ntrkmx];
+  Float_t cmvhitrecoposz22[ntrkmx];
 
-  G4float cmvhittrueposx22[ntrkmx];
-  G4float cmvhittrueposy22[ntrkmx];
-  G4float cmvhittrueposz22[ntrkmx];
+  Float_t cmvhittrueposx22[ntrkmx];
+  Float_t cmvhittrueposy22[ntrkmx];
+  Float_t cmvhittrueposz22[ntrkmx];
 
-  G4float cmvhitrecoposxerr22[ntrkmx];
-  G4float cmvhitrecoposyerr22[ntrkmx];
-  G4float cmvhitrecoposzerr22[ntrkmx];
+  Float_t cmvhitrecoposxerr22[ntrkmx];
+  Float_t cmvhitrecoposyerr22[ntrkmx];
+  Float_t cmvhitrecoposzerr22[ntrkmx];
 
-  G4float LeTime22[ntrkmx];
-  G4float RiTime22[ntrkmx];
-  G4float LePulse22[ntrkmx];
-  G4float RiPulse22[ntrkmx];
+  Float_t LeTime22[ntrkmx];
+  Float_t RiTime22[ntrkmx];
+  Float_t LePulse22[ntrkmx];
+  Float_t RiPulse22[ntrkmx];
 
-G4int clustersize30[ntrkmx];
+  Int_t clustersize30[ntrkmx];
 
-  G4float extrapolposx30[ntrkmx];
-  G4float extrapolposy30[ntrkmx];
-  G4float extrapolposz30[ntrkmx];
+  Float_t extrapolposx30[ntrkmx];
+  Float_t extrapolposy30[ntrkmx];
+  Float_t extrapolposz30[ntrkmx];
 
-  G4float extrapolposxerr30[ntrkmx];
-  G4float extrapolposyerr30[ntrkmx];
-  G4float extrapolposzerr30[ntrkmx];
+  Float_t extrapolposxerr30[ntrkmx];
+  Float_t extrapolposyerr30[ntrkmx];
+  Float_t extrapolposzerr30[ntrkmx];
 
-  G4float cmvhitrecoposx30[ntrkmx];
-  G4float cmvhitrecoposy30[ntrkmx];
-  G4float cmvhitrecoposz30[ntrkmx];
+  Float_t cmvhitrecoposx30[ntrkmx];
+  Float_t cmvhitrecoposy30[ntrkmx];
+  Float_t cmvhitrecoposz30[ntrkmx];
 
-  G4float cmvhittrueposx30[ntrkmx];
-  G4float cmvhittrueposy30[ntrkmx];
-  G4float cmvhittrueposz30[ntrkmx];
+  Float_t cmvhittrueposx30[ntrkmx];
+  Float_t cmvhittrueposy30[ntrkmx];
+  Float_t cmvhittrueposz30[ntrkmx];
 
-  G4float cmvhitrecoposxerr30[ntrkmx];
-  G4float cmvhitrecoposyerr30[ntrkmx];
-  G4float cmvhitrecoposzerr30[ntrkmx];
+  Float_t cmvhitrecoposxerr30[ntrkmx];
+  Float_t cmvhitrecoposyerr30[ntrkmx];
+  Float_t cmvhitrecoposzerr30[ntrkmx];
 
-  G4float LeTime30[ntrkmx];
-  G4float RiTime30[ntrkmx];
-  G4float LePulse30[ntrkmx];
-  G4float RiPulse30[ntrkmx];
+  Float_t LeTime30[ntrkmx];
+  Float_t RiTime30[ntrkmx];
+  Float_t LePulse30[ntrkmx];
+  Float_t RiPulse30[ntrkmx];
 
 
 
-G4int clustersize31[ntrkmx];
+  Int_t clustersize31[ntrkmx];
 
 
-  G4float extrapolposx31[ntrkmx];
-  G4float extrapolposy31[ntrkmx];
-  G4float extrapolposz31[ntrkmx];
+  Float_t extrapolposx31[ntrkmx];
+  Float_t extrapolposy31[ntrkmx];
+  Float_t extrapolposz31[ntrkmx];
 
-  G4float extrapolposxerr31[ntrkmx];
-  G4float extrapolposyerr31[ntrkmx];
-  G4float extrapolposzerr31[ntrkmx];
+  Float_t extrapolposxerr31[ntrkmx];
+  Float_t extrapolposyerr31[ntrkmx];
+  Float_t extrapolposzerr31[ntrkmx];
 
-  G4float cmvhitrecoposx31[ntrkmx];
-  G4float cmvhitrecoposy31[ntrkmx];
-  G4float cmvhitrecoposz31[ntrkmx];
+  Float_t cmvhitrecoposx31[ntrkmx];
+  Float_t cmvhitrecoposy31[ntrkmx];
+  Float_t cmvhitrecoposz31[ntrkmx];
 
-  G4float cmvhittrueposx31[ntrkmx];
-  G4float cmvhittrueposy31[ntrkmx];
-  G4float cmvhittrueposz31[ntrkmx];
+  Float_t cmvhittrueposx31[ntrkmx];
+  Float_t cmvhittrueposy31[ntrkmx];
+  Float_t cmvhittrueposz31[ntrkmx];
 
-  G4float cmvhitrecoposxerr31[ntrkmx];
-  G4float cmvhitrecoposyerr31[ntrkmx];
-  G4float cmvhitrecoposzerr31[ntrkmx];
+  Float_t cmvhitrecoposxerr31[ntrkmx];
+  Float_t cmvhitrecoposyerr31[ntrkmx];
+  Float_t cmvhitrecoposzerr31[ntrkmx];
 
-  G4float LeTime31[ntrkmx];
-  G4float RiTime31[ntrkmx];
-  G4float LePulse31[ntrkmx];
-  G4float RiPulse31[ntrkmx];
+  Float_t LeTime31[ntrkmx];
+  Float_t RiTime31[ntrkmx];
+  Float_t LePulse31[ntrkmx];
+  Float_t RiPulse31[ntrkmx];
 
 
-G4int clustersize32[ntrkmx];
+  Int_t clustersize32[ntrkmx];
 
 
-  G4float extrapolposx32[ntrkmx];
-  G4float extrapolposy32[ntrkmx];
-  G4float extrapolposz32[ntrkmx];
+  Float_t extrapolposx32[ntrkmx];
+  Float_t extrapolposy32[ntrkmx];
+  Float_t extrapolposz32[ntrkmx];
 
-  G4float extrapolposxerr32[ntrkmx];
-  G4float extrapolposyerr32[ntrkmx];
-  G4float extrapolposzerr32[ntrkmx];
+  Float_t extrapolposxerr32[ntrkmx];
+  Float_t extrapolposyerr32[ntrkmx];
+  Float_t extrapolposzerr32[ntrkmx];
 
-  G4float cmvhitrecoposx32[ntrkmx];
-  G4float cmvhitrecoposy32[ntrkmx];
-  G4float cmvhitrecoposz32[ntrkmx];
+  Float_t cmvhitrecoposx32[ntrkmx];
+  Float_t cmvhitrecoposy32[ntrkmx];
+  Float_t cmvhitrecoposz32[ntrkmx];
 
-  G4float cmvhittrueposx32[ntrkmx];
-  G4float cmvhittrueposy32[ntrkmx];
-  G4float cmvhittrueposz32[ntrkmx];
+  Float_t cmvhittrueposx32[ntrkmx];
+  Float_t cmvhittrueposy32[ntrkmx];
+  Float_t cmvhittrueposz32[ntrkmx];
 
-  G4float cmvhitrecoposxerr32[ntrkmx];
-  G4float cmvhitrecoposyerr32[ntrkmx];
-  G4float cmvhitrecoposzerr32[ntrkmx];
+  Float_t cmvhitrecoposxerr32[ntrkmx];
+  Float_t cmvhitrecoposyerr32[ntrkmx];
+  Float_t cmvhitrecoposzerr32[ntrkmx];
 
 
 
-  G4float LeTime32[ntrkmx];
-  G4float RiTime32[ntrkmx];
-  G4float LePulse32[ntrkmx];
-  G4float RiPulse32[ntrkmx];
+  Float_t LeTime32[ntrkmx];
+  Float_t RiTime32[ntrkmx];
+  Float_t LePulse32[ntrkmx];
+  Float_t RiPulse32[ntrkmx];
 
 
   //11022022
 
-  G4int clustersize40[ntrkmx];
+  Int_t clustersize40[ntrkmx];
 
-  G4float extrapolposx40[ntrkmx];
-  G4float extrapolposy40[ntrkmx];
-  G4float extrapolposz40[ntrkmx];
+  Float_t extrapolposx40[ntrkmx];
+  Float_t extrapolposy40[ntrkmx];
+  Float_t extrapolposz40[ntrkmx];
 
-  G4float extrapolposxerr40[ntrkmx];
-  G4float extrapolposyerr40[ntrkmx];
-  G4float extrapolposzerr40[ntrkmx];
+  Float_t extrapolposxerr40[ntrkmx];
+  Float_t extrapolposyerr40[ntrkmx];
+  Float_t extrapolposzerr40[ntrkmx];
 
-  G4float cmvhitrecoposx40[ntrkmx];
-  G4float cmvhitrecoposy40[ntrkmx];
-  G4float cmvhitrecoposz40[ntrkmx];
+  Float_t cmvhitrecoposx40[ntrkmx];
+  Float_t cmvhitrecoposy40[ntrkmx];
+  Float_t cmvhitrecoposz40[ntrkmx];
 
-  G4float cmvhittrueposx40[ntrkmx];
-  G4float cmvhittrueposy40[ntrkmx];
-  G4float cmvhittrueposz40[ntrkmx];
+  Float_t cmvhittrueposx40[ntrkmx];
+  Float_t cmvhittrueposy40[ntrkmx];
+  Float_t cmvhittrueposz40[ntrkmx];
 
-  G4float cmvhitrecoposxerr40[ntrkmx];
-  G4float cmvhitrecoposyerr40[ntrkmx];
-  G4float cmvhitrecoposzerr40[ntrkmx];
+  Float_t cmvhitrecoposxerr40[ntrkmx];
+  Float_t cmvhitrecoposyerr40[ntrkmx];
+  Float_t cmvhitrecoposzerr40[ntrkmx];
 
-  G4float LeTime40[ntrkmx];
-  G4float RiTime40[ntrkmx];
-  G4float LePulse40[ntrkmx];
-  G4float RiPulse40[ntrkmx];
+  Float_t LeTime40[ntrkmx];
+  Float_t RiTime40[ntrkmx];
+  Float_t LePulse40[ntrkmx];
+  Float_t RiPulse40[ntrkmx];
 
 
 
-G4int clustersize41[ntrkmx];
+  Int_t clustersize41[ntrkmx];
 
 
-  G4float extrapolposx41[ntrkmx];
-  G4float extrapolposy41[ntrkmx];
-  G4float extrapolposz41[ntrkmx];
+  Float_t extrapolposx41[ntrkmx];
+  Float_t extrapolposy41[ntrkmx];
+  Float_t extrapolposz41[ntrkmx];
 
-  G4float extrapolposxerr41[ntrkmx];
-  G4float extrapolposyerr41[ntrkmx];
-  G4float extrapolposzerr41[ntrkmx];
+  Float_t extrapolposxerr41[ntrkmx];
+  Float_t extrapolposyerr41[ntrkmx];
+  Float_t extrapolposzerr41[ntrkmx];
 
-  G4float cmvhitrecoposx41[ntrkmx];
-  G4float cmvhitrecoposy41[ntrkmx];
-  G4float cmvhitrecoposz41[ntrkmx];
+  Float_t cmvhitrecoposx41[ntrkmx];
+  Float_t cmvhitrecoposy41[ntrkmx];
+  Float_t cmvhitrecoposz41[ntrkmx];
 
-  G4float cmvhittrueposx41[ntrkmx];
-  G4float cmvhittrueposy41[ntrkmx];
-  G4float cmvhittrueposz41[ntrkmx];
+  Float_t cmvhittrueposx41[ntrkmx];
+  Float_t cmvhittrueposy41[ntrkmx];
+  Float_t cmvhittrueposz41[ntrkmx];
 
-  G4float cmvhitrecoposxerr41[ntrkmx];
-  G4float cmvhitrecoposyerr41[ntrkmx];
-  G4float cmvhitrecoposzerr41[ntrkmx];
+  Float_t cmvhitrecoposxerr41[ntrkmx];
+  Float_t cmvhitrecoposyerr41[ntrkmx];
+  Float_t cmvhitrecoposzerr41[ntrkmx];
 
-  G4float LeTime41[ntrkmx];
-  G4float RiTime41[ntrkmx];
-  G4float LePulse41[ntrkmx];
-  G4float RiPulse41[ntrkmx];
+  Float_t LeTime41[ntrkmx];
+  Float_t RiTime41[ntrkmx];
+  Float_t LePulse41[ntrkmx];
+  Float_t RiPulse41[ntrkmx];
 
 
-G4int clustersize42[ntrkmx];
+  Int_t clustersize42[ntrkmx];
 
 
-  G4float extrapolposx42[ntrkmx];
-  G4float extrapolposy42[ntrkmx];
-  G4float extrapolposz42[ntrkmx];
+  Float_t extrapolposx42[ntrkmx];
+  Float_t extrapolposy42[ntrkmx];
+  Float_t extrapolposz42[ntrkmx];
 
-  G4float extrapolposxerr42[ntrkmx];
-  G4float extrapolposyerr42[ntrkmx];
-  G4float extrapolposzerr42[ntrkmx];
+  Float_t extrapolposxerr42[ntrkmx];
+  Float_t extrapolposyerr42[ntrkmx];
+  Float_t extrapolposzerr42[ntrkmx];
 
-  G4float cmvhitrecoposx42[ntrkmx];
-  G4float cmvhitrecoposy42[ntrkmx];
-  G4float cmvhitrecoposz42[ntrkmx];
+  Float_t cmvhitrecoposx42[ntrkmx];
+  Float_t cmvhitrecoposy42[ntrkmx];
+  Float_t cmvhitrecoposz42[ntrkmx];
 
-  G4float cmvhittrueposx42[ntrkmx];
-  G4float cmvhittrueposy42[ntrkmx];
-  G4float cmvhittrueposz42[ntrkmx];
+  Float_t cmvhittrueposx42[ntrkmx];
+  Float_t cmvhittrueposy42[ntrkmx];
+  Float_t cmvhittrueposz42[ntrkmx];
 
-  G4float cmvhitrecoposxerr42[ntrkmx];
-  G4float cmvhitrecoposyerr42[ntrkmx];
-  G4float cmvhitrecoposzerr42[ntrkmx];
+  Float_t cmvhitrecoposxerr42[ntrkmx];
+  Float_t cmvhitrecoposyerr42[ntrkmx];
+  Float_t cmvhitrecoposzerr42[ntrkmx];
 
 
 
-  G4float LeTime42[ntrkmx];
-  G4float RiTime42[ntrkmx];
-  G4float LePulse42[ntrkmx];
-  G4float RiPulse42[ntrkmx];
+  Float_t LeTime42[ntrkmx];
+  Float_t RiTime42[ntrkmx];
+  Float_t LePulse42[ntrkmx];
+  Float_t RiPulse42[ntrkmx];
 
 
-G4int clustersize50[ntrkmx];
+  Int_t clustersize50[ntrkmx];
 
-  G4float extrapolposx50[ntrkmx];
-  G4float extrapolposy50[ntrkmx];
-  G4float extrapolposz50[ntrkmx];
+  Float_t extrapolposx50[ntrkmx];
+  Float_t extrapolposy50[ntrkmx];
+  Float_t extrapolposz50[ntrkmx];
 
-  G4float extrapolposxerr50[ntrkmx];
-  G4float extrapolposyerr50[ntrkmx];
-  G4float extrapolposzerr50[ntrkmx];
+  Float_t extrapolposxerr50[ntrkmx];
+  Float_t extrapolposyerr50[ntrkmx];
+  Float_t extrapolposzerr50[ntrkmx];
 
-  G4float cmvhitrecoposx50[ntrkmx];
-  G4float cmvhitrecoposy50[ntrkmx];
-  G4float cmvhitrecoposz50[ntrkmx];
+  Float_t cmvhitrecoposx50[ntrkmx];
+  Float_t cmvhitrecoposy50[ntrkmx];
+  Float_t cmvhitrecoposz50[ntrkmx];
 
-  G4float cmvhittrueposx50[ntrkmx];
-  G4float cmvhittrueposy50[ntrkmx];
-  G4float cmvhittrueposz50[ntrkmx];
+  Float_t cmvhittrueposx50[ntrkmx];
+  Float_t cmvhittrueposy50[ntrkmx];
+  Float_t cmvhittrueposz50[ntrkmx];
 
-  G4float cmvhitrecoposxerr50[ntrkmx];
-  G4float cmvhitrecoposyerr50[ntrkmx];
-  G4float cmvhitrecoposzerr50[ntrkmx];
+  Float_t cmvhitrecoposxerr50[ntrkmx];
+  Float_t cmvhitrecoposyerr50[ntrkmx];
+  Float_t cmvhitrecoposzerr50[ntrkmx];
 
-  G4float LeTime50[ntrkmx];
-  G4float RiTime50[ntrkmx];
-  G4float LePulse50[ntrkmx];
-  G4float RiPulse50[ntrkmx];
+  Float_t LeTime50[ntrkmx];
+  Float_t RiTime50[ntrkmx];
+  Float_t LePulse50[ntrkmx];
+  Float_t RiPulse50[ntrkmx];
 
 
 
-G4int clustersize51[ntrkmx];
+  Int_t clustersize51[ntrkmx];
 
 
-  G4float extrapolposx51[ntrkmx];
-  G4float extrapolposy51[ntrkmx];
-  G4float extrapolposz51[ntrkmx];
+  Float_t extrapolposx51[ntrkmx];
+  Float_t extrapolposy51[ntrkmx];
+  Float_t extrapolposz51[ntrkmx];
 
-  G4float extrapolposxerr51[ntrkmx];
-  G4float extrapolposyerr51[ntrkmx];
-  G4float extrapolposzerr51[ntrkmx];
+  Float_t extrapolposxerr51[ntrkmx];
+  Float_t extrapolposyerr51[ntrkmx];
+  Float_t extrapolposzerr51[ntrkmx];
 
-  G4float cmvhitrecoposx51[ntrkmx];
-  G4float cmvhitrecoposy51[ntrkmx];
-  G4float cmvhitrecoposz51[ntrkmx];
+  Float_t cmvhitrecoposx51[ntrkmx];
+  Float_t cmvhitrecoposy51[ntrkmx];
+  Float_t cmvhitrecoposz51[ntrkmx];
 
-  G4float cmvhittrueposx51[ntrkmx];
-  G4float cmvhittrueposy51[ntrkmx];
-  G4float cmvhittrueposz51[ntrkmx];
+  Float_t cmvhittrueposx51[ntrkmx];
+  Float_t cmvhittrueposy51[ntrkmx];
+  Float_t cmvhittrueposz51[ntrkmx];
 
-  G4float cmvhitrecoposxerr51[ntrkmx];
-  G4float cmvhitrecoposyerr51[ntrkmx];
-  G4float cmvhitrecoposzerr51[ntrkmx];
+  Float_t cmvhitrecoposxerr51[ntrkmx];
+  Float_t cmvhitrecoposyerr51[ntrkmx];
+  Float_t cmvhitrecoposzerr51[ntrkmx];
 
-  G4float LeTime51[ntrkmx];
-  G4float RiTime51[ntrkmx];
-  G4float LePulse51[ntrkmx];
-  G4float RiPulse51[ntrkmx];
+  Float_t LeTime51[ntrkmx];
+  Float_t RiTime51[ntrkmx];
+  Float_t LePulse51[ntrkmx];
+  Float_t RiPulse51[ntrkmx];
 
 
-G4int clustersize52[ntrkmx];
+  Int_t clustersize52[ntrkmx];
 
 
-  G4float extrapolposx52[ntrkmx];
-  G4float extrapolposy52[ntrkmx];
-  G4float extrapolposz52[ntrkmx];
+  Float_t extrapolposx52[ntrkmx];
+  Float_t extrapolposy52[ntrkmx];
+  Float_t extrapolposz52[ntrkmx];
 
-  G4float extrapolposxerr52[ntrkmx];
-  G4float extrapolposyerr52[ntrkmx];
-  G4float extrapolposzerr52[ntrkmx];
+  Float_t extrapolposxerr52[ntrkmx];
+  Float_t extrapolposyerr52[ntrkmx];
+  Float_t extrapolposzerr52[ntrkmx];
 
-  G4float cmvhitrecoposx52[ntrkmx];
-  G4float cmvhitrecoposy52[ntrkmx];
-  G4float cmvhitrecoposz52[ntrkmx];
+  Float_t cmvhitrecoposx52[ntrkmx];
+  Float_t cmvhitrecoposy52[ntrkmx];
+  Float_t cmvhitrecoposz52[ntrkmx];
 
-  G4float cmvhittrueposx52[ntrkmx];
-  G4float cmvhittrueposy52[ntrkmx];
-  G4float cmvhittrueposz52[ntrkmx];
+  Float_t cmvhittrueposx52[ntrkmx];
+  Float_t cmvhittrueposy52[ntrkmx];
+  Float_t cmvhittrueposz52[ntrkmx];
 
-  G4float cmvhitrecoposxerr52[ntrkmx];
-  G4float cmvhitrecoposyerr52[ntrkmx];
-  G4float cmvhitrecoposzerr52[ntrkmx];
+  Float_t cmvhitrecoposxerr52[ntrkmx];
+  Float_t cmvhitrecoposyerr52[ntrkmx];
+  Float_t cmvhitrecoposzerr52[ntrkmx];
 
 
 
-  G4float LeTime52[ntrkmx];
-  G4float RiTime52[ntrkmx];
-  G4float LePulse52[ntrkmx];
-  G4float RiPulse52[ntrkmx];
+  Float_t LeTime52[ntrkmx];
+  Float_t RiTime52[ntrkmx];
+  Float_t LePulse52[ntrkmx];
+  Float_t RiPulse52[ntrkmx];
 
 
-G4int clustersize60[ntrkmx];
+  Int_t clustersize60[ntrkmx];
 
-  G4float extrapolposx60[ntrkmx];
-  G4float extrapolposy60[ntrkmx];
-  G4float extrapolposz60[ntrkmx];
+  Float_t extrapolposx60[ntrkmx];
+  Float_t extrapolposy60[ntrkmx];
+  Float_t extrapolposz60[ntrkmx];
 
-  G4float extrapolposxerr60[ntrkmx];
-  G4float extrapolposyerr60[ntrkmx];
-  G4float extrapolposzerr60[ntrkmx];
+  Float_t extrapolposxerr60[ntrkmx];
+  Float_t extrapolposyerr60[ntrkmx];
+  Float_t extrapolposzerr60[ntrkmx];
 
-  G4float cmvhitrecoposx60[ntrkmx];
-  G4float cmvhitrecoposy60[ntrkmx];
-  G4float cmvhitrecoposz60[ntrkmx];
+  Float_t cmvhitrecoposx60[ntrkmx];
+  Float_t cmvhitrecoposy60[ntrkmx];
+  Float_t cmvhitrecoposz60[ntrkmx];
 
-  G4float cmvhittrueposx60[ntrkmx];
-  G4float cmvhittrueposy60[ntrkmx];
-  G4float cmvhittrueposz60[ntrkmx];
+  Float_t cmvhittrueposx60[ntrkmx];
+  Float_t cmvhittrueposy60[ntrkmx];
+  Float_t cmvhittrueposz60[ntrkmx];
 
-  G4float cmvhitrecoposxerr60[ntrkmx];
-  G4float cmvhitrecoposyerr60[ntrkmx];
-  G4float cmvhitrecoposzerr60[ntrkmx];
+  Float_t cmvhitrecoposxerr60[ntrkmx];
+  Float_t cmvhitrecoposyerr60[ntrkmx];
+  Float_t cmvhitrecoposzerr60[ntrkmx];
 
-  G4float LeTime60[ntrkmx];
-  G4float RiTime60[ntrkmx];
-  G4float LePulse60[ntrkmx];
-  G4float RiPulse60[ntrkmx];
+  Float_t LeTime60[ntrkmx];
+  Float_t RiTime60[ntrkmx];
+  Float_t LePulse60[ntrkmx];
+  Float_t RiPulse60[ntrkmx];
 
 
 
-G4int clustersize61[ntrkmx];
+  Int_t clustersize61[ntrkmx];
 
 
-  G4float extrapolposx61[ntrkmx];
-  G4float extrapolposy61[ntrkmx];
-  G4float extrapolposz61[ntrkmx];
+  Float_t extrapolposx61[ntrkmx];
+  Float_t extrapolposy61[ntrkmx];
+  Float_t extrapolposz61[ntrkmx];
 
-  G4float extrapolposxerr61[ntrkmx];
-  G4float extrapolposyerr61[ntrkmx];
-  G4float extrapolposzerr61[ntrkmx];
+  Float_t extrapolposxerr61[ntrkmx];
+  Float_t extrapolposyerr61[ntrkmx];
+  Float_t extrapolposzerr61[ntrkmx];
 
-  G4float cmvhitrecoposx61[ntrkmx];
-  G4float cmvhitrecoposy61[ntrkmx];
-  G4float cmvhitrecoposz61[ntrkmx];
+  Float_t cmvhitrecoposx61[ntrkmx];
+  Float_t cmvhitrecoposy61[ntrkmx];
+  Float_t cmvhitrecoposz61[ntrkmx];
 
-  G4float cmvhittrueposx61[ntrkmx];
-  G4float cmvhittrueposy61[ntrkmx];
-  G4float cmvhittrueposz61[ntrkmx];
+  Float_t cmvhittrueposx61[ntrkmx];
+  Float_t cmvhittrueposy61[ntrkmx];
+  Float_t cmvhittrueposz61[ntrkmx];
 
-  G4float cmvhitrecoposxerr61[ntrkmx];
-  G4float cmvhitrecoposyerr61[ntrkmx];
-  G4float cmvhitrecoposzerr61[ntrkmx];
+  Float_t cmvhitrecoposxerr61[ntrkmx];
+  Float_t cmvhitrecoposyerr61[ntrkmx];
+  Float_t cmvhitrecoposzerr61[ntrkmx];
 
-  G4float LeTime61[ntrkmx];
-  G4float RiTime61[ntrkmx];
-  G4float LePulse61[ntrkmx];
-  G4float RiPulse61[ntrkmx];
+  Float_t LeTime61[ntrkmx];
+  Float_t RiTime61[ntrkmx];
+  Float_t LePulse61[ntrkmx];
+  Float_t RiPulse61[ntrkmx];
 
 
-G4int clustersize62[ntrkmx];
+  Int_t clustersize62[ntrkmx];
 
 
-  G4float extrapolposx62[ntrkmx];
-  G4float extrapolposy62[ntrkmx];
-  G4float extrapolposz62[ntrkmx];
+  Float_t extrapolposx62[ntrkmx];
+  Float_t extrapolposy62[ntrkmx];
+  Float_t extrapolposz62[ntrkmx];
 
-  G4float extrapolposxerr62[ntrkmx];
-  G4float extrapolposyerr62[ntrkmx];
-  G4float extrapolposzerr62[ntrkmx];
+  Float_t extrapolposxerr62[ntrkmx];
+  Float_t extrapolposyerr62[ntrkmx];
+  Float_t extrapolposzerr62[ntrkmx];
 
-  G4float cmvhitrecoposx62[ntrkmx];
-  G4float cmvhitrecoposy62[ntrkmx];
-  G4float cmvhitrecoposz62[ntrkmx];
+  Float_t cmvhitrecoposx62[ntrkmx];
+  Float_t cmvhitrecoposy62[ntrkmx];
+  Float_t cmvhitrecoposz62[ntrkmx];
 
-  G4float cmvhittrueposx62[ntrkmx];
-  G4float cmvhittrueposy62[ntrkmx];
-  G4float cmvhittrueposz62[ntrkmx];
+  Float_t cmvhittrueposx62[ntrkmx];
+  Float_t cmvhittrueposy62[ntrkmx];
+  Float_t cmvhittrueposz62[ntrkmx];
 
-  G4float cmvhitrecoposxerr62[ntrkmx];
-  G4float cmvhitrecoposyerr62[ntrkmx];
-  G4float cmvhitrecoposzerr62[ntrkmx];
+  Float_t cmvhitrecoposxerr62[ntrkmx];
+  Float_t cmvhitrecoposyerr62[ntrkmx];
+  Float_t cmvhitrecoposzerr62[ntrkmx];
 
 
 
-  G4float LeTime62[ntrkmx];
-  G4float RiTime62[ntrkmx];
-  G4float LePulse62[ntrkmx];
-  G4float RiPulse62[ntrkmx];
+  Float_t LeTime62[ntrkmx];
+  Float_t RiTime62[ntrkmx];
+  Float_t LePulse62[ntrkmx];
+  Float_t RiPulse62[ntrkmx];
 
 
 
   //11
 
-  G4float extra_diff1[ntrkmx];
-  G4float extra_diff2[ntrkmx];
-  G4float extra_diff3[ntrkmx];
+  Float_t extra_diff1[ntrkmx];
+  Float_t extra_diff2[ntrkmx];
+  Float_t extra_diff3[ntrkmx];
 
 
 
-   G4float ellip_diff00[ntrkmx];
-  G4float ellip_diff01[ntrkmx];
-  G4float ellip_diff02[ntrkmx];
-  G4float ellip_diff03[ntrkmx];
+  Float_t ellip_diff00[ntrkmx];
+  Float_t ellip_diff01[ntrkmx];
+  Float_t ellip_diff02[ntrkmx];
+  Float_t ellip_diff03[ntrkmx];
 
-  G4float ellip_diff10[ntrkmx];
-  G4float ellip_diff11[ntrkmx];
-  G4float ellip_diff12[ntrkmx];
+  Float_t ellip_diff10[ntrkmx];
+  Float_t ellip_diff11[ntrkmx];
+  Float_t ellip_diff12[ntrkmx];
 
-  G4float ellip_diff20[ntrkmx];
-  G4float ellip_diff21[ntrkmx];
-  G4float ellip_diff22[ntrkmx];
+  Float_t ellip_diff20[ntrkmx];
+  Float_t ellip_diff21[ntrkmx];
+  Float_t ellip_diff22[ntrkmx];
 
-    G4float ellip_diff30[ntrkmx];
-  G4float ellip_diff31[ntrkmx];
-  G4float ellip_diff32[ntrkmx];
+  Float_t ellip_diff30[ntrkmx];
+  Float_t ellip_diff31[ntrkmx];
+  Float_t ellip_diff32[ntrkmx];
 
 
   //cmv
 
   //simulation
-	static const unsigned int cmv_nsimhtmx=1000;
-  unsigned int cmv_nsimhit;
-  int cmv_detid[cmv_nsimhtmx];
-  int  cmv_simpdgid[cmv_nsimhtmx];
-  float cmv_simtime[cmv_nsimhtmx];
-  float cmv_simenr[cmv_nsimhtmx];
-  float cmv_simposx[cmv_nsimhtmx];
-  float cmv_simposy[cmv_nsimhtmx];
-  float cmv_simposz[cmv_nsimhtmx];
+  static const unsigned int cmv_nsimhtmx=1000;
+  UInt_t cmv_nsimhit;
+  UInt_t cmv_detid[cmv_nsimhtmx];
+  Int_t  cmv_simpdgid[cmv_nsimhtmx];
+  Float_t cmv_simtime[cmv_nsimhtmx];
+  Float_t cmv_simenr[cmv_nsimhtmx];
+  Float_t cmv_simposx[cmv_nsimhtmx];
+  Float_t cmv_simposy[cmv_nsimhtmx];
+  Float_t cmv_simposz[cmv_nsimhtmx];
 
-	Float_t cmv_simpx[cmv_nsimhtmx];
-	Float_t cmv_simpy[cmv_nsimhtmx];
-	Float_t cmv_simpz[cmv_nsimhtmx];
+  Float_t cmv_simpx[cmv_nsimhtmx];
+  Float_t cmv_simpy[cmv_nsimhtmx];
+  Float_t cmv_simpz[cmv_nsimhtmx];
 
-  float cmv_simlocx[cmv_nsimhtmx];
-  float cmv_simlocy[cmv_nsimhtmx];
-	 float cmv_simlocz[cmv_nsimhtmx];
+  Float_t cmv_simlocx[cmv_nsimhtmx];
+  Float_t cmv_simlocy[cmv_nsimhtmx];
+  Float_t cmv_simlocz[cmv_nsimhtmx];
   //digitization
-	// for data only one 16 bit integer + one 32bit integer arrays will be there
-	static const unsigned int cmv_ndigihtmx=1000;
+  // for data only one 16 bit integer + one 32bit integer arrays will be there
+  static const unsigned int cmv_ndigihtmx=1000;
 
-  unsigned int cmv_ndigihit;
-  int  cmv_digipdgid[cmv_ndigihtmx];
-	unsigned int cmv_sipmid[cmv_ndigihtmx];
-	// 3 bit for CMVD
-	// 2 bit for Layer
-	// 7 bit for Strip
-	// 2 bit for SiPM
-  unsigned int cmv_digitimpul[cmv_ndigihtmx]; // 12bit for energy and 20 bit for time
-   unsigned int cmv_digitime[cmv_ndigihtmx];
-   unsigned int cmv_digipul[cmv_ndigihtmx];
-  float cmv_digiposx[cmv_ndigihtmx];
-  float cmv_digiposy[cmv_ndigihtmx];
-  float cmv_digiposz[cmv_ndigihtmx];
+  UInt_t cmv_ndigihit;
+  Int_t  cmv_digipdgid[cmv_ndigihtmx];
+  UInt_t cmv_sipmid[cmv_ndigihtmx];
+  // 3 bit for CMVD
+  // 2 bit for Layer
+  // 7 bit for Strip
+  // 2 bit for SiPM
+  Int_t cmv_digitimpul[cmv_ndigihtmx]; // 12bit for energy and 20 bit for time
+  Int_t cmv_digitime[cmv_ndigihtmx];
+  Int_t cmv_digipul[cmv_ndigihtmx];
+  Float_t cmv_digiposx[cmv_ndigihtmx];
+  Float_t cmv_digiposy[cmv_ndigihtmx];
+  Float_t cmv_digiposz[cmv_ndigihtmx];
 
-	float cmv_digimom[cmv_ndigihtmx];
-	float cmv_digithe[cmv_ndigihtmx];
-	float cmv_digiphi[cmv_ndigihtmx];
+  Float_t cmv_digimom[cmv_ndigihtmx];
+  Float_t cmv_digithe[cmv_ndigihtmx];
+  Float_t cmv_digiphi[cmv_ndigihtmx];
 
-  float cmv_digilocx[cmv_ndigihtmx];
-  float cmv_digilocy[cmv_ndigihtmx];
-  float cmv_digilocz[cmv_ndigihtmx];
+  Float_t cmv_digilocx[cmv_ndigihtmx];
+  Float_t cmv_digilocy[cmv_ndigihtmx];
+  Float_t cmv_digilocz[cmv_ndigihtmx];
   //cmv sipm noise
   TFile* sipmnoise;
   TH1F* noise_hist[10][4];
@@ -1345,7 +1345,7 @@ private:
   double parirlay[3];
   double parlay[3];
 
-    double h2dDimX;
+  double h2dDimX;
   double h2dDimY;
   int nbinxMag2d;
   int nbinyMag2d;
@@ -1356,8 +1356,8 @@ private:
   int nUp;
   int nDown;
   //  int DetectorType;
-	double PhotonSpeed;
-	double CMVadctons;
+  double PhotonSpeed;
+  double CMVadctons;
 };
 
 #endif

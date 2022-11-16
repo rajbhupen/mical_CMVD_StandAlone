@@ -1,11 +1,11 @@
 // Reconstruction Code of DIGI output
 //argv[0]:
 //argv[1]:input file name containing root files
-//argv[2]:Input options: 0: SIM -> DIFI, 1 : DIGI -> RECO (MC), 2: DIGI->RECO (Data), 3: SIM-> RECO (MC) //inout3
+//argv[2]:Input options: 0: SIM -> DIFI, 1 : DIGI -> RECO (MC), 2: DIGI->RECO (Data), 3: SIM-> RECO (MC) //inout3 4: JustCMVD Extrapolation MC
 //argv[3]:Least Count of TDC- 0.1
 //argv[4]: filename Alignement and offset correction for data
 //argv[5]: Print Level- 1000
-//argv[6]:CMVD Flag: 0: dont include CMVD files, 1: Use it
+//argv[6]:CMVD Flag: 0: dont include CMVD files, 1: do cmvd extrapolation along with reco
 //argv[7]:Mag Field: 0: Use Straightline Fit; 1: Field is there
 //argv[8]: Trackfit Flag: 0:(Old) SwimSwimmer,1: (New)Kohlahal
 //argv[9]:Gdml Option: 0:- One stack center & No CMVD, 1:- Two Stacks & No CMVD, 2:  Two Stacks with CMVD
@@ -52,7 +52,8 @@ int main(int argc, char** argv) {
 
 
   if(InputOutput==0 || InputOutput==3) {
-    collatedIn = 1;//atoi(argv[4]);
+    // collatedfiles required only for digitization
+    collatedIn = 1;
   } else {
     collatedIn = 0;
   }
@@ -82,16 +83,20 @@ int main(int argc, char** argv) {
   MultiSimAnalysisDigi *pAnalysis;
 
   char fileCorrName[300];
-  if(InputOutput) {
-    
-      sprintf(fileCorrName,"%s",argv[4]);
+
+  if(InputOutput>0 && InputOutput<4) {
+    //Alignment correction files  needed:
+    // Data: reconstruction- pos time correction and multiplicity based errors
+    // MC: Only multiplicity based errors, offset correction set 0
+    sprintf(fileCorrName,"%s",argv[4]);
       cout<<"fileCorrName "<<fileCorrName<<endl;
       greco = new GeneralRecoInfo(fileCorrName,InputOutput);
 
+  }
 
-
-
-    if(gdmlOption==0){
+  if(InputOutput){
+    //    gdml files required only during reconstruction both MC and Data
+  if(gdmlOption==0){
       geoManager = new InoGeometry_Manager("OneStack_NoCMVD.gdml");
     }
     else if(gdmlOption==1){
@@ -102,10 +107,9 @@ int main(int argc, char** argv) {
     } //cmvd
 
 
-
-
   }
 
+  
   char rootfiles[200] = {};
   char ffoutname[200] = {};
 
@@ -121,9 +125,10 @@ int main(int argc, char** argv) {
   ffoutname[len1-4] = '\0';
   cout << " ffoutname " << ffoutname << endl;
 
-  if(InputOutput) {// ??
+  if(InputOutput<4) {
+    //Raw occupancy and multiplicity 
     greco->OpenRootFiles(ffoutname);
-    // pfield->PrintFieldMap();
+    
   }
   ffoutname[len1-4] = '\0';
   cout << " ffoutname " << ffoutname << endl;
@@ -143,6 +148,11 @@ int main(int argc, char** argv) {
 
       if(InputOutput==2) {//data Reco //inout3
 	sprintf(outfile,"./fileOut/%s_data",outfileName.c_str());
+      }
+	else if(InputOutput==4){
+	sprintf(outfile,"./fileOut/%s_extrapol",outfileName.c_str());
+	  
+
       } else {  //inout3
 	sprintf(outfile,"./fileOut/%s_reco",outfileName.c_str());
       }
@@ -159,7 +169,8 @@ int main(int argc, char** argv) {
     cout<<"OpenOutputRootFiles : complete "<<endl;
     cout<<"pAnalysis "<<pAnalysis <<endl;
 
-    if(InputOutput) {
+    if(InputOutput>0 && InputOutput<4 && detectorConfig->GetMag()==1) {
+      // Field Map required only during reconstruction in presence of Magnetic field
       pfield = new  micalFieldPropagator();cout<<"pfiled:"<<pfield<<endl;   cout<<"pAnalysis "<<pAnalysis <<endl; /* pfield->PrintFieldMap();*/
     }
 
@@ -242,7 +253,7 @@ int main(int argc, char** argv) {
 	}
 
 	//	else if(InputOutput) {
-	if(InputOutput>0){//inout3
+	if(InputOutput>0 && InputOutput<4){//inout3
 
 	  InoRecoAlg RecoAlgINO(InputOutput);
 	  RecoAlgINO.ReadEvent(ievt1);
@@ -254,8 +265,10 @@ int main(int argc, char** argv) {
 	  RecoAlgINO.PerformTrackReconstruction();
 
 	  cout<<"check abc "<<pAnalysis->ntrkt<<endl;
+
+	}
 	  //add cmvd extrapolation here
-	  if(CMVDFlag==1 && gdmlOption==2){
+	  if(InputOutput==4 || CMVDFlag==1){
 	    CMVDRecoAlg RecoAlgCMVD(InputOutput);
 	    RecoAlgCMVD.ReadCMVDdata(ievt1);
 	    RecoAlgCMVD.CreateCmvHit();
@@ -266,7 +279,7 @@ int main(int argc, char** argv) {
 	  }//CMVDFlag
 	  pAnalysis->SaveGenVisFile();
 	  cout<<"!!check aborted!!"<<endl;
-	}
+	
 
 
 	cout<<pAnalysis<<endl;
@@ -286,14 +299,20 @@ int main(int argc, char** argv) {
     cout<<"No code run..."<<endl;
   }
 
-  if(InputOutput==1) {
+  if(InputOutput>0 && InputOutput<4 && detectorConfig->GetMag()==1) {
     if(pfield) {delete pfield; pfield=0;}
+  }
+  if(InputOutput){
     if(geoManager) {delete geoManager; geoManager = 0;}
+  }
+
+  if(InputOutput>0 && InputOutput<4) {
     if(greco) {
       greco->CloseRootFiles();
       delete greco; greco =0;
     }
   }
+  
 
   delete paradef; paradef=0;
   delete detectorConfig; detectorConfig=0;

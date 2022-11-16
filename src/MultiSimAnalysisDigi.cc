@@ -143,7 +143,7 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
 
   cout << " opening root file " << infile << " inout " <<  isInOut << endl;
 
-  if(isInOut==0 ||isInOut==3 || isInOut==1 ) { ////inout3
+  if(isInOut==0 ||isInOut==3 || isInOut==1 || isInOut==4 ) { ////inout3
     //Input is sim file from MC for sim to reco(3) or sim to digi(0)
 
     if(isInOut==3 || isInOut==0){
@@ -156,9 +156,16 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
    sprintf(inRootFile,"%s",infile);
     inputRootFile = new TFile(inRootFile, "read");
     cout<< "Data is read from digitization output file : "<< inRootFile  <<endl;
-    inputEventTree = (TTree*)inputRootFile->Get("T1"); //T2
+    inputEventTree = (TTree*)inputRootFile->Get("T2"); //T2
     }
 
+    else if (isInOut==4){
+  sprintf(inRootFile,"%s",infile);
+    inputRootFile = new TFile(inRootFile, "read");
+    cout<< "Data is read from reconstructed output file : "<< inRootFile  <<endl;
+    inputEventTree = (TTree*)inputRootFile->Get("T1");
+
+    }
     
     inputEventTree->SetBranchAddress("irun",&irun);
     inputEventTree->SetBranchAddress("ievt",&ievt);
@@ -188,7 +195,113 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("trigx", &trigx);
     inputEventTree->SetBranchAddress("trigy", &trigy);
 
-    if(CardFile->GetCMVD()==1){
+
+    if(isInOut==4){
+      //read branches required for CMVD Extrapolation
+      // Basically read entrire T1 branches
+      inputEventTree->SetBranchAddress("ntrkt", &ntrkt);
+      inputEventTree->SetBranchAddress("itype", itype);
+      inputEventTree->SetBranchAddress("nLayer", &nLayer);
+      inputEventTree->SetBranchAddress("nhits", nhits);
+      inputEventTree->SetBranchAddress("nhits_finder", nhits_finder);
+      inputEventTree->SetBranchAddress("nhits", nhits);
+      inputEventTree->SetBranchAddress("chisq", chisq);
+      inputEventTree->SetBranchAddress("chisq2", chisq2);
+      inputEventTree->SetBranchAddress("ndof", ndof);
+      inputEventTree->SetBranchAddress("ndof2", ndof2);
+      inputEventTree->SetBranchAddress("cvalue", cvalue);
+      inputEventTree->SetBranchAddress("trkmm", trkmm);
+      inputEventTree->SetBranchAddress("trkth", trkth);
+      inputEventTree->SetBranchAddress("trkph", trkph);
+      inputEventTree->SetBranchAddress("momvx", momvx);
+      inputEventTree->SetBranchAddress("thevx", thevx);
+      inputEventTree->SetBranchAddress("phivx", phivx);
+      inputEventTree->SetBranchAddress("posxvx", posxvx);
+      inputEventTree->SetBranchAddress("posyvx", posyvx);
+      inputEventTree->SetBranchAddress("poszvx", poszvx);
+
+      inputEventTree->SetBranchAddress("momrf", momrf);
+      inputEventTree->SetBranchAddress("therf", therf);
+      inputEventTree->SetBranchAddress("phirf", phirf);
+      inputEventTree->SetBranchAddress("posxrf", posxrf);
+      inputEventTree->SetBranchAddress("posyrf", posyrf);
+      inputEventTree->SetBranchAddress("poszrf", poszrf);
+
+
+        inputEventTree->SetBranchAddress("XPosdev_exclu", XPosdev_exclu);
+	inputEventTree->SetBranchAddress("YPosdev_exclu", YPosdev_exclu);
+
+        inputEventTree->SetBranchAddress("XPosdev", XPosdev);
+	inputEventTree->SetBranchAddress("YPosdev", YPosdev);
+
+        inputEventTree->SetBranchAddress("inPosX", inPosX);	
+	inputEventTree->SetBranchAddress("inPosY", inPosY);
+	inputEventTree->SetBranchAddress("extPosX", extPosX);	
+	inputEventTree->SetBranchAddress("extPosY", extPosY);
+	inputEventTree->SetBranchAddress("nXStrips", nXStrips);
+	inputEventTree->SetBranchAddress("nYStrips", nYStrips);
+
+	inputEventTree->SetBranchAddress("inPosfX", inPosfX);	
+	inputEventTree->SetBranchAddress("inPosfY", inPosfY);
+	inputEventTree->SetBranchAddress("extPosfX", extPosfX);	
+	inputEventTree->SetBranchAddress("extPosfY", extPosfY);
+	inputEventTree->SetBranchAddress("nfXStrips", nfXStrips);
+	inputEventTree->SetBranchAddress("nfYStrips", nfYStrips);
+
+
+	inputEventTree->SetBranchAddress("XchisqOccu", XchisqOccu);
+	inputEventTree->SetBranchAddress("YchisqOccu", YchisqOccu);
+	inputEventTree->SetBranchAddress("XndfOccu", XndfOccu);
+	inputEventTree->SetBranchAddress("YndfOccu", YndfOccu);
+	inputEventTree->SetBranchAddress("nxFailOccu", nxFailOccu);
+	inputEventTree->SetBranchAddress("nyFailOccu", nyFailOccu);
+
+	inputEventTree->SetBranchAddress("tx", &tx);
+	inputEventTree->SetBranchAddress("ty", &ty);
+	inputEventTree->SetBranchAddress("xxin", &xxin);
+	inputEventTree->SetBranchAddress("yyin", &yyin);
+
+	inputEventTree->SetBranchAddress("txin", &txin);
+	inputEventTree->SetBranchAddress("tyin", &tyin);
+
+        inputEventTree->SetBranchAddress("therr", &therr);
+	inputEventTree->SetBranchAddress("pherr", &pherr);
+
+	inputEventTree->SetBranchAddress("atimslope", &atimslope);
+	inputEventTree->SetBranchAddress("atiminter", &atiminter);
+	
+	
+	inputEventTree->SetBranchAddress("xxerr", &xxerr);
+	inputEventTree->SetBranchAddress("yyerr", &yyerr);
+	inputEventTree->SetBranchAddress("txerr", &txerr);
+	inputEventTree->SetBranchAddress("tyerr", &tyerr);
+	inputEventTree->SetBranchAddress("qperr", &qperr);
+
+
+	inputEventTree->SetBranchAddress("xxtxerr", &xxtxerr);
+	inputEventTree->SetBranchAddress("xxtyerr", &xxtyerr);
+	inputEventTree->SetBranchAddress("yytyerr", &yytyerr);
+	inputEventTree->SetBranchAddress("yytxerr", &yytxerr);
+	inputEventTree->SetBranchAddress("txtyerr", &txtyerr);
+
+	inputEventTree->SetBranchAddress("xxenderr", &xxenderr);
+	inputEventTree->SetBranchAddress("yyenderr", &yyenderr);
+	inputEventTree->SetBranchAddress("txenderr", &txenderr);
+	inputEventTree->SetBranchAddress("tyenderr", &tyenderr );
+	inputEventTree->SetBranchAddress("qpenderr", &qpenderr);
+	
+	
+	
+    }
+
+
+
+
+
+
+
+    
+    if(isInOut==4 || CardFile->GetCMVD()==1){
   //cmv
     inputEventTree->SetBranchAddress("cmv_nsimhit", &cmv_nsimhit);
      inputEventTree->SetBranchAddress("cmv_detid", cmv_detid) ;
@@ -206,7 +319,7 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
  inputEventTree->SetBranchAddress("cmv_simlocz", cmv_simlocz);
     }// if(CardFile->GetCMVD()==1){
 
-    if(isInOut==1) {
+    if(isInOut==4 || isInOut==1) {
     inputEventTree->SetBranchAddress("ndigiht", &ndigiht);
     inputEventTree->SetBranchAddress("stripid", stripid);
     inputEventTree->SetBranchAddress("digipdgid", digipdgid);
@@ -221,7 +334,7 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     inputEventTree->SetBranchAddress("digipz", digipz);
     // inputEventTree->SetBranchAddress("diginoise", diginoise);
        //cmv
-     if(CardFile->GetCMVD()==1){
+     if(isInOut==4 || CardFile->GetCMVD()==1){
     inputEventTree->SetBranchAddress("cmv_ndigihit", &cmv_ndigihit);
     inputEventTree->SetBranchAddress("cmv_sipmid", cmv_sipmid);
     inputEventTree->SetBranchAddress("cmv_digipdgid", cmv_digipdgid);
@@ -240,6 +353,16 @@ void MultiSimAnalysisDigi::OpenInputRootFiles(char* infile) {
     //cmv
      }// if(CardFile->GetCMVD()==1){
 
+
+
+
+
+
+
+
+
+
+     
     }
   } else if(isInOut==2) { // datareading
     sprintf(inRootFile,"%s",infile);
@@ -279,6 +402,10 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
       pEventTree = new TTree("T4", "INODATA");
  }
 
+    else if(isInOut==4){
+      pEventTree = new TTree("T5", "CMVD");
+    }
+
     //These are common to all:
 
     pEventTree->Branch("irun",&irun,"irun/i"); //VALGRIND
@@ -298,7 +425,7 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
 
 
     //DigiOutput
-     if (isInOut==0 || isInOut==3 || isInOut==1 ){
+     if (isInOut==0 || isInOut==3 || isInOut==1 || isInOut==4 ){
 
 
        pEventTree->Branch("nsimht", &nsimht, "nsimht/i");
@@ -335,10 +462,10 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("digipz", digipz, "digipz[ndigiht]/F");
 
        cout<<"check4"<<endl;
-     if(CardFile->GetCMVD()==1){
+     if(isInOut==4 || CardFile->GetCMVD()==1){
 
        pEventTree->Branch("cmv_nsimhit", &cmv_nsimhit, "cmv_nsimhit/i");
-       pEventTree->Branch("cmv_detid", cmv_detid, "cmv_detid[cmv_nsimhit]/I") ;
+       pEventTree->Branch("cmv_detid", cmv_detid, "cmv_detid[cmv_nsimhit]/i") ;
        pEventTree->Branch("cmv_simpdgid", cmv_simpdgid, "cmv_simpdgid[cmv_nsimhit]/I");
        pEventTree->Branch("cmv_simtime", cmv_simtime, "cmv_simtime[cmv_nsimhit]/F");
        pEventTree->Branch("cmv_simenr", cmv_simenr, "cmv_simenr[cmv_nsimhit]/F");
@@ -377,7 +504,7 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
      }//     if (isInOut==0 || isInOut==3  ){
 
 
-        if (isInOut){
+        if (isInOut>0 || isInOut<4){
 
     pEventTree->Branch("hw_trig",&hw_trig,"hw_trig/I");
     // pEventTree->Branch("hw_trigy",&hw_trigy,"hw_trigy/I");
@@ -390,8 +517,8 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("nhits_finder",nhits_finder,"nhits_finder[ntrkt]/I");
     pEventTree->Branch("chisq",chisq,"chisq[ntrkt]/F");
     pEventTree->Branch("chisq2",chisq2,"chisq2[ntrkt]/F");
-    pEventTree->Branch("ndof",ndof,"ndof[ntrkt]/i");
-    pEventTree->Branch("ndof2",ndof2,"ndof2[ntrkt]/i");
+    pEventTree->Branch("ndof",ndof,"ndof[ntrkt]/I");
+    pEventTree->Branch("ndof2",ndof2,"ndof2[ntrkt]/I");
     pEventTree->Branch("cvalue",cvalue,"cvalue[ntrkt]/F");
     pEventTree->Branch("trkmm",trkmm,"trkmm[ntrkt]/F");
     pEventTree->Branch("trkth",trkth,"trkth[ntrkt]/F");
@@ -508,114 +635,8 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("nxFailOccu", nxFailOccu, "nxFailOccu[10]/I");
     pEventTree->Branch("nyFailOccu", nyFailOccu, "nyFailOccu[10]/I");
 
-    //cmvd
 
- if(CardFile->GetCMVD()==1){
-
-
-
-  pEventTree->Branch("CMVDnLayer", &CMVDnLayer, "CMVDnLayer/i");
-
-  pEventTree->Branch("CMVDTruePosX", CMVDTruePosX, "CMVDTruePosX[32]/F");
-  pEventTree->Branch("CMVDTruePosY", CMVDTruePosY, "CMVDTruePosY[32]/F");
-  pEventTree->Branch("CMVDTruePosZ", CMVDTruePosZ, "CMVDTruePosZ[32]/F");
-
-  pEventTree->Branch("CMVDRecoPosX", CMVDRecoPosX, "CMVDRecoPosX[32]/F");
-  pEventTree->Branch("CMVDRecoPosY", CMVDRecoPosY, "CMVDRecoPosY[32]/F");
-  pEventTree->Branch("CMVDRecoPosZ", CMVDRecoPosZ, "CMVDRecoPosZ[32]/F");
-
-
-  pEventTree->Branch("CMVDWRecoPosX", CMVDWRecoPosX, "CMVDWRecoPosX[32]/F");
-  pEventTree->Branch("CMVDWRecoPosY", CMVDWRecoPosY, "CMVDWRecoPosY[32]/F");
-  pEventTree->Branch("CMVDWRecoPosZ", CMVDWRecoPosZ, "CMVDWRecoPosZ[32]/F");
-
-
-  
-  pEventTree->Branch("CMVDExpPosX", CMVDExpPosX, "CMVDExpPosX[32]/F");
-  pEventTree->Branch("CMVDExpPosY", CMVDExpPosY, "CMVDExpPosY[32]/F");
-  pEventTree->Branch("CMVDExpPosZ", CMVDExpPosZ, "CMVDExpPosZ[32]/F");
-
-  pEventTree->Branch("CMVDExpnHit", CMVDExpnHit, "CMVDExpnHit[32]/I");
-
-  pEventTree->Branch("CMVDisExpIn", CMVDisExpIn, "CMVDisExpIn[32]/I");
-  pEventTree->Branch("CMVDisHit", CMVDisHit, "CMVDisHit[32]/I");
-
-  pEventTree->Branch("CMVDpl2", CMVDpl2, "CMVDpl2[32]/I");
-  pEventTree->Branch("CMVDClusterSize", CMVDClusterSize, "CMVDClusterSize[32]/I");
-
-   pEventTree->Branch("CMVDClustsInLay", CMVDClustsInLay, "CMVDClustsInLay[32]/I");
-   pEventTree->Branch("CMVDHitsInLay", CMVDHitsInLay, "CMVDHitsInLay[32]/I");
-     
-
-
-
-   
-
-    pEventTree->Branch("cmv_nhit", &cmv_nhit, "cmv_nhit/i");
-    pEventTree->Branch("cmv_hitid", cmv_hitid, "cmv_hitid[cmv_nhit]/I") ;
-    pEventTree->Branch("cmv_hitpdgid", cmv_hitpdgid, "cmv_hitpdgid[cmv_nhit]/I");
-    pEventTree->Branch("cmv_hitLeTim", cmv_hitLeTim, "cmv_hitLeTim[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitRiTim", cmv_hitLeTim, "cmv_hitRiTim[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitLePul", cmv_hitLePul, "cmv_hitLePul[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitRiPul", cmv_hitLePul, "cmv_hitRiPul[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitTrueposx", cmv_hitTrueposx, "cmv_hitTrueposx[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitTrueposy", cmv_hitTrueposy, "cmv_hitTrueposy[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitTrueposz", cmv_hitTrueposz, "cmv_hitTrueposz[cmv_nhit]/F");
-    // pEventTree->Branch("cmv_hitmom", cmv_hitmom, "cmv_hitmom[cmv_nhit]/F");
-    // pEventTree->Branch("cmv_hitthe", cmv_hitthe, "cmv_hitthe[cmv_nhit]/F");
-    // pEventTree->Branch("cmv_hitphi", cmv_hitphi, "cmv_hitphi[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitRecoposx", cmv_hitRecoposx, "cmv_hitRecoposx[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitRecoposy", cmv_hitRecoposy, "cmv_hitRecoposy[cmv_nhit]/F");
-    pEventTree->Branch("cmv_hitRecoposz", cmv_hitRecoposz, "cmv_hitRecoposz[cmv_nhit]/F");
-
-
-
-
-    //cmv clust branches
-    pEventTree->Branch("cmv_nclust", &cmv_nclust, "cmv_nclust/i");
-    pEventTree->Branch("cmv_clustid", cmv_clustid, "cmv_clustid[cmv_nclust]/I") ;
-    pEventTree->Branch("cmv_clustpdgid", cmv_clustpdgid, "cmv_clustpdgid[cmv_nclust]/I");
-    pEventTree->Branch("cmv_clustLeTim", cmv_clustLeTim, "cmv_clustLeTim[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustRiTim", cmv_clustLeTim, "cmv_clustRiTim[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustLePul", cmv_clustLePul, "cmv_clustLePul[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustRiPul", cmv_clustLePul, "cmv_clustRiPul[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustTrueposx", cmv_clustTrueposx, "cmv_clustTrueposx[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustTrueposy", cmv_clustTrueposy, "cmv_clustTrueposy[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustTrueposz", cmv_clustTrueposz, "cmv_clustTrueposz[cmv_nclust]/F");
-    // pEventTree->Branch("cmv_clustmom", cmv_clustmom, "cmv_clustmom[cmv_nclust]/F");
-    // pEventTree->Branch("cmv_clustthe", cmv_clustthe, "cmv_clustthe[cmv_nclust]/F");
-    // pEventTree->Branch("cmv_clustphi", cmv_clustphi, "cmv_clustphi[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustRecoposx", cmv_clustRecoposx, "cmv_clustRecoposx[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustRecoposy", cmv_clustRecoposy, "cmv_clustRecoposy[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustRecoposz", cmv_clustRecoposz, "cmv_clustRecoposz[cmv_nclust]/F");
-    pEventTree->Branch("cmv_clustsiz", cmv_clustsiz, "cmv_clustsiz[cmv_nclust]/I") ;
-
-
-
-
-
-
-
-
-    // //extrapol brances
-    // pEventTree->Branch("cmv_nexphit", &cmv_nexphit, "cmv_nexphit/i");
-    // pEventTree->Branch("cmv_expid", cmv_expid, "cmv_expid[cmv_nexphit]/I") ;
-    // pEventTree->Branch("cmv_Expposx", cmv_Expposx, "cmv_Expposx[cmv_nexphit]/F");
-    // pEventTree->Branch("cmv_Expposy", cmv_Expposy, "cmv_Expposy[cmv_nexphit]/F");
-    // pEventTree->Branch("cmv_Expposz", cmv_Expposz, "cmv_Expposz[cmv_nexphit]/F");
-    //  pEventTree->Branch("cmv_DCAposx", cmv_DCAposx, "cmv_DCAposx[cmv_nexphit]/F");
-    // pEventTree->Branch("cmv_DCAposy", cmv_DCAposy, "cmv_DCAposy[cmv_nexphit]/F");
-    // pEventTree->Branch("cmv_DCAposz", cmv_DCAposz, "cmv_DCAposz[cmv_nexphit]/F");
-
-
-    // pEventTree->Branch("distofclosapp", distofclosapp, "distofclosapp[cmv_nexphit]/F");
-    // pEventTree->Branch("planeedge", planeedge, "planeedge[cmv_nexphit]/I") ;
-
-
- }// if(CardFile->GetCMVD()==1){
-
-   
-    pEventTree->Branch("tx_end",tx_end,"tx_end[ntrkt]/F");
+   pEventTree->Branch("tx_end",tx_end,"tx_end[ntrkt]/F");
     pEventTree->Branch("ty_end",ty_end,"ty_end[ntrkt]/F");
 
 
@@ -666,8 +687,120 @@ void MultiSimAnalysisDigi::OpenOutputRootFiles(char* outfile) {
     pEventTree->Branch("tyenderr", &tyenderr, "tyenderr/F");
     pEventTree->Branch("qpenderr", &qpenderr, "qpenderr/F");
 
-   }
 
+
+	}
+
+
+    
+
+    //cmvd
+
+ if(isInOut==4 || CardFile->GetCMVD()==1){
+
+
+
+  pEventTree->Branch("CMVDnLayer", &CMVDnLayer, "CMVDnLayer/i");
+
+  pEventTree->Branch("CMVDTruePosX", CMVDTruePosX, "CMVDTruePosX[32]/F");
+  pEventTree->Branch("CMVDTruePosY", CMVDTruePosY, "CMVDTruePosY[32]/F");
+  pEventTree->Branch("CMVDTruePosZ", CMVDTruePosZ, "CMVDTruePosZ[32]/F");
+
+  pEventTree->Branch("CMVDRecoPosX", CMVDRecoPosX, "CMVDRecoPosX[32]/F");
+  pEventTree->Branch("CMVDRecoPosY", CMVDRecoPosY, "CMVDRecoPosY[32]/F");
+  pEventTree->Branch("CMVDRecoPosZ", CMVDRecoPosZ, "CMVDRecoPosZ[32]/F");
+
+
+  pEventTree->Branch("CMVDWRecoPosX", CMVDWRecoPosX, "CMVDWRecoPosX[32]/F");
+  pEventTree->Branch("CMVDWRecoPosY", CMVDWRecoPosY, "CMVDWRecoPosY[32]/F");
+  pEventTree->Branch("CMVDWRecoPosZ", CMVDWRecoPosZ, "CMVDWRecoPosZ[32]/F");
+
+
+  
+  pEventTree->Branch("CMVDExpPosX", CMVDExpPosX, "CMVDExpPosX[32]/F");
+  pEventTree->Branch("CMVDExpPosY", CMVDExpPosY, "CMVDExpPosY[32]/F");
+  pEventTree->Branch("CMVDExpPosZ", CMVDExpPosZ, "CMVDExpPosZ[32]/F");
+
+  pEventTree->Branch("CMVDExpnHit", CMVDExpnHit, "CMVDExpnHit[32]/I");
+
+  pEventTree->Branch("CMVDisExpIn", CMVDisExpIn, "CMVDisExpIn[32]/I");
+  pEventTree->Branch("CMVDisHit", CMVDisHit, "CMVDisHit[32]/I");
+
+  pEventTree->Branch("CMVDpl2", CMVDpl2, "CMVDpl2[32]/I");
+  pEventTree->Branch("CMVDClusterSize", CMVDClusterSize, "CMVDClusterSize[32]/I");
+
+   pEventTree->Branch("CMVDClustsInLay", CMVDClustsInLay, "CMVDClustsInLay[32]/I");
+   pEventTree->Branch("CMVDHitsInLay", CMVDHitsInLay, "CMVDHitsInLay[32]/I");
+     
+
+
+
+   
+
+    pEventTree->Branch("cmv_nhit", &cmv_nhit, "cmv_nhit/i");
+    pEventTree->Branch("cmv_hitid", cmv_hitid, "cmv_hitid[cmv_nhit]/i") ;
+    pEventTree->Branch("cmv_hitpdgid", cmv_hitpdgid, "cmv_hitpdgid[cmv_nhit]/I");
+    pEventTree->Branch("cmv_hitLeTim", cmv_hitLeTim, "cmv_hitLeTim[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitRiTim", cmv_hitLeTim, "cmv_hitRiTim[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitLePul", cmv_hitLePul, "cmv_hitLePul[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitRiPul", cmv_hitLePul, "cmv_hitRiPul[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitTrueposx", cmv_hitTrueposx, "cmv_hitTrueposx[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitTrueposy", cmv_hitTrueposy, "cmv_hitTrueposy[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitTrueposz", cmv_hitTrueposz, "cmv_hitTrueposz[cmv_nhit]/F");
+    // pEventTree->Branch("cmv_hitmom", cmv_hitmom, "cmv_hitmom[cmv_nhit]/F");
+    // pEventTree->Branch("cmv_hitthe", cmv_hitthe, "cmv_hitthe[cmv_nhit]/F");
+    // pEventTree->Branch("cmv_hitphi", cmv_hitphi, "cmv_hitphi[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitRecoposx", cmv_hitRecoposx, "cmv_hitRecoposx[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitRecoposy", cmv_hitRecoposy, "cmv_hitRecoposy[cmv_nhit]/F");
+    pEventTree->Branch("cmv_hitRecoposz", cmv_hitRecoposz, "cmv_hitRecoposz[cmv_nhit]/F");
+
+
+
+
+    //cmv clust branches
+    pEventTree->Branch("cmv_nclust", &cmv_nclust, "cmv_nclust/i");
+    pEventTree->Branch("cmv_clustid", cmv_clustid, "cmv_clustid[cmv_nclust]/i") ;
+    pEventTree->Branch("cmv_clustpdgid", cmv_clustpdgid, "cmv_clustpdgid[cmv_nclust]/I");
+    pEventTree->Branch("cmv_clustLeTim", cmv_clustLeTim, "cmv_clustLeTim[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustRiTim", cmv_clustLeTim, "cmv_clustRiTim[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustLePul", cmv_clustLePul, "cmv_clustLePul[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustRiPul", cmv_clustLePul, "cmv_clustRiPul[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustTrueposx", cmv_clustTrueposx, "cmv_clustTrueposx[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustTrueposy", cmv_clustTrueposy, "cmv_clustTrueposy[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustTrueposz", cmv_clustTrueposz, "cmv_clustTrueposz[cmv_nclust]/F");
+    // pEventTree->Branch("cmv_clustmom", cmv_clustmom, "cmv_clustmom[cmv_nclust]/F");
+    // pEventTree->Branch("cmv_clustthe", cmv_clustthe, "cmv_clustthe[cmv_nclust]/F");
+    // pEventTree->Branch("cmv_clustphi", cmv_clustphi, "cmv_clustphi[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustRecoposx", cmv_clustRecoposx, "cmv_clustRecoposx[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustRecoposy", cmv_clustRecoposy, "cmv_clustRecoposy[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustRecoposz", cmv_clustRecoposz, "cmv_clustRecoposz[cmv_nclust]/F");
+    pEventTree->Branch("cmv_clustsiz", cmv_clustsiz, "cmv_clustsiz[cmv_nclust]/I") ;
+
+
+
+
+
+
+
+
+    // //extrapol brances
+    // pEventTree->Branch("cmv_nexphit", &cmv_nexphit, "cmv_nexphit/i");
+    // pEventTree->Branch("cmv_expid", cmv_expid, "cmv_expid[cmv_nexphit]/i") ;
+    // pEventTree->Branch("cmv_Expposx", cmv_Expposx, "cmv_Expposx[cmv_nexphit]/F");
+    // pEventTree->Branch("cmv_Expposy", cmv_Expposy, "cmv_Expposy[cmv_nexphit]/F");
+    // pEventTree->Branch("cmv_Expposz", cmv_Expposz, "cmv_Expposz[cmv_nexphit]/F");
+    //  pEventTree->Branch("cmv_DCAposx", cmv_DCAposx, "cmv_DCAposx[cmv_nexphit]/F");
+    // pEventTree->Branch("cmv_DCAposy", cmv_DCAposy, "cmv_DCAposy[cmv_nexphit]/F");
+    // pEventTree->Branch("cmv_DCAposz", cmv_DCAposz, "cmv_DCAposz[cmv_nexphit]/F");
+
+
+    // pEventTree->Branch("distofclosapp", distofclosapp, "distofclosapp[cmv_nexphit]/F");
+    // pEventTree->Branch("planeedge", planeedge, "planeedge[cmv_nexphit]/I") ;
+
+
+ }// if(CardFile->GetCMVD()==1){
+
+ 
 
 
 
