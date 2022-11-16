@@ -37,8 +37,8 @@ class CmvHit
     if (fRiMiSipm) {count++; pulse+= fRiMiSipm->GetPulse();}
     if (fRiPlSipm) {count++; pulse+= fRiPlSipm->GetPulse();}
     if (count ==0) count = 1;
-    return pulse;
-    //return pulse/count; //why average ?
+    //return pulse;
+    return pulse/count; 
   };
 
   void SetTruePosX(double fd) { fXTruePosX=fd;}
