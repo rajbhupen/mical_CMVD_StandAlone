@@ -735,7 +735,10 @@ void CMVDRecoAlg::CMVD_Extrapolation(){
 		tmphtvec.setZ(CmvClusterBank[ijk][ij][ix]->GetRecoPosZ());
 
 		//		cout<<"recohtvec: "<<tmphtvec<<endl;
-        	 double difx = (extposvec-tmphtvec).mag();
+		double difx = (extposvec-tmphtvec).mag();
+		if(ijk==0){difx = abs(extposvec.x()-tmphtvec.x()); }
+		else   if(ijk==1 || ijk==2 || ijk==3 ){difx = abs(extposvec.z()-tmphtvec.z()); }
+                else   if(ijk==5 || ijk==6 ){difx = abs(extposvec.y()-tmphtvec.y()); }
 
 		truehtvec.setX(CmvClusterBank[ijk][ij][ix]->GetTruePosX());
 		truehtvec.setY(CmvClusterBank[ijk][ij][ix]->GetTruePosY());
@@ -849,8 +852,11 @@ void CMVDRecoAlg::CMVD_Extrapolation(){
 		tmphtvec.setZ(CmvClusterBank[ijk][ij][ix]->GetRecoPosZ());
 
 		//		cout<<"recohtvec: "<<tmphtvec<<endl;
-        	 double difx = (extposvec-tmphtvec).mag();
-
+		double difx = (extposvec-tmphtvec).mag();
+		if(ijk==0){difx = abs(extposvec.x()-tmphtvec.x()); }
+		else   if(ijk==1 || ijk==2 || ijk==3 ){difx = abs(extposvec.z()-tmphtvec.z()); }
+                else   if(ijk==5 || ijk==6 ){difx = abs(extposvec.y()-tmphtvec.y()); }
+		 
 		truehtvec.setX(CmvClusterBank[ijk][ij][ix]->GetTruePosX());
 		truehtvec.setY(CmvClusterBank[ijk][ij][ix]->GetTruePosY());
 		truehtvec.setZ(CmvClusterBank[ijk][ij][ix]->GetTruePosZ());
