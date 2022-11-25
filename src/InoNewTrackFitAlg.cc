@@ -86,7 +86,7 @@ InoNewTrackFitAlg::InoNewTrackFitAlg() {
   pFieldMap	= micalFieldPropagator::FdPointer;//GM
 
   icalGeometry= (InoGeometry_Manager::APointer)->icalGeometry;
-  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
+  //  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
 
   //g4Edisp		= new G4EnergyLossForExtrapolator(1);
   PoissonRn	= new TRandom3(0);
@@ -662,7 +662,7 @@ void InoNewTrackFitAlg::TrackElementMerging(double *Tr1, double TargetZ, double 
     double state[5] ={x,y,tx,ty,qbyP};
 
     icalGeometry->InitTrack(pos, dir);
-    localmat = icalGeometry->GetCurrentVolume()->GetMaterial();
+   TGeoMaterial* localmat = icalGeometry->GetCurrentVolume()->GetMaterial();
     double Eloss = 0;
     Eloss = GetEnergyLoss(state, dz, xi, T_max, I, localmat);
     //cout<<"Eloss "<<Eloss<<endl;
@@ -4244,7 +4244,7 @@ bool InoNewTrackFitAlg::PredictedStateCov(double *StateVector, const int Plane, 
       Bx *= 1000;
       By *= 1000;
        icalGeometry->InitTrack(posTrack, dirTrack);
-      localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
+      TGeoMaterial* localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
       icalGeometry->FindNextBoundary();
       snext	= epsilon+gGeoManager->GetStep();
       Z		= localmat->GetZ();
@@ -5232,7 +5232,7 @@ int InoNewTrackFitAlg::CheckFCPCUpOrDn(double *ax_k, bool DirExtraPol, int MaxMi
       double localpos[3];
       icalGeometry->MasterToLocal(pos, localpos);
 
-      localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
+      TGeoMaterial* localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
 
       // Putting the conditions to check FC or PC
       CheckMat[iempty] = 0;
@@ -5303,7 +5303,7 @@ int InoNewTrackFitAlg::CheckFCPCUpOrDn(double *ax_k, bool DirExtraPol, int MaxMi
               MinPlane = nextplane;
             }
 
-            //Update track paramters in local variables
+            //Update track paramters in loca lvariables
             for (int ij=0; ij<5; ij++) {
               tmpax_k[ij] = ax_k[ij];
 

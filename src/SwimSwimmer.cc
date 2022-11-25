@@ -117,7 +117,7 @@ double SwimSwimmer::Swim(SwimParticle& particle) { // (SwimCondition& c)
   cout<<"double SwimSwimmer::Swim(SwimParticle& particle) {"<<endl;
   pFieldMap = micalFieldPropagator::FdPointer;
     icalGeometry= (InoGeometry_Manager::APointer)->icalGeometry;
-  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
+    //  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
   //  SwimGeo::SwimMaterial_t material;
   double              fStep;
   double              distToNextPlane = 0;
@@ -340,7 +340,7 @@ double SwimSwimmer::Swim(SwimParticle& particle) { // (SwimCondition& c)
       // double pos1incm[3] = {100*pos1[0],100*pos1[1],100*pos1[2] };
       // icalGeometry->InitTrack(pos1incm, dir);//in cm
      
-      localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
+      TGeoMaterial* localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
       density = localmat->GetDensity();
 
 
@@ -723,7 +723,7 @@ double SwimSwimmer::Swim(SwimParticle& particle, int& nextplane) {  // (SwimCond
   cout<<"double SwimSwimmer::Swim(SwimParticle& particle, int& nextplane) {"<<fNewPlane<<endl; 
   pFieldMap = micalFieldPropagator::FdPointer;
   icalGeometry= (InoGeometry_Manager::APointer)->icalGeometry;
-  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
+  //  localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
   
   double              fStep=.1;
   double              distToNextPlane = 0;
@@ -908,7 +908,7 @@ double SwimSwimmer::Swim(SwimParticle& particle, int& nextplane) {  // (SwimCond
       B[0] = Bx*1000; B[1] =By*1000; B[2]=0;
       // double pos1incm[3] = {100*pos1[0],100*pos1[1],100*pos1[2] };
       // icalGeometry->InitTrack(pos1incm, dir);//in cm
-      localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
+      TGeoMaterial* localmat= icalGeometry->GetCurrentVolume()->GetMaterial();
       density = localmat->GetDensity();
 
 

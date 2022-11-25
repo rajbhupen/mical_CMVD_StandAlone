@@ -270,7 +270,7 @@ typedef struct{
   
   TGeoManager* icalGeometry;
   TGeoManager* abc;
-  TGeoMaterial *localmat;
+  //  TGeoMaterial *localmat;
   TRandom3 *PoissonRn;
   InoMuRange *IcalRange;
 

@@ -56,7 +56,7 @@ void SetBPlane(int n) {BPlane=n;};
  private:
     micalFieldPropagator *pFieldMap;
       TGeoManager* icalGeometry;
-      TGeoMaterial* localmat;
+      //      TGeoMaterial* localmat;
     void anal_getnrot(double*, double*);
     void anal_getarot(double, double, double*);
     void trace_track_planef(double*, double*, double, double*, double&);//AAR: 1st argument added to pass the Field array.

@@ -35,7 +35,7 @@ InoOldTrackFitAlg::InoOldTrackFitAlg()
   pAnalysis = MultiSimAnalysisDigi::AnPointer;   
   icalGeometry= (InoGeometry_Manager::APointer)->icalGeometry;
   pFieldMap = micalFieldPropagator::FdPointer;
- localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
+  // localmat	= new TGeoMaterial("Fe",55.845,26,7.874);
   debug_fit = true;
   debug_fcpc = false;
   debug_new = true;//true;

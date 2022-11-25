@@ -252,7 +252,7 @@ typedef struct{
   double ShiftInZ;
 
   TGeoManager* icalGeometry;
-  TGeoMaterial *localmat;
+  //  TGeoMaterial *localmat;
 
   bool LinePlaneInt(double* Line, double* Plane, double* Point);
 
